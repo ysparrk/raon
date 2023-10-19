@@ -16,3 +16,20 @@
 - docker container stats webserver
 - docker stop webserver
 - docker start webserver
+
+### 도커 사용 스프링 부트 배포
+- 도커 파일 작성
+```
+FROM openjdk:11
+ARG JAR_FILE=build/libs/*.jar
+COPY ${JAR_FILE} app.jar
+ENTRYPOINT ["java","-jar","/app.jar"]
+```
+- $ docker build --tag <도커계정명>/springapp:1.0.1 . -> 도커 파일 실행
+- $ docker images
+- $ docker login
+- $ docker push
+- 서버에 접속
+- $ docker login
+- $ docker pull <이미지 이름>
+- $ docker run -i -t -p 8080:8080 <도커이미지> -> 포트 포워딩
