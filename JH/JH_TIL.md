@@ -141,26 +141,3 @@
 
     npm i react-router-dom
 
-
-    React Router component 사용하기
-    react-router-dom 라이브러리에는 많은 컴포넌트가 존재한다. 그 중 가장 중요한 3가지 컴포넌트에 대해 알아보자.
-
-    Link : html의 <a> 태그와 유사한 기능, to prop을 통해서 이동할 경로를 지정해준다.
-    <Link to="/about">About</Link>
-    예를들어서 위의 코드는 브라우저에서 클릭이 가능한 about으로 렌더링되고, about을 클릭하면 주소창의 경로가 <도메인 네임>/about 으로 갱신된다.
-
-    Route : 현재 주소창의 경로와 매치될 경우 보여줄 컴포넌트를 지정하는데 사용된다. path prop을 통해서 매치시킬 경로를 지정하고 component prop을 통해서 매치되었을 때 보여줄 컴포넌트를 할당한다.
-    <Route path="/about" component={About}>
-    현재 주소창의 경로가 /about 인경우 About 이라는 컴포넌트를 보여준다. 일반적으로 현재 주소창의 URL 경로에 따라 특정 컨텐츠를 보여주거나 숨기기 위해서 사용될 수 있다.
-
-    Router : <Route>와 <Link>컴포넌트가 함께 유기적으로 동작하도록 묶어주는데 사용한다. <Route>와 <Link> 컴포넌트는 DOM 트리 상에서 항상 <Router>를 공통 상위 컴포넌트로 가져야한다.
-    <Router>
-
-        <Link/>
-        <Link/>
-
-        <Router />
-        <Router />
-
-    </Router>
-    React Router를 사용하는 어플리케이션은 위와 같은 구조를 가지게 된다. 실제 프로젝트에서는 위 컴포넌트들이 여러 파일에 걸쳐서 흩어져 있을 수도 있다.
