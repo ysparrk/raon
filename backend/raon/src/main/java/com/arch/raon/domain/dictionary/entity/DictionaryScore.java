@@ -1,5 +1,6 @@
 package com.arch.raon.domain.dictionary.entity;
 
+import com.arch.raon.domain.member.entity.Member;
 import com.arch.raon.global.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -19,4 +20,8 @@ public class DictionaryScore extends BaseTimeEntity {
 
     @Column(name = "score", nullable = false, columnDefinition = "0")
     private Integer score;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Member member;
+
 }
