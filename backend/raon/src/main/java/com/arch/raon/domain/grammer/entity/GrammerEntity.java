@@ -17,6 +17,11 @@ public class GrammerEntity implements Serializable {
 	private LocalDateTime created_at;
 	private LocalDateTime modified_at;
 
+
+	public GrammerEntity() {
+		super();
+	}
+
 	public GrammerEntity(Long id, String content, String option_one, String option_two, String answer,
 		LocalDateTime created_at, LocalDateTime modified_at) {
 
@@ -29,9 +34,6 @@ public class GrammerEntity implements Serializable {
 		setModified_at(modified_at);
 	}
 
-	public GrammerEntity() {
-		super();
-	}
 
 	public Long getId() {
 		return id;
