@@ -1,0 +1,55 @@
+package com.arch.raon.domain.summary.entity;
+
+import com.arch.raon.domain.member.entity.Member;
+import com.arch.raon.global.BaseTimeEntity;
+import com.arch.raon.global.util.enums.Grade;
+import jakarta.persistence.*;
+import lombok.Builder;
+import lombok.Getter;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
+
+
+@Entity(name="summary")
+@Getter
+@Builder
+@SQLDelete(sql = "UPDATE summary SET is_delete = true, deleted_at = CURRENT_TIMESTAMP WHERE id = ?")
+@Where(clause = "is_delete = false")
+public class Summary extends BaseTimeEntity {
+
+    @Id
+    @Column(name="id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="member_id", referencedColumnName = "id")
+    private Member member;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="article_id", referencedColumnName = "id")
+    private Article article;
+
+    @Column(name = "summary_content", length = 140)
+    private String summary_content;
+
+    @Column(name = "feedback_content", length = 1024)
+    private String feedback_content;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "grade")
+    private Grade grade;
+
+    public Summary() {
+
+    }
+
+    public Summary(Long id, Member member, Article article, String summary_content, String feedback_content, Grade grade) {
+        this.id = id;
+        this.member = member;
+        this.article = article;
+        this.summary_content = summary_content;
+        this.feedback_content = feedback_content;
+        this.grade = grade;
+    }
+}
