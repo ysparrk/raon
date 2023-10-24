@@ -2,11 +2,10 @@
 
 ```
 develop
-    ㄴfeature/be/123-백엔드기능
-    ㄴfeature/fe/156-프론트기능
+    ㄴfeature/be/백엔드기능-숫자(지라 이슈번호, 필수는 아님)
+    ㄴfeature/fe/프론트기능-숫자(지라 이슈번호, 필수는 아님)
 ```
 
 - 무조건 develop에서 branch 생성
-- feature/XX/XXX-XXXXX 형식으로 생성
-- 작업 전 git pull
+- feature/XX/XXXXX-XXX 형식으로 생성
 - master로 merge하면 사형
