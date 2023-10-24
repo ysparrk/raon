@@ -1,13 +1,16 @@
 package com.arch.raon.domain.summary.entity;
 
 import com.arch.raon.domain.member.entity.Member;
-import com.arch.raon.global.BaseTimeEntity;
 import com.arch.raon.global.util.enums.Grade;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.annotations.Where;
+
+import java.time.LocalDateTime;
 
 
 @Entity(name="summary")
@@ -15,7 +18,7 @@ import org.hibernate.annotations.Where;
 @Builder
 @SQLDelete(sql = "UPDATE summary SET is_delete = true, deleted_at = CURRENT_TIMESTAMP WHERE id = ?")
 @Where(clause = "is_delete = false")
-public class Summary extends BaseTimeEntity {
+public class Summary {
 
     @Id
     @Column(name="id")
@@ -39,6 +42,13 @@ public class Summary extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     @Column(name = "grade")
     private Grade grade;
+
+    @CreationTimestamp
+    @Column(name = "created_at", nullable = false)
+    private LocalDateTime createdAt;
+    @UpdateTimestamp
+    @Column(name = "modified_at", nullable = false)
+    private LocalDateTime modifiedAt;
 
     public Summary() {
 

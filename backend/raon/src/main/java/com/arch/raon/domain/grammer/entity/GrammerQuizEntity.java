@@ -3,8 +3,11 @@ package com.arch.raon.domain.grammer.entity;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
 public class GrammerQuizEntity implements Serializable {
@@ -14,26 +17,27 @@ public class GrammerQuizEntity implements Serializable {
 	private String option_one;
 	private String option_two;
 	private String answer;
-	private LocalDateTime created_at;
-	private LocalDateTime modified_at;
+	@CreationTimestamp
+	@Column(name = "created_at", nullable = false)
+	private LocalDateTime createdAt;
+	@UpdateTimestamp
+	@Column(name = "modified_at", nullable = false)
+	private LocalDateTime modifiedAt;
 
 
 	public GrammerQuizEntity() {
 		super();
 	}
 
-	public GrammerQuizEntity(Long id, String content, String option_one, String option_two, String answer,
-		LocalDateTime created_at, LocalDateTime modified_at) {
-
-		setId(id);
-		setContent(content);
-		setOption_one(option_one);
-		setOption_two(option_two);
-		setAnswer(answer);
-		setCreated_at(created_at);
-		setModified_at(modified_at);
+	public GrammerQuizEntity(Long id, String content, String option_one, String option_two, String answer, LocalDateTime createdAt, LocalDateTime modifiedAt) {
+		this.id = id;
+		this.content = content;
+		this.option_one = option_one;
+		this.option_two = option_two;
+		this.answer = answer;
+		this.createdAt = createdAt;
+		this.modifiedAt = modifiedAt;
 	}
-
 
 	public Long getId() {
 		return id;
@@ -75,19 +79,19 @@ public class GrammerQuizEntity implements Serializable {
 		this.answer = answer;
 	}
 
-	public LocalDateTime getCreated_at() {
-		return created_at;
+	public LocalDateTime getCreatedAt() {
+		return createdAt;
 	}
 
-	public void setCreated_at(LocalDateTime created_at) {
-		this.created_at = created_at;
+	public void setCreatedAt(LocalDateTime createdAt) {
+		this.createdAt = createdAt;
 	}
 
-	public LocalDateTime getModified_at() {
-		return modified_at;
+	public LocalDateTime getModifiedAt() {
+		return modifiedAt;
 	}
 
-	public void setModified_at(LocalDateTime modified_at) {
-		this.modified_at = modified_at;
+	public void setModifiedAt(LocalDateTime modifiedAt) {
+		this.modifiedAt = modifiedAt;
 	}
 }

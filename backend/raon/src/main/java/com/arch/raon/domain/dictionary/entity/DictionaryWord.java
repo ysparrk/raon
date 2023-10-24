@@ -1,17 +1,19 @@
 package com.arch.raon.domain.dictionary.entity;
 
-import com.arch.raon.domain.member.entity.Member;
-import com.arch.raon.global.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "dictionary_word")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class DictionaryWord extends BaseTimeEntity {
+public class DictionaryWord {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,4 +28,11 @@ public class DictionaryWord extends BaseTimeEntity {
 
     @Column(name = "meaning", nullable = false)
     private String meaning;
+
+    @CreationTimestamp
+    @Column(name = "created_at", nullable = false)
+    private LocalDateTime createdAt;
+    @UpdateTimestamp
+    @Column(name = "modified_at", nullable = false)
+    private LocalDateTime modifiedAt;
 }
