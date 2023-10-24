@@ -7,7 +7,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 
 @Entity
-public class GrammerEntity implements Serializable {
+public class GrammerQuizEntity implements Serializable {
 	@Id
 	private Long id;
 	private String content;
@@ -18,11 +18,11 @@ public class GrammerEntity implements Serializable {
 	private LocalDateTime modified_at;
 
 
-	public GrammerEntity() {
+	public GrammerQuizEntity() {
 		super();
 	}
 
-	public GrammerEntity(Long id, String content, String option_one, String option_two, String answer,
+	public GrammerQuizEntity(Long id, String content, String option_one, String option_two, String answer,
 		LocalDateTime created_at, LocalDateTime modified_at) {
 
 		setId(id);
