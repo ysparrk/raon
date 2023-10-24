@@ -2,7 +2,15 @@ package com.arch.raon.domain.grammer.entity;
 
 import java.time.LocalDateTime;
 
-public class GrammerScoreEntity {
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = "GrammerScore")
+public class GrammerScore {
+
+	@Id
 	private Long id;
 	private Long member_id;
 	private int score;
@@ -10,10 +18,10 @@ public class GrammerScoreEntity {
 	private LocalDateTime created_at;
 	private LocalDateTime modified_at;
 
-	public GrammerScoreEntity() {
+	public GrammerScore() {
 	}
 
-	public GrammerScoreEntity(Long id, Long member_id, int score, int play_time, LocalDateTime created_at,
+	public GrammerScore(Long id, Long member_id, int score, int play_time, LocalDateTime created_at,
 		LocalDateTime modified_at) {
 		setId(id);
 		setMember_id(member_id);

@@ -6,11 +6,14 @@ import java.time.LocalDateTime;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
-public class GrammerQuizEntity implements Serializable {
+@Table(name = "Grammer_Quiz")
+public class GrammerQuiz implements Serializable {
 	@Id
 	private Long id;
 	private String content;
@@ -25,11 +28,11 @@ public class GrammerQuizEntity implements Serializable {
 	private LocalDateTime modifiedAt;
 
 
-	public GrammerQuizEntity() {
+	public GrammerQuiz() {
 		super();
 	}
 
-	public GrammerQuizEntity(Long id, String content, String option_one, String option_two, String answer, LocalDateTime createdAt, LocalDateTime modifiedAt) {
+	public GrammerQuiz(Long id, String content, String option_one, String option_two, String answer, LocalDateTime createdAt, LocalDateTime modifiedAt) {
 		this.id = id;
 		this.content = content;
 		this.option_one = option_one;
