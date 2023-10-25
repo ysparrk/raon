@@ -1,22 +1,41 @@
-package com.arch.raon.domain.grammer.dto.response;
+package com.arch.raon.domain.grammar.entity;
 
 import java.io.Serializable;
 
-public class GrammerResDto implements Serializable {
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = "grammer_quiz")
+public class GrammarQuiz implements Serializable {
+	@Id
+	private Long id;
 	private String content;
 	private String option_one;
 	private String option_two;
 	private String answer;
 
-	public GrammerResDto(){
+
+	public GrammarQuiz() {
 		super();
 	}
 
-	public GrammerResDto(String content, String option_one, String option_two, String answer) {
-		setContent(content);
-		setAnswer(answer);
-		setOption_one(option_one);
-		setOption_two(option_two);
+	public GrammarQuiz(Long id, String content, String option_one, String option_two, String answer) {
+		this.id = id;
+		this.content = content;
+		this.option_one = option_one;
+		this.option_two = option_two;
+		this.answer = answer;
+
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public String getContent() {
@@ -45,9 +64,5 @@ public class GrammerResDto implements Serializable {
 
 	public String getAnswer() {
 		return answer;
-	}
-
-	public void setAnswer(String answer) {
-		this.answer = answer;
 	}
 }
