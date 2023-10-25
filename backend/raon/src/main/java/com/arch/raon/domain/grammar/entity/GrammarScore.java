@@ -7,7 +7,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "GrammerScore")
+@Table(name = "grammar_score")
 public class GrammarScore {
 
 	@Id
