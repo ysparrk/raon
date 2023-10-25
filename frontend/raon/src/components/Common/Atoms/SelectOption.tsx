@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import newone from '../../../assets/Images/new.png';
 
 interface SelectOptionProps {
   imgSrc?: string;
@@ -11,9 +10,9 @@ interface SelectOptionProps {
 const SelectOptionDiv = styled.div`
   display: flex;
   position: relative;
-  background-color: grey;
-  margin-left: 100px;
-  margin-bottom: 100px;
+  width: 820px;
+  height: 298px;
+  margin: 10px;
 `;
 const Circle = styled.div<SelectOptionProps>`
   position: absolute;
@@ -25,6 +24,8 @@ const Circle = styled.div<SelectOptionProps>`
   border-radius: 50%;
   border: 8px solid black;
   background-image: ${({ imgSrc }) => (imgSrc ? `url(${imgSrc})` : 'none')};
+  background-size: cover;
+  background-color: lightgrey;
 `;
 
 const Square = styled.div`
@@ -44,13 +45,19 @@ const Square = styled.div`
   background-color: white;
 `;
 
-function SelectOption() {
+function SelectOption({ optionText, imgSrc, onClick }: SelectOptionProps) {
   return (
     <SelectOptionDiv>
-      <Circle imgSrc={newone} />
-      <Square>여섯 글자 짜리</Square>
+      <Circle onClick={onClick} imgSrc={imgSrc} />
+      <Square onClick={onClick}>{optionText}</Square>
     </SelectOptionDiv>
   );
 }
+
+SelectOption.defaultProps = {
+  optionText: '',
+  imgSrc: '',
+  onClick: console.log('test'),
+};
 
 export default SelectOption;
