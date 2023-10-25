@@ -1,18 +1,19 @@
 package com.arch.raon.domain.summary.entity;
 
 
-import com.arch.raon.global.BaseTimeEntity;
 import com.arch.raon.global.util.enums.ArticleCategory;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 
 @Entity(name="article")
 @Getter
 @Builder
-public class Article extends BaseTimeEntity {
+public class Article {
 
     @Id
     @Column(name="id")
@@ -30,6 +31,13 @@ public class Article extends BaseTimeEntity {
 
     @Column(name = "date")
     private LocalDateTime date;
+
+    @CreationTimestamp
+    @Column(name = "created_at", nullable = false)
+    private LocalDateTime createdAt;
+    @UpdateTimestamp
+    @Column(name = "modified_at", nullable = false)
+    private LocalDateTime modifiedAt;
 
     public Article() {
 

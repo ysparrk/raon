@@ -1,6 +1,5 @@
 package com.arch.raon.domain.member.entity;
 
-import com.arch.raon.global.BaseTimeEntity;
 import com.arch.raon.global.util.enums.Gender;
 import com.arch.raon.global.util.enums.School;
 import jakarta.persistence.*;
@@ -8,7 +7,9 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 
@@ -17,7 +18,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @SQLDelete(sql = "UPDATE member SET deleted_at = now() WHERE member_id = ?")
-public class Member extends BaseTimeEntity {
+public class Member {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -47,6 +48,13 @@ public class Member extends BaseTimeEntity {
     @ColumnDefault("0")
     @Column(name = "mileage", nullable = false)
     private Integer mileage;
+
+    @CreationTimestamp
+    @Column(name = "created_at", nullable = false)
+    private LocalDateTime createdAt;
+    @UpdateTimestamp
+    @Column(name = "modified_at", nullable = false)
+    private LocalDateTime modifiedAt;
 
     @ColumnDefault("false")
     @Column(name = "is_deleted", nullable = false)
