@@ -28,11 +28,4 @@ public class DictionaryWord {
 
     @Column(name = "meaning", nullable = false)
     private String meaning;
-
-    @CreationTimestamp
-    @Column(name = "created_at", nullable = false)
-    private LocalDateTime createdAt;
-    @UpdateTimestamp
-    @Column(name = "modified_at", nullable = false)
-    private LocalDateTime modifiedAt;
 }
