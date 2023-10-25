@@ -1,4 +1,4 @@
-package com.arch.raon.domain.grammer.entity;
+package com.arch.raon.domain.grammar.entity;
 
 import java.time.LocalDateTime;
 
@@ -7,8 +7,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "GrammerScore")
-public class GrammerScore {
+@Table(name = "grammar_score")
+public class GrammarScore {
 
 	@Id
 	private Long id;
@@ -18,10 +18,10 @@ public class GrammerScore {
 	private LocalDateTime created_at;
 	private LocalDateTime modified_at;
 
-	public GrammerScore() {
+	public GrammarScore() {
 	}
 
-	public GrammerScore(Long id, Long member_id, int score, int play_time, LocalDateTime created_at,
+	public GrammarScore(Long id, Long member_id, int score, int play_time, LocalDateTime created_at,
 		LocalDateTime modified_at) {
 		setId(id);
 		setMember_id(member_id);
