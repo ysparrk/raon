@@ -15,8 +15,8 @@ import Landing from '../components/Interface/Pages/Landing.tsx';
 
 // // GameSummarize
 // import SummarizeCategory from '../components/GameSummarize/Pages/SummarizeCategory.tsx';
-// import SummarizeQuiz from '../components/GameSumarize/Pages/SummarizeQuiz.tsx';
-// import SummarizeResult from '../components/GameSumarize/Pages/SummarizeResult.tsx';
+import SummarizeQuiz from '../components/GameSummarize/Pages/SummarizeQuiz.tsx';
+// import SummarizeResult from '../components/GameSummarize/Pages/SummarizeResult.tsx';
 
 // // GameDictionary
 // import DictionaryCategory from '../components/GameDictionary/Pages/DictionaryCategory.tsx';
@@ -32,6 +32,7 @@ const AppRouter: React.FC = () => {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Landing />} />
+        <Route path="/game/summarize" element={<SummarizeQuiz />} />
         {/* <Route path="/user/" element={<Foundation />} /> */}
       </Routes>
     </BrowserRouter>
