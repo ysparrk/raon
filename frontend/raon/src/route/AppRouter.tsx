@@ -10,8 +10,8 @@ import Landing from '../components/Interface/Pages/Landing.tsx';
 // import Information from '../components/User/Pages/Information.tsx';
 
 // // GameSpelling
-// import SpellingQuiz from '../components/GameSpelling/Pages/SpellingQuiz.tsx';
-// import SpellingResult from '../components/GameSpelling/Pages/SpellingResult.tsx';
+import SpellingQuiz from '../components/GameSpelling/Pages/SpellingQuiz.tsx';
+import SpellingResult from '../components/GameSpelling/Pages/SpellingResult.tsx';
 
 // // GameSummarize
 // import SummarizeCategory from '../components/GameSummarize/Pages/SummarizeCategory.tsx';
@@ -33,6 +33,8 @@ const AppRouter: React.FC = () => {
       <Routes>
         <Route path="/" element={<Landing />} />
         <Route path="/game/summarize" element={<SummarizeQuiz />} />
+        <Route path="/game/spelling-quiz" element={<SpellingQuiz />} />
+        <Route path="/game/spelling-result" element={<SpellingResult />} />
         {/* <Route path="/user/" element={<Foundation />} /> */}
       </Routes>
     </BrowserRouter>

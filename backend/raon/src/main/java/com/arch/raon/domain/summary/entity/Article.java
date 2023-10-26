@@ -3,19 +3,22 @@ package com.arch.raon.domain.summary.entity;
 
 import com.arch.raon.global.util.enums.ArticleCategory;
 import jakarta.persistence.*;
-import lombok.Builder;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 
-@Entity(name="article")
+@Entity
+@Table(name="article")
 @Getter
-@Builder
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Article {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id")
     private Long id;
 
@@ -39,16 +42,5 @@ public class Article {
     @Column(name = "modified_at", nullable = false)
     private LocalDateTime modifiedAt;
 
-    public Article() {
-
-    }
-
-    public Article(Long id, String title, String content, ArticleCategory category, LocalDateTime date) {
-        this.id = id;
-        this.title = title;
-        this.content = content;
-        this.category = category;
-        this.date = date;
-    }
 
 }
