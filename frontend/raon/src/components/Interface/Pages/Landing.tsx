@@ -10,12 +10,7 @@ const TestDiv2 = styled.div`
   font-size: 200px;
 `;
 function LandingPage() {
-  return (
-    <div>
-      <TestDiv>Hello 원모바일</TestDiv>
-      <TestDiv2>Hello 쿠키런</TestDiv2>
-    </div>
-  );
+  return <div>landingpage</div>;
 }
 
 export default LandingPage;
