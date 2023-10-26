@@ -6,7 +6,7 @@ import ExitButton from '../../Common/Atoms/ExitButton';
 
 const ContentDiv = styled.div`
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
 `;
@@ -16,8 +16,8 @@ function SummarizeResultPage() {
       <TitleBox>문해력 기르기</TitleBox>
       <ContentDiv>
         <ResultPart />
+        <ExitButton to="/" />
       </ContentDiv>
-      <ExitButton to="/" />
     </div>
   );
 }
