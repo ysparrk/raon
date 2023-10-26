@@ -2,18 +2,28 @@ package com.arch.raon.domain.grammar.entity;
 
 import java.io.Serializable;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "grammer_quiz")
 public class GrammarQuiz implements Serializable {
 	@Id
+	@Column(name = "id", nullable = false)
 	private Long id;
+
+	@Column(name = "content", length = 255, nullable = false)
 	private String content;
+
+	@Column(name = "option_one", length = 32, nullable = false)
 	private String option_one;
+	@Column(name = "option_two", length = 32, nullable = false)
 	private String option_two;
+	@Column(name = "answer", length = 32, nullable = false)
 	private String answer;
 
 
