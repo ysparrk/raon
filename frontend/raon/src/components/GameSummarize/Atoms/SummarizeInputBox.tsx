@@ -1,9 +1,11 @@
 import React, { useState, ChangeEvent } from 'react';
+import { useSetRecoilState } from 'recoil';
 import styled, { css } from 'styled-components';
+import { summarizeState } from '../../../recoil/Atoms';
 
 const InputTextarea = styled.textarea`
   width: 300px;
-  height: 360px;
+  height: 240px;
   font-family: 'CookieRun';
   font-size: 20px;
   border-radius: 20px;
@@ -20,17 +22,19 @@ const Placeholder = styled.div<{ isHidden: boolean }>`
   font-family: 'CookieRun';
   position: absolute;
   pointer-events: none;
-  top: 155px;
-  left: 20px;
+  top: 110px;
+  left: 22px;
   color: #999;
   display: ${(props) => (props.isHidden ? 'none' : 'block')};
 `;
 
 function SummarizeInputBox() {
   const [text, setText] = useState('');
+  const setSummarize = useSetRecoilState(summarizeState);
 
   const handleTextareaChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
     setText(event.target.value);
+    setSummarize(event.target.value);
   };
 
   const isPlaceholderHidden = text !== '';

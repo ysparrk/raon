@@ -1,8 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
-import UserInputPart from '../Organisms/UserInputPart';
-import OriginalText from '../Organisms/OriginalText';
+import ResultPart from '../Organisms/ResultPart';
 import TitleBox from '../../Common/Atoms/TitleBox';
+import ExitButton from '../../Common/Atoms/ExitButton';
 
 const ContentDiv = styled.div`
   display: flex;
@@ -10,17 +10,16 @@ const ContentDiv = styled.div`
   justify-content: center;
   align-items: center;
 `;
-
-function SummarizeQuizPage() {
+function SummarizeResultPage() {
   return (
     <div>
       <TitleBox>문해력 기르기</TitleBox>
       <ContentDiv>
-        <OriginalText />
-        <UserInputPart />
+        <ResultPart />
       </ContentDiv>
+      <ExitButton to="/" />
     </div>
   );
 }
 
-export default SummarizeQuizPage;
+export default SummarizeResultPage;

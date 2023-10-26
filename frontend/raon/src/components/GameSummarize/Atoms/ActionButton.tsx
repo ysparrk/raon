@@ -11,7 +11,7 @@ const ButtonDiv = styled.div<ActionButtonProps>`
   display: flex;
   width: 300px;
   height: 60px;
-  margin: 10px;
+  margin: 15px;
   font-family: 'CookieRun';
   font-size: 40px;
   font-weight: 900;
