@@ -3,8 +3,9 @@ package com.arch.raon.domain.summary.entity;
 import com.arch.raon.domain.member.entity.Member;
 import com.arch.raon.global.util.enums.Grade;
 import jakarta.persistence.*;
-import lombok.Builder;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -13,9 +14,10 @@ import org.hibernate.annotations.Where;
 import java.time.LocalDateTime;
 
 
-@Entity(name="summary")
+@Entity
+@Table(name="summary")
 @Getter
-@Builder
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @SQLDelete(sql = "UPDATE summary SET is_delete = true, deleted_at = CURRENT_TIMESTAMP WHERE id = ?")
 @Where(clause = "is_delete = false")
 public class Summary {
@@ -50,16 +52,4 @@ public class Summary {
     @Column(name = "modified_at", nullable = false)
     private LocalDateTime modifiedAt;
 
-    public Summary() {
-
-    }
-
-    public Summary(Long id, Member member, Article article, String summary_content, String feedback_content, Grade grade) {
-        this.id = id;
-        this.member = member;
-        this.article = article;
-        this.summary_content = summary_content;
-        this.feedback_content = feedback_content;
-        this.grade = grade;
-    }
 }
