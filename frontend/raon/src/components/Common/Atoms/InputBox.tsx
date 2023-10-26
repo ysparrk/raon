@@ -23,6 +23,7 @@ const InputBox = ({ inputText, onChange }: InputBoxProps) => {
   const formStyle = {
     width: '100%',
   };
+
   const inputStyle: React.CSSProperties = {
     boxSizing: 'border-box',
     height: '50px',
