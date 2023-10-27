@@ -8,13 +8,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Getter
 @NoArgsConstructor
-public class ErrorResponse {
+public class ErrorResponseDto {
 
     private String code;
     private String message;
 
-    public static ErrorResponse of (ErrorCode code) {
-        return new ErrorResponse(code.getCode(), code.getMessage());
+    public static ErrorResponseDto of (ErrorCode code) {
+        return new ErrorResponseDto(code.getCode(), code.getMessage());
     }
 }
 
