@@ -10,19 +10,19 @@ interface SelectOptionProps {
 const SelectOptionDiv = styled.div`
   display: flex;
   position: relative;
-  width: 570px;
-  height: 248px;
-  margin: 20px;
+  width: 35.625rem;
+  height: 15.5rem;
+  margin: 1.25rem;
 `;
 const Circle = styled.div<SelectOptionProps>`
   position: absolute;
   top: 0%;
   left: 0%;
   z-index: 3;
-  width: 200px;
-  height: 200px;
+  width: 12.5rem;
+  height: 12.5rem;
   border-radius: 50%;
-  border: 8px solid black;
+  border: 0.5rem solid black;
   background-image: ${({ imgSrc }) => (imgSrc ? `url(${imgSrc})` : 'none')};
   background-size: cover;
   background-color: lightgrey;
@@ -31,17 +31,17 @@ const Circle = styled.div<SelectOptionProps>`
 const Square = styled.div`
   position: absolute;
   display: flex;
-  top: 35px;
-  left: 140px;
-  width: 400px;
-  height: 120px;
-  border-radius: 30px;
-  border: 8px solid black;
+  top: 2.1875rem;
+  left: 8.75rem;
+  width: 25rem;
+  height: 7.5rem;
+  border-radius: 1.875rem;
+  border: 0.5rem solid black;
   align-items: center;
   justify-content: right;
-  font-size: 60px;
+  font-size: 3.75rem;
   font-family: 'ONE-Mobile-POP';
-  padding: 8px;
+  padding: 0.5rem;
   background-color: white;
 `;
 

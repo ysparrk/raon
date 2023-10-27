@@ -4,12 +4,12 @@ import styled from 'styled-components';
 const StyledButton = styled.button`
   background-color: white;
   font-family: CookieRun;
-  border: 4px solid black;
-  padding: 16px 60px;
-  border-radius: 10px;
+  border: 0.25rem solid black;
+  padding: 1rem 3.75rem;
+  border-radius: 0.625rem;
   cursor: pointer;
   transition: 0.3s;
-  font-size: 24px;
+  font-size: 1.5rem;
 `;
 
 const CenteredContainer = styled.div`

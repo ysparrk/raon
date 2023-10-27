@@ -5,7 +5,7 @@ const BlurBox = styled.div`
   height: 100vh;
   top: 0;
   left: 0;
-  backdrop-filter: blur(3px);
+  backdrop-filter: blur(0.1875rem);
   background-color: rgba(255, 255, 255, 0.5);
   position: absolute;
   z-index: 1;

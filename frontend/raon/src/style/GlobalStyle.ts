@@ -35,4 +35,23 @@ time, mark, audio, video {
   font: inherit;
   vertical-align: baseline;
 }
+
+  html {
+    font-size: 15px;
+  }
+
+/* 화면 너비 1440px 이하인 경우 */
+@media (max-width: 1024px) {
+  html {
+    font-size: 12px; 
+  }
+}
+
+/* 화면 너비 1441px 이상인 경우 (큰 화면) */
+@media (min-width: 1441px) {
+  html {
+    font-size: 16px; /* 큰 화면에 대한 글꼴 크기 설정 */
+  }
+}
+
 `;

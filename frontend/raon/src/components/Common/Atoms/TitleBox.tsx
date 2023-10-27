@@ -7,24 +7,24 @@ interface TitleBoxProps {
 
 const Container = styled.div`
   display: flex;
-  padding-top: 20px;
-  padding-left: 100px;
+  padding-top: 1.25rem;
+  padding-left: 6.25rem;
 `;
 
 const Box = styled.div`
-  width: 645px;
-  height: 89px;
+  width: 40.3125rem;
+  height: 5.5625rem;
   background-color: #ffcd4a;
   display: flex;
   justify-content: center;
   align-items: center;
-  border: 3px solid #000000;
+  border: 0.1875rem solid #000000;
 `;
 
 const Text = styled.div`
   font-family: 'CookieRun';
   color: #000000;
-  font-size: 48px;
+  font-size: 3rem;
 `;
 
 const TitleBox = ({ children }: TitleBoxProps) => {

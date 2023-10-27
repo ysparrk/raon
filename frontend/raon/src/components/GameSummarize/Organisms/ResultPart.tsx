@@ -9,15 +9,15 @@ const ResultDiv = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 800px;
-  height: 450px;
+  width: 50rem;
+  height: 28.125rem;
 `;
 
 const ResultText = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 150px;
+  font-size: 9.375rem;
   font-family: 'ONE-Mobile-POP';
   color: white;
   height: 65%;

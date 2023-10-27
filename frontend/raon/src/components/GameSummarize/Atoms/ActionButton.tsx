@@ -9,14 +9,14 @@ interface ActionButtonProps {
 
 const ButtonDiv = styled.div<ActionButtonProps>`
   display: flex;
-  width: 300px;
-  height: 60px;
-  margin: 15px;
+  width: 18.75rem;
+  height: 3.75rem;
+  margin: 0.9375rem;
   font-family: 'CookieRun';
-  font-size: 40px;
+  font-size: 2.5rem;
   font-weight: 900;
-  border-radius: 20px;
-  box-shadow: 2px 2px 7px rgba(0, 0, 0, 0.5);
+  border-radius: 1.25rem;
+  box-shadow: 0.125rem 0.125rem 0.4375rem rgba(0, 0, 0, 0.5);
   background-color: ${(props) => props.buttoncolor};
   justify-content: center;
   align-items: center;
