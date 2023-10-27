@@ -1,4 +1,4 @@
-import React, { useState, ChangeEvent } from 'react';
+import React, { useState, useEffect, ChangeEvent } from 'react';
 import { useSetRecoilState } from 'recoil';
 import styled, { css } from 'styled-components';
 import { summarizeState } from '../../../recoil/Atoms';
@@ -17,7 +17,7 @@ const InputTextarea = styled.textarea`
   padding: 10px;
 `;
 
-const Placeholder = styled.div<{ isHidden: boolean }>`
+const Placeholder = styled.div<{ ishidden: boolean }>`
   font-size: 30px;
   font-family: 'CookieRun';
   position: absolute;
@@ -25,12 +25,16 @@ const Placeholder = styled.div<{ isHidden: boolean }>`
   top: 110px;
   left: 22px;
   color: #999;
-  display: ${(props) => (props.isHidden ? 'none' : 'block')};
+  display: ${(props) => (props.ishidden ? 'none' : 'block')};
 `;
 
 function SummarizeInputBox() {
   const [text, setText] = useState('');
   const setSummarize = useSetRecoilState(summarizeState);
+
+  useEffect(() => {
+    setSummarize('');
+  }, []);
 
   const handleTextareaChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
     setText(event.target.value);
@@ -46,7 +50,7 @@ function SummarizeInputBox() {
         value={text}
         onChange={handleTextareaChange}
       />
-      <Placeholder isHidden={isPlaceholderHidden}>
+      <Placeholder ishidden={!!isPlaceholderHidden}>
         요약문을 작성해주세요
       </Placeholder>
     </div>

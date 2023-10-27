@@ -4,7 +4,7 @@ import styled from 'styled-components';
 interface ActionButtonProps {
   onClick?: React.MouseEventHandler<HTMLDivElement>;
   optionText?: string;
-  btncolor?: string;
+  buttoncolor?: string;
 }
 
 const ButtonDiv = styled.div<ActionButtonProps>`
@@ -17,14 +17,14 @@ const ButtonDiv = styled.div<ActionButtonProps>`
   font-weight: 900;
   border-radius: 20px;
   box-shadow: 2px 2px 7px rgba(0, 0, 0, 0.5);
-  background-color: ${(props) => props.btncolor};
+  background-color: ${(props) => props.buttoncolor};
   justify-content: center;
   align-items: center;
 `;
 
-function ActionButton({ onClick, optionText, btncolor }: ActionButtonProps) {
+function ActionButton({ onClick, optionText, buttoncolor }: ActionButtonProps) {
   return (
-    <ButtonDiv onClick={onClick} btncolor={btncolor}>
+    <ButtonDiv onClick={onClick} buttoncolor={buttoncolor}>
       {optionText}
     </ButtonDiv>
   );
@@ -33,7 +33,7 @@ function ActionButton({ onClick, optionText, btncolor }: ActionButtonProps) {
 ActionButton.defaultProps = {
   optionText: '',
   onClick: console.log('test'),
-  btncolor: 'white',
+  buttoncolor: 'white',
 };
 
 export default ActionButton;

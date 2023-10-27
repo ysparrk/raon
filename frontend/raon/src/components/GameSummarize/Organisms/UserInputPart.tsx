@@ -48,21 +48,21 @@ function UserInputPart() {
         <BotInputPartDiv>
           <ActionButton
             optionText="녹음하기"
-            btncolor="lightgrey"
+            buttoncolor="lightgrey"
             onClick={() => {
               alert('제출하기를 눌러주세요');
             }}
           />
           <ActionButton
             optionText="직접 입력"
-            btncolor="lightgrey"
+            buttoncolor="lightgrey"
             onClick={() => {
               alert('제출하기를 눌러주세요');
             }}
           />
           <ActionButton
             optionText="제출하기"
-            btncolor="yellow"
+            buttoncolor="yellow"
             onClick={() => {
               console.log(userSummarizes);
               navigate('/game/summarize-result');
@@ -81,19 +81,19 @@ function UserInputPart() {
       <BotInputPartDiv>
         <ActionButton
           optionText="녹음하기"
-          btncolor="coral"
+          buttoncolor="coral"
           onClick={() => {
             alert('미구현');
           }}
         />
         <ActionButton
           optionText="직접 입력"
-          btncolor="lightblue"
+          buttoncolor="lightblue"
           onClick={() => setIsTyping(true)}
         />
         <ActionButton
           optionText="제출하기"
-          btncolor="lightgrey"
+          buttoncolor="lightgrey"
           onClick={() => {
             alert('녹음하기 혹은 직접 입력을 통해 값을 먼저 입력해주세요');
           }}
