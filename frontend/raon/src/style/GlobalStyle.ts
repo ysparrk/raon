@@ -37,7 +37,7 @@ time, mark, audio, video {
 }
 
   html {
-    font-size: 14px;
+    font-size: 15px;
   }
 
 /* 화면 너비 1440px 이하인 경우 */
