@@ -10,9 +10,9 @@ interface SelectOptionProps {
 const SelectOptionDiv = styled.div`
   display: flex;
   position: relative;
-  width: 660px;
+  width: 570px;
   height: 248px;
-  margin: 15px;
+  margin: 20px;
 `;
 const Circle = styled.div<SelectOptionProps>`
   position: absolute;

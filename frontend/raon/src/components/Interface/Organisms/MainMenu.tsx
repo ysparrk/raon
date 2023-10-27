@@ -16,16 +16,6 @@ const MenuContainer = styled.div`
   max-width: 90%;
   margin: 0 auto;
   height: 90vh; // 뷰포트의 높이에 따라 컨테이너의 높이를 설정
-
-  // SelectOption 컴포넌트에 대한 스타일
-  & > * {
-    margin: 1px;
-    margin-right: 0;
-  }
-
-  @media (max-width: 1700px) {
-    justify-content: space-between;
-  }
 `;
 
 const MainMenu = () => {
