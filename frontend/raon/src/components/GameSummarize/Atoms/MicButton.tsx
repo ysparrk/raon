@@ -9,8 +9,8 @@ interface MicButtonProps {
 const MicDiv = styled.div`
   background-image: url(${mic});
   background-size: cover;
-  width: 130px;
-  height: 130px;
+  width: 8.125rem;
+  height: 8.125rem;
 `;
 
 function MicButton({ onClick }: MicButtonProps) {

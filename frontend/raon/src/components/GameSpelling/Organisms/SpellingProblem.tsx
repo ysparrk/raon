@@ -14,20 +14,20 @@ const Container = styled.div`
 
 const Content = styled.div`
   font-family: 'CookieRun';
-  font-size: 60px;
+  font-size: 3.75rem;
   color: white;
-  margin-bottom: 100px;
+  margin-bottom: 6.25rem;
 `;
 
 const Options = styled.div`
   display: flex;
-  gap: 400px;
+  gap: 25rem;
 `;
 
 const Option = styled.div`
   font-family: 'ONE-Mobile-POP';
   color: white;
-  font-size: 48px;
+  font-size: 3rem;
   cursor: pointer;
   transition: background-color 0.2s;
 
@@ -36,7 +36,7 @@ const Option = styled.div`
   }
 `;
 
-const quiz_list = [
+const Quizlist = [
   {
     content: '문제1',
     option_one: '1',
@@ -109,34 +109,34 @@ const SpellingProblem = () => {
   const handleOptionClick = (option: string) => {
     setSubmitList((prevList: string[]) => [...prevList, option]);
 
-    if (currentIndex < quiz_list.length - 1) {
+    if (currentIndex < Quizlist.length - 1) {
       setCurrentIndex(currentIndex + 1);
     }
 
-    if (currentIndex === quiz_list.length - 1) {
+    if (currentIndex === Quizlist.length - 1) {
       navigate('/game/spelling-result');
     }
   };
 
   useEffect(() => {
-    const correctAnswers = quiz_list.map((quiz) => quiz.answer);
+    const correctAnswers = Quizlist.map((quiz) => quiz.answer);
     setAnswerList(correctAnswers);
     setSubmitList([]);
   }, []);
 
   return (
     <Container>
-      <Content>{quiz_list[currentIndex].content}</Content>
+      <Content>{Quizlist[currentIndex].content}</Content>
       <Options>
         <Option
-          onClick={() => handleOptionClick(quiz_list[currentIndex].option_one)}
+          onClick={() => handleOptionClick(Quizlist[currentIndex].option_one)}
         >
-          {quiz_list[currentIndex].option_one}
+          {Quizlist[currentIndex].option_one}
         </Option>
         <Option
-          onClick={() => handleOptionClick(quiz_list[currentIndex].option_two)}
+          onClick={() => handleOptionClick(Quizlist[currentIndex].option_two)}
         >
-          {quiz_list[currentIndex].option_two}
+          {Quizlist[currentIndex].option_two}
         </Option>
       </Options>
     </Container>

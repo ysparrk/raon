@@ -2,12 +2,12 @@ import React from 'react';
 import styled from 'styled-components';
 
 const TextDiv = styled.div`
-  width: 900px;
-  height: 600px;
+  width: 56.25rem;
+  height: 37rem;
   font-family: 'CookieRun';
-  font-size: 30px;
+  font-size: 1.875rem;
   color: white;
-  margin: 20px;
+  margin: 1.25rem;
 `;
 
 const OriginalText = () => {
