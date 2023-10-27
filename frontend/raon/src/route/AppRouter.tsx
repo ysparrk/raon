@@ -3,7 +3,7 @@ import { Routes, Route, BrowserRouter } from 'react-router-dom';
 
 // Interface
 import Landing from '../components/Interface/Pages/Landing.tsx';
-// import Main from '../components/Interface/Pages/Main.tsx';
+import Main from '../components/Interface/Pages/Main.tsx';
 
 // // User
 // import Login from '../components/User/Pages/Login.tsx';
@@ -32,6 +32,7 @@ const AppRouter: React.FC = () => {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Landing />} />
+        <Route path="/main" element={<Main />} />
         <Route path="/game/spelling-quiz" element={<SpellingQuiz />} />
         <Route path="/game/spelling-result" element={<SpellingResult />} />
         {/* <Route path="/user/" element={<Foundation />} /> */}
