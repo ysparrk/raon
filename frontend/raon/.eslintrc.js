@@ -29,6 +29,8 @@ module.exports = {
       { extensions: ['.js', '.jsx', '.ts', '.tsx'] },
     ], // JSX를 사용하는 파일 확장자를 명시 / .js, .jsx, .ts, .tsx 확장자를 가진 파일에서만 JSX 사용을 허용
     'jsx-a11y/click-events-have-key-events': 0, // onClick 이벤트 시 키보드 버튼 추가로 안정해줘도 됨.
+    camelcase: 'off',
+    '@typescript-eslint/naming-convention': 'off',
     'jsx-a11y/no-noninteractive-element-interactions': 0, // 사용자와의 상호작용이 없는 요소에 이벤트 핸들러를 사용해도 경고를 표시하지 않음
     '@typescript-eslint/explicit-module-boundary-types': 0, // TypeScript에서 함수의 반환 타입을 명시적으로 선언하지 않아도 되도록 허용
   },
