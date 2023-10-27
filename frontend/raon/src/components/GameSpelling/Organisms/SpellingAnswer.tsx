@@ -95,7 +95,7 @@ const SpellingAnswer = () => {
           </Column>
         </Columns>
       </Content>
-      <ExitButton to="/" />
+      <ExitButton to="/main/" />
     </Container>
   );
 };

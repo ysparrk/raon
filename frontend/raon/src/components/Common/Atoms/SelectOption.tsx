@@ -10,9 +10,9 @@ interface SelectOptionProps {
 const SelectOptionDiv = styled.div`
   display: flex;
   position: relative;
-  width: 660px;
+  width: 570px;
   height: 248px;
-  margin: 15px;
+  margin: 20px;
 `;
 const Circle = styled.div<SelectOptionProps>`
   position: absolute;
@@ -33,13 +33,13 @@ const Square = styled.div`
   display: flex;
   top: 35px;
   left: 140px;
-  width: 500px;
+  width: 400px;
   height: 120px;
   border-radius: 30px;
   border: 8px solid black;
   align-items: center;
   justify-content: right;
-  font-size: 80px;
+  font-size: 60px;
   font-family: 'ONE-Mobile-POP';
   padding: 8px;
   background-color: white;
