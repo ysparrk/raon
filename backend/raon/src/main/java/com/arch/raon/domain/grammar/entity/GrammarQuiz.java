@@ -10,7 +10,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "grammer_quiz")
+@Table(name = "grammar_quiz")
 public class GrammarQuiz implements Serializable {
 	@Id
 	@Column(name = "id", nullable = false)
@@ -74,5 +74,16 @@ public class GrammarQuiz implements Serializable {
 
 	public String getAnswer() {
 		return answer;
+	}
+
+	@Override
+	public String toString() {
+		return "GrammarQuiz{" +
+			"id=" + id +
+			", content='" + content + '\'' +
+			", option_one='" + option_one + '\'' +
+			", option_two='" + option_two + '\'' +
+			", answer='" + answer + '\'' +
+			'}';
 	}
 }

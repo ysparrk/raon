@@ -9,3 +9,8 @@ export const answerState = atom<string[]>({
   key: 'answerState',
   default: [],
 });
+
+export const summarizeState = atom<string>({
+  key: 'summarizeState',
+  default: '',
+});
