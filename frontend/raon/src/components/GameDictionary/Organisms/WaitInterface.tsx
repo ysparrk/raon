@@ -17,7 +17,8 @@ const InterfaceDiv = styled.div`
 const RoomCurrentDiv = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
+  padding-top: 100px;
   align-items: center;
   gap: 20px;
   width: 600px;
@@ -60,6 +61,9 @@ function WaitInterface() {
         <RoomCurrentDiv>
           <RoomHeadText>방 코드</RoomHeadText>
           <RoomCodeText>AAAA-BBBB-CCCC-DDDD</RoomCodeText>
+          <RoomParticipantsText>참가자</RoomParticipantsText>
+          <RoomParticipantsText>참가자</RoomParticipantsText>
+          <RoomParticipantsText>참가자</RoomParticipantsText>
           <RoomParticipantsText>참가자</RoomParticipantsText>
         </RoomCurrentDiv>
         <JoinButton
