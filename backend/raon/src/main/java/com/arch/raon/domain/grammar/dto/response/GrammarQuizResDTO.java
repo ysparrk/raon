@@ -6,7 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-public class GrammarQuizResDto implements Serializable {
+public class GrammarQuizResDTO implements Serializable {
 
 	private Long id;
 	private String content;
@@ -14,12 +14,12 @@ public class GrammarQuizResDto implements Serializable {
 	private String option_two;
 	private String answer;
 
-	public GrammarQuizResDto(){
+	public GrammarQuizResDTO(){
 		super();
 	}
 
 	@Builder
-	public GrammarQuizResDto(Long id, String content, String option_one, String option_two, String answer) {
+	public GrammarQuizResDTO(Long id, String content, String option_one, String option_two, String answer) {
 		this.id = id;
 		this.content = content;
 		this.option_one = option_one;

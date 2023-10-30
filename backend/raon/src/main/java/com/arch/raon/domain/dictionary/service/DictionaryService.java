@@ -1,10 +1,10 @@
 package com.arch.raon.domain.dictionary.service;
 
-import com.arch.raon.domain.dictionary.dto.request.DictionaryScoreReqDto;
-import com.arch.raon.domain.dictionary.dto.response.DictionaryQuizResDto;
+import com.arch.raon.domain.dictionary.dto.request.DictionaryScoreReqDTO;
+import com.arch.raon.domain.dictionary.dto.response.DictionaryQuizResDTO;
 
 public interface DictionaryService {
-    DictionaryQuizResDto getDictionaryQuizzes();
-    void saveDictionaryQuizResult(DictionaryScoreReqDto dictionaryScoreReqDto);
+    DictionaryQuizResDTO getDictionaryQuizzes();
+    void saveDictionaryQuizResult(DictionaryScoreReqDTO dictionaryScoreReqDTO);
 
 }

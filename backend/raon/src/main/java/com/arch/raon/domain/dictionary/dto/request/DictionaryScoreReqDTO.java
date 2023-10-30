@@ -6,15 +6,15 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-public class DictionaryScoreReqDto {
+public class DictionaryScoreReqDTO {
     private int score;		// 최대 100
 
-    public DictionaryScoreReqDto() {
+    public DictionaryScoreReqDTO() {
         super();
     }
 
     @Builder
-    public DictionaryScoreReqDto(int score) {
+    public DictionaryScoreReqDTO(int score) {
         setScore(score);
     }
 
