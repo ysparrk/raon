@@ -13,7 +13,7 @@ import java.util.List;
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class DictionaryQuizServiceImpl implements DictionaryQuizService{
+public class DictionaryServiceImpl implements DictionaryService {
 
     private final DictionaryInitialQuizRepository dictionaryInitialQuizRepository;
     private final DictionaryDirectionQuizRepository dictionaryDirectionQuizRepository;

@@ -10,14 +10,14 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
-class DictionaryQuizServiceImplTest {
+class DictionaryServiceImplTest {
 
     @Autowired
     DictionaryInitialQuizRepository dictionaryInitialQuizRepository;
     @Autowired
     DictionaryDirectionQuizRepository dictionaryDirectionQuizRepository;
     @Autowired
-    DictionaryQuizService dictionaryQuizService;
+    DictionaryService dictionaryService;
 
     @DisplayName("국어사전 퀴즈 랜덤 문제")
     @Test
@@ -25,7 +25,7 @@ class DictionaryQuizServiceImplTest {
         // given
 
         // when
-        DictionaryQuizResponseDto expectList = dictionaryQuizService.getDictionaryQuizzes();
+        DictionaryQuizResponseDto expectList = dictionaryService.getDictionaryQuizzes();
 
         // then
         assertThat(7).isEqualTo(expectList.getInitialQuizList().size());

@@ -1,7 +1,7 @@
 package com.arch.raon.domain.dictionary.controller;
 
 import com.arch.raon.domain.dictionary.dto.response.DictionaryQuizResponseDto;
-import com.arch.raon.domain.dictionary.service.DictionaryQuizService;
+import com.arch.raon.domain.dictionary.service.DictionaryService;
 import com.arch.raon.global.dto.ResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -15,13 +15,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class DictionaryQuizController {
 
-    private final DictionaryQuizService dictionaryQuizService;
+    private final DictionaryService dictionaryService;
 
     @GetMapping("/quiz")
     public ResponseEntity<ResponseDto> getQuizzes(
 //            @AuthenticationPrincipal Long memberId
     ){
-        DictionaryQuizResponseDto dictionaryQuizzes = dictionaryQuizService.getDictionaryQuizzes();
+        DictionaryQuizResponseDto dictionaryQuizzes = dictionaryService.getDictionaryQuizzes();
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ResponseDto.builder()
