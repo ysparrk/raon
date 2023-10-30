@@ -1,5 +1,8 @@
 package com.arch.raon.domain.member.entity;
 
+import com.arch.raon.global.auth.enums.AuthProvider;
+import com.arch.raon.global.auth.enums.RoleType;
+import com.arch.raon.global.auth.oauth2.OAuth2UserInfo;
 import com.arch.raon.global.util.enums.Gender;
 import com.arch.raon.global.util.enums.School;
 import jakarta.persistence.*;
@@ -64,8 +67,26 @@ public class Member {
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
 
+    @Column(name = "oauth2_id")
+    private String oauth2Id;  // 로그인시 전달되는 id
+
+    @Column(name = "auth_provider")
+    @Enumerated(EnumType.STRING)
+    private AuthProvider authProvider;
+
+    @Column(name = "role_type")
+    @Enumerated(EnumType.STRING)
+    private RoleType roleType;  // adimin or user
+
+    public Member update(OAuth2UserInfo oAuth2UserInfo) {
+        this.nickname = oAuth2UserInfo.getName();
+        this.oauth2Id = oAuth2UserInfo.getOAuth2Id();
+
+        return this;
+    }
+
     @Builder
-    public Member(Long id, String email, String nickname, String profileUrl, Gender gender, School school, Integer yearOfBirth, Integer mileage, LocalDateTime createdAt, LocalDateTime modifiedAt, Boolean isDeleted, LocalDateTime deletedAt) {
+    public Member(Long id, String email, String nickname, String profileUrl, Gender gender, School school, Integer yearOfBirth, Integer mileage, LocalDateTime createdAt, LocalDateTime modifiedAt, Boolean isDeleted, LocalDateTime deletedAt, String oauth2Id, AuthProvider authProvider, RoleType roleType) {
         this.id = id;
         this.email = email;
         this.nickname = nickname;
@@ -78,5 +99,8 @@ public class Member {
         this.modifiedAt = modifiedAt;
         this.isDeleted = isDeleted;
         this.deletedAt = deletedAt;
+        this.oauth2Id = oauth2Id;
+        this.authProvider = authProvider;
+        this.roleType = roleType;
     }
 }
