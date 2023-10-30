@@ -16,7 +16,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class GrammarQuizServiceImpl implements GrammarQuizService{
+public class GrammarServiceImpl implements GrammarService {
 
 	private final GrammarQuizRepository grammarQuizRepository;
 	private final GrammarScoreRepository grammarScoreRepository;
