@@ -31,9 +31,9 @@ public class DictionaryController {
 
     @PostMapping("/single-result")
     public ResponseEntity<ResponseDTO> saveResult(
-            @RequestBody DictionaryScoreReqDTO dictionaryScoreReqDto
+            @RequestBody DictionaryScoreReqDTO dictionaryScoreReqDTO
             ) {
-        dictionaryService.saveDictionaryQuizResult(dictionaryScoreReqDto);
+        dictionaryService.saveDictionaryQuizResult(dictionaryScoreReqDTO);
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ResponseDTO.builder()

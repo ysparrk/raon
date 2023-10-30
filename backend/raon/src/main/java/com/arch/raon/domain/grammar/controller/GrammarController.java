@@ -31,10 +31,10 @@ public class GrammarController {
 	}
 
 	@PostMapping("/score")
-	public ResponseEntity<ResponseDTO> saveScore(@RequestBody GrammarScoreReqDTO grammarScoreReqDto){
+	public ResponseEntity<ResponseDTO> saveScore(@RequestBody GrammarScoreReqDTO grammarScoreReqDTO){
 
 
-		grammarService.saveQuizResult(grammarScoreReqDto);
+		grammarService.saveQuizResult(grammarScoreReqDTO);
 
 		return ResponseEntity.status(HttpStatus.OK)
 			.body(ResponseDTO.builder()
