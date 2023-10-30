@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -23,7 +24,8 @@ public class DictionaryScore {
     @Column(name = "id", updatable = false)
     private Long id;
 
-    @Column(name = "score", nullable = false, columnDefinition = "0")
+    @ColumnDefault("0")
+    @Column(name = "score", nullable = false)
     private Integer score;
 
     @ManyToOne(fetch = FetchType.LAZY)
