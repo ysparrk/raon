@@ -4,6 +4,7 @@ import com.arch.raon.global.util.enums.Gender;
 import com.arch.raon.global.util.enums.School;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
@@ -62,4 +63,20 @@ public class Member {
 
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
+
+    @Builder
+    public Member(Long id, String email, String nickname, String profileUrl, Gender gender, School school, Integer yearOfBirth, Integer mileage, LocalDateTime createdAt, LocalDateTime modifiedAt, Boolean isDeleted, LocalDateTime deletedAt) {
+        this.id = id;
+        this.email = email;
+        this.nickname = nickname;
+        this.profileUrl = profileUrl;
+        this.gender = gender;
+        this.school = school;
+        this.yearOfBirth = yearOfBirth;
+        this.mileage = mileage;
+        this.createdAt = createdAt;
+        this.modifiedAt = modifiedAt;
+        this.isDeleted = isDeleted;
+        this.deletedAt = deletedAt;
+    }
 }
