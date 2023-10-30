@@ -1,6 +1,7 @@
 package com.arch.raon.domain.grammar.controller;
 
 import com.arch.raon.domain.grammar.entity.GrammarQuiz;
+import com.arch.raon.domain.grammar.entity.GrammarScore;
 import com.arch.raon.domain.grammar.service.GrammarQuizService;
 import com.arch.raon.global.dto.ResponseDto;
 import lombok.RequiredArgsConstructor;
@@ -30,4 +31,17 @@ public class GrammarController {
 				.data(quizzes)
 				.build());
 	}
+
+	@PostMapping("/score")
+	public ResponseEntity<ResponseDto> saveScore(@RequestBody GrammarScoreReqDto grammarScoreReqDto){
+
+
+		grammarQuizService.saveQuizResult(grammarScoreReqDto);
+
+		return ResponseEntity.status(HttpStatus.OK)
+			.body(ResponseDto.builder()
+				.message("결과 저장 성공")
+				.build());
+	}
+
 }

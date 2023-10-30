@@ -13,13 +13,13 @@ const ResultModalDiv = styled.div`
   position: absolute;
   z-index: 2;
   top: 5%;
-  width: 1000px;
-  height: 650px;
-  padding: 10px;
+  width: 62.5rem;
+  height: 40.625rem;
+  padding: 0.625rem;
   font-family: 'CookieRun';
-  font-size: 24px;
-  border-radius: 15px;
-  border: 6px solid black;
+  font-size: 1.5rem;
+  border-radius: 0.9375rem;
+  border: 0.375rem solid black;
   background-color: #ffcd4a;
   justify-content: center;
   align-items: center;
@@ -27,35 +27,35 @@ const ResultModalDiv = styled.div`
 
 const ResultModalHeader = styled.p`
   font-family: 'CookieRun';
-  font-size: 40px;
+  font-size: 2.5rem;
   font-weight: 1000;
   color: #ffebb6;
   text-shadow:
-    -1.5px -1.5px 0 #000,
-    1.5px -1.5px 0 #000,
-    -1.5px 1.5px 0 #000,
-    1.5px 1.5px 0 #000;
+    -0.0938rem -0.0938rem 0 #000,
+    0.0938rem -0.0938rem 0 #000,
+    -0.0938rem 0.0938rem 0 #000,
+    0.0938rem 0.0938rem 0 #000;
 `;
 
 const ResultModalContent = styled.div`
-  width: 983px;
-  height: 120px;
-  padding: 2px;
-  margin: 4px;
+  width: 61.4375rem;
+  height: 7.5rem;
+  padding: 0.125rem;
+  margin: 0.25rem;
   font-family: 'CookieRun';
-  font-size: 22px;
-  border-radius: 15px;
-  border: 3px solid black;
-  box-shadow: 2px 2px 4px rgb(0, 0, 0, 0.5);
+  font-size: 1.375rem;
+  border-radius: 0.9375rem;
+  border: 0.1875rem solid black;
+  box-shadow: 0.125rem 0.125rem 0.25rem rgb(0, 0, 0, 0.5);
   background-color: white;
 `;
 
 const ResultModalExit = styled.div`
   font-family: 'ONE-Mobile-POP';
-  font-size: 50px;
-  margin-left: 850px;
-  margin-top: 20px;
-  padding: 0px;
+  font-size: 3.125rem;
+  margin-left: 53.125rem;
+  margin-top: 1.25rem;
+  padding: 0rem;
 `;
 function ResultModal({
   spellResult,

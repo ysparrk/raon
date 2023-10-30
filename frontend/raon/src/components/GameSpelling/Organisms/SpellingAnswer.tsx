@@ -14,21 +14,21 @@ const Container = styled.div`
 const ScoreHeader = styled.h1`
   font-family: 'CookieRun';
   text-align: center;
-  font-size: 70px;
+  font-size: 4.375rem;
   width: 100%;
-  margin-top: 50px;
+  margin-top: 3.125rem;
 `;
 
 const Content = styled.div`
   font-family: 'CookieRun';
-  font-size: 50px;
+  font-size: 3.125rem;
   color: #000000;
 `;
 
 const Columns = styled.div`
   display: flex;
   justify-content: center;
-  gap: 50px;
+  gap: 3.125rem;
 `;
 
 const Column = styled.div`
@@ -38,7 +38,7 @@ const Column = styled.div`
 
 const IncorrectAnswer = styled.span`
   text-decoration: line-through;
-  margin-right: 40px;
+  margin-right: 2.5rem;
 `;
 
 const CorrectAnswer = styled.span`
@@ -95,7 +95,7 @@ const SpellingAnswer = () => {
           </Column>
         </Columns>
       </Content>
-      <ExitButton to="/" />
+      <ExitButton to="/main/" />
     </Container>
   );
 };

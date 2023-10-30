@@ -4,26 +4,26 @@ import styled, { css } from 'styled-components';
 import { summarizeState } from '../../../recoil/Atoms';
 
 const InputTextarea = styled.textarea`
-  width: 300px;
-  height: 240px;
+  width: 18.75rem;
+  height: 15rem;
   font-family: 'CookieRun';
-  font-size: 20px;
-  border-radius: 20px;
+  font-size: 1.25rem;
+  border-radius: 1.25rem;
   background-color: white;
-  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
+  box-shadow: 0.0625rem 0.0625rem 0.3125rem rgba(0, 0, 0, 0.5);
   justify-content: center;
   text-align: left;
   resize: none;
-  padding: 10px;
+  padding: 0.625rem;
 `;
 
 const Placeholder = styled.div<{ ishidden: boolean }>`
-  font-size: 30px;
+  font-size: 1.875rem;
   font-family: 'CookieRun';
   position: absolute;
   pointer-events: none;
-  top: 110px;
-  left: 22px;
+  top: 6.875rem;
+  left: 1.375rem;
   color: #999;
   display: ${(props) => (props.ishidden ? 'none' : 'block')};
 `;

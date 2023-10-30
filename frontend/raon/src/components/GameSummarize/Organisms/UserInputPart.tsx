@@ -10,8 +10,8 @@ import SummarizeInputBox from '../Atoms/SummarizeInputBox';
 const UserInputPartDiv = styled.div`
   display: flex;
   flex-direction: column;
-  width: 330px;
-  height: 450px;
+  width: 20.625rem;
+  height: 28.1rem;
 `;
 
 const TopInputPartDiv = styled.div`

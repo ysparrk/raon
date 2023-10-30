@@ -16,7 +16,7 @@ function SummarizeResultPage() {
       <TitleBox>문해력 기르기</TitleBox>
       <ContentDiv>
         <ResultPart />
-        <ExitButton to="/" />
+        <ExitButton to="/main/" />
       </ContentDiv>
     </div>
   );

@@ -31,7 +31,11 @@ public enum ErrorCode {
     INVALID_PASSWORD_FORMAT(HttpStatus.BAD_REQUEST, "M004", "비밀번호 제약조건에 맞지 않습니다."),
     INVALID_NAME_FORMAT(HttpStatus.BAD_REQUEST, "M005", "이름 제약조건에 맞지 않습니다."),
     INVALID_CONTACT_FORMAT(HttpStatus.BAD_REQUEST, "M006", "전화번호 제약조건에 맞지 않습니다."),
-    MEMBER_NOT_FOUND(HttpStatus.BAD_REQUEST, "M007", "멤버가 존재하지 않습니다.");
+    MEMBER_NOT_FOUND(HttpStatus.BAD_REQUEST, "M007", "멤버가 존재하지 않습니다."),
+
+    // 맞춤법 퀴즈
+    GRAMMAR_SCORE_UNAVAILABLE(HttpStatus.BAD_REQUEST, "G001","유효하지 않은 점수입니다."),
+    GRAMMAR_CLEAR_TIME_UNAVAILABLE(HttpStatus.BAD_REQUEST, "G002","유효하지 않은 클리어 시간입니다.");
 
     private final HttpStatus status;
     private final String code;

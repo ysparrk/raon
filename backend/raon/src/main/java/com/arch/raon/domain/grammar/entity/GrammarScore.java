@@ -7,15 +7,19 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.Builder;
 
 @Entity
 @Table(name = "grammar_score")
 public class GrammarScore {
 
 	@Id
-	@Column(name = "id", nullable = false)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id", updatable = false)
 	private Long id;
 	@Column(name = "member_id", nullable = false)
 	private Long member_id;
@@ -32,8 +36,10 @@ public class GrammarScore {
 	private LocalDateTime modified_at;
 
 	public GrammarScore() {
+		super();
 	}
 
+	@Builder
 	public GrammarScore(Long id, Long member_id, int score, int play_time, LocalDateTime created_at,
 		LocalDateTime modified_at) {
 		setId(id);
