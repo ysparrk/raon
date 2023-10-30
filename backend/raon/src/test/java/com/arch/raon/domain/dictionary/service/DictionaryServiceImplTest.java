@@ -1,6 +1,6 @@
 package com.arch.raon.domain.dictionary.service;
 
-import com.arch.raon.domain.dictionary.dto.response.DictionaryQuizResponseDto;
+import com.arch.raon.domain.dictionary.dto.response.DictionaryQuizResDto;
 import com.arch.raon.domain.dictionary.repository.DictionaryDirectionQuizRepository;
 import com.arch.raon.domain.dictionary.repository.DictionaryInitialQuizRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -25,7 +25,7 @@ class DictionaryServiceImplTest {
         // given
 
         // when
-        DictionaryQuizResponseDto expectList = dictionaryService.getDictionaryQuizzes();
+        DictionaryQuizResDto expectList = dictionaryService.getDictionaryQuizzes();
 
         // then
         assertThat(7).isEqualTo(expectList.getInitialQuizList().size());

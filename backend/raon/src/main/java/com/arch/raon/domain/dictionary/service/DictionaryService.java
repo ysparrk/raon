@@ -1,7 +1,8 @@
 package com.arch.raon.domain.dictionary.service;
 
-import com.arch.raon.domain.dictionary.dto.response.DictionaryQuizResponseDto;
+import com.arch.raon.domain.dictionary.dto.response.DictionaryQuizResDto;
 
 public interface DictionaryService {
-    DictionaryQuizResponseDto getDictionaryQuizzes();
+    DictionaryQuizResDto getDictionaryQuizzes();
+
 }

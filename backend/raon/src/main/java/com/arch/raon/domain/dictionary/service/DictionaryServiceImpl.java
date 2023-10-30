@@ -1,6 +1,6 @@
 package com.arch.raon.domain.dictionary.service;
 
-import com.arch.raon.domain.dictionary.dto.response.DictionaryQuizResponseDto;
+import com.arch.raon.domain.dictionary.dto.response.DictionaryQuizResDto;
 import com.arch.raon.domain.dictionary.entity.DictionaryDirectionQuiz;
 import com.arch.raon.domain.dictionary.entity.DictionaryInitialQuiz;
 import com.arch.raon.domain.dictionary.repository.DictionaryDirectionQuizRepository;
@@ -19,12 +19,12 @@ public class DictionaryServiceImpl implements DictionaryService {
     private final DictionaryDirectionQuizRepository dictionaryDirectionQuizRepository;
 
     @Override
-    public DictionaryQuizResponseDto getDictionaryQuizzes() {
+    public DictionaryQuizResDto getDictionaryQuizzes() {
 
         List<DictionaryInitialQuiz> initialQuizList = dictionaryInitialQuizRepository.random7();
         List<DictionaryDirectionQuiz> directionQuizList = dictionaryDirectionQuizRepository.random3();
 
-        DictionaryQuizResponseDto quizList = DictionaryQuizResponseDto.builder()
+        DictionaryQuizResDto quizList = DictionaryQuizResDto.builder()
                 .initialQuizList(initialQuizList)
                 .directionQuizList(directionQuizList)
                 .build();
