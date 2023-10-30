@@ -35,7 +35,11 @@ public enum ErrorCode {
 
     // 맞춤법 퀴즈
     GRAMMAR_SCORE_UNAVAILABLE(HttpStatus.BAD_REQUEST, "G001","유효하지 않은 점수입니다."),
-    GRAMMAR_CLEAR_TIME_UNAVAILABLE(HttpStatus.BAD_REQUEST, "G002","유효하지 않은 클리어 시간입니다.");
+    GRAMMAR_CLEAR_TIME_UNAVAILABLE(HttpStatus.BAD_REQUEST, "G002","유효하지 않은 클리어 시간입니다."),
+
+
+    // 국어사전 퀴즈
+    DICTIONARY_SCORE_UNAVAILABLE(HttpStatus.BAD_REQUEST, "D001", "유효하지 않은 국어사전 퀴즈 점수입니다.");
 
     private final HttpStatus status;
     private final String code;

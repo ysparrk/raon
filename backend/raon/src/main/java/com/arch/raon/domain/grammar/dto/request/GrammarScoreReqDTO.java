@@ -9,16 +9,16 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-public class GrammarScoreReqDto implements Serializable {
+public class GrammarScoreReqDTO implements Serializable {
 	private int score;		// 최대 100
 	private int play_time; // 단위 : ms
 
-	public GrammarScoreReqDto() {
+	public GrammarScoreReqDTO() {
 		super();
 	}
 
 	@Builder
-	public GrammarScoreReqDto(int score, int play_time) {
+	public GrammarScoreReqDTO(int score, int play_time) {
 		setScore(score);
 		setPlay_time(play_time);
 	}
