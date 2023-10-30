@@ -20,7 +20,7 @@ public class DictionaryQuizController {
 
     @GetMapping("/quiz")
     public ResponseEntity<ResponseDto> getQuizzes(
-            @AuthenticationPrincipal Long memberId
+//            @AuthenticationPrincipal Long memberId
     ){
         DictionaryQuizResponseDto dictionaryQuizzes = dictionaryQuizService.getDictionaryQuizzes();
 
