@@ -8,16 +8,16 @@ import lombok.Getter;
 import java.util.List;
 
 @Getter
-public class DictionaryQuizResDto {
+public class DictionaryQuizResDTO {
     private List<DictionaryInitialQuiz> initialQuizList;
     private List<DictionaryDirectionQuiz> directionQuizList;
 
-    public DictionaryQuizResDto(){
+    public DictionaryQuizResDTO(){
         super();
     }
 
     @Builder
-    public DictionaryQuizResDto(List<DictionaryInitialQuiz> initialQuizList, List<DictionaryDirectionQuiz> directionQuizList) {
+    public DictionaryQuizResDTO(List<DictionaryInitialQuiz> initialQuizList, List<DictionaryDirectionQuiz> directionQuizList) {
         this.initialQuizList = initialQuizList;
         this.directionQuizList = directionQuizList;
     }

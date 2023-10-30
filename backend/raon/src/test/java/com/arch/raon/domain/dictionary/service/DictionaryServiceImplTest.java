@@ -1,6 +1,6 @@
 package com.arch.raon.domain.dictionary.service;
 
-import com.arch.raon.domain.dictionary.dto.response.DictionaryQuizResDto;
+import com.arch.raon.domain.dictionary.dto.response.DictionaryQuizResDTO;
 import com.arch.raon.domain.dictionary.repository.DictionaryDirectionQuizRepository;
 import com.arch.raon.domain.dictionary.repository.DictionaryInitialQuizRepository;
 import com.arch.raon.domain.dictionary.repository.DictionaryScoreRepository;
@@ -60,7 +60,7 @@ class DictionaryServiceImplTest {
         // given
 
         // when
-        DictionaryQuizResDto expectList = dictionaryService.getDictionaryQuizzes();
+        DictionaryQuizResDTO expectList = dictionaryService.getDictionaryQuizzes();
 
         // then
         assertThat(7).isEqualTo(expectList.getInitialQuizList().size());
@@ -73,7 +73,7 @@ class DictionaryServiceImplTest {
 //    @Test
 //    void saveDictionaryQuizResult() {
 //        // given
-//        DictionaryScoreReqDto dictionaryScoreReqDto = DictionaryScoreReqDto.builder()
+//        DictionaryScoreReqDTO dictionaryScoreReqDTO = DictionaryScoreReqDTO.builder()
 //                .score(70)
 //                .build();
 //

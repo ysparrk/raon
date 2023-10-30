@@ -1,6 +1,6 @@
 package com.arch.raon.global.exception;
 
-import com.arch.raon.global.dto.ErrorResponseDto;
+import com.arch.raon.global.dto.ErrorResponseDTO;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -24,65 +24,65 @@ public class GlobalExceptionHandler {
 
     // CustomException을 상속받은 모든 에러를 처리하는 Handler
     @ExceptionHandler(CustomException.class)
-    public ResponseEntity<ErrorResponseDto> handleRuntimeException(CustomException e) {
+    public ResponseEntity<ErrorResponseDTO> handleRuntimeException(CustomException e) {
         ErrorCode errorCode = e.getErrorCode();
         e.printStackTrace();
         return ResponseEntity.status(errorCode.getStatus())
-                .body(ErrorResponseDto.of(errorCode));
+                .body(ErrorResponseDTO.of(errorCode));
     }
 
     // CustomException을 상속받지 않은 에러를 처리하는 Handler들 작성
     // @Valid 예외 처리
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ErrorResponseDto> handleMethodArgumentNotValidException(BindException e) {
+    public ResponseEntity<ErrorResponseDTO> handleMethodArgumentNotValidException(BindException e) {
         log.error("[EXCEPTION] {}", e.getClass().getSimpleName());
         e.printStackTrace();
         return ResponseEntity.status(BAD_REQUEST)
-                .body(new ErrorResponseDto(INVALID_INPUT_VALUE.getCode(), e.getFieldError().getDefaultMessage()));
+                .body(new ErrorResponseDTO(INVALID_INPUT_VALUE.getCode(), e.getFieldError().getDefaultMessage()));
     }
 
     // 요청 데이터 인자 부족
     @ExceptionHandler(MissingRequestValueException.class)
-    public ResponseEntity<ErrorResponseDto> handleMissingRequestValueException(MissingRequestValueException e) {
+    public ResponseEntity<ErrorResponseDTO> handleMissingRequestValueException(MissingRequestValueException e) {
         log.error("[EXCEPTION] {}", e.getClass().getSimpleName());
         e.printStackTrace();
         return ResponseEntity.status(BAD_REQUEST)
-                .body(ErrorResponseDto.of(MISSING_INPUT_VALUE));
+                .body(ErrorResponseDTO.of(MISSING_INPUT_VALUE));
     }
 
     // PathVariable 타입이 MissMatch
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
-    public ResponseEntity<ErrorResponseDto> handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException e){
+    public ResponseEntity<ErrorResponseDTO> handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException e){
         log.error("[EXCEPTION] {}", e.getClass().getSimpleName());
         e.printStackTrace();
         return ResponseEntity.status(BAD_REQUEST)
-                .body(ErrorResponseDto.of(INVALID_PATH_VALUE));
+                .body(ErrorResponseDTO.of(INVALID_PATH_VALUE));
     }
 
     // 잘못된 HttpMethod로 요청
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
-    public ResponseEntity<ErrorResponseDto> handleHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException e) {
+    public ResponseEntity<ErrorResponseDTO> handleHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException e) {
         log.error("[EXCEPTION] {}", e.getClass().getSimpleName());
         e.printStackTrace();
         return ResponseEntity.status(BAD_REQUEST)
-                .body(ErrorResponseDto.of(METHOD_NOT_ALLOWED));
+                .body(ErrorResponseDTO.of(METHOD_NOT_ALLOWED));
     }
 
     // 없는 api로 요청
     @ExceptionHandler(NoHandlerFoundException.class)
-    public ResponseEntity<ErrorResponseDto> handleNoHandlerFoundException(NoHandlerFoundException e) {
+    public ResponseEntity<ErrorResponseDTO> handleNoHandlerFoundException(NoHandlerFoundException e) {
         log.error("[EXCEPTION] {}", e.getClass().getSimpleName());
         e.printStackTrace();
         return ResponseEntity.status(BAD_REQUEST)
-                .body(ErrorResponseDto.of(NO_SUCH_API));
+                .body(ErrorResponseDTO.of(NO_SUCH_API));
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorResponseDto> handleException(Exception e) {
+    public ResponseEntity<ErrorResponseDTO> handleException(Exception e) {
         log.error("[EXCEPTION] {}", e.getClass().getSimpleName());
         e.printStackTrace();
         return ResponseEntity.status(INTERNAL_SERVER_ERROR)
-                .body(ErrorResponseDto.of(ErrorCode.INTERNAL_SERVER_ERROR));
+                .body(ErrorResponseDTO.of(ErrorCode.INTERNAL_SERVER_ERROR));
     }
 }
 

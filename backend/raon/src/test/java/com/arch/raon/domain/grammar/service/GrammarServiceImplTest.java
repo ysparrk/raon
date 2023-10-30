@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import com.arch.raon.domain.grammar.dto.request.GrammarScoreReqDto;
+import com.arch.raon.domain.grammar.dto.request.GrammarScoreReqDTO;
 import com.arch.raon.domain.grammar.entity.GrammarQuiz;
 import com.arch.raon.domain.grammar.repository.GrammarQuizRepository;
 import com.arch.raon.domain.grammar.repository.GrammarScoreRepository;
@@ -39,7 +39,7 @@ class GrammarServiceImplTest {
 	@Test
 	void saveQuizResult() {
 		//given
-		GrammarScoreReqDto grammarScore = GrammarScoreReqDto.builder()
+		GrammarScoreReqDTO grammarScore = GrammarScoreReqDTO.builder()
 			.score(10)
 			.play_time(1627)
 			.build();

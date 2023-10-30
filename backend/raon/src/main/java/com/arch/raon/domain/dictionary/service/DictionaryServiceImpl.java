@@ -1,7 +1,7 @@
 package com.arch.raon.domain.dictionary.service;
 
-import com.arch.raon.domain.dictionary.dto.request.DictionaryScoreReqDto;
-import com.arch.raon.domain.dictionary.dto.response.DictionaryQuizResDto;
+import com.arch.raon.domain.dictionary.dto.request.DictionaryScoreReqDTO;
+import com.arch.raon.domain.dictionary.dto.response.DictionaryQuizResDTO;
 import com.arch.raon.domain.dictionary.entity.DictionaryDirectionQuiz;
 import com.arch.raon.domain.dictionary.entity.DictionaryInitialQuiz;
 import com.arch.raon.domain.dictionary.entity.DictionaryScore;
@@ -28,12 +28,12 @@ public class DictionaryServiceImpl implements DictionaryService {
     private final DictionaryScoreRepository dictionaryScoreRepository;
 
     @Override
-    public DictionaryQuizResDto getDictionaryQuizzes() {
+    public DictionaryQuizResDTO getDictionaryQuizzes() {
 
         List<DictionaryInitialQuiz> initialQuizList = dictionaryInitialQuizRepository.random7();
         List<DictionaryDirectionQuiz> directionQuizList = dictionaryDirectionQuizRepository.random3();
 
-        DictionaryQuizResDto quizList = DictionaryQuizResDto.builder()
+        DictionaryQuizResDTO quizList = DictionaryQuizResDTO.builder()
                 .initialQuizList(initialQuizList)
                 .directionQuizList(directionQuizList)
                 .build();
@@ -43,7 +43,7 @@ public class DictionaryServiceImpl implements DictionaryService {
 
     @Override
     @Transactional
-    public void saveDictionaryQuizResult(DictionaryScoreReqDto dictionaryScoreReqDto) {
+    public void saveDictionaryQuizResult(DictionaryScoreReqDTO dictionaryScoreReqDTO) {
         // TODO: security 적용 후 member에 대한 검증
         final long TEST_MEMBER_ID = 6;
 
@@ -56,7 +56,7 @@ public class DictionaryServiceImpl implements DictionaryService {
 
         DictionaryScore dictionaryScore = DictionaryScore.builder()
                 .member(member)
-                .score(dictionaryScoreReqDto.getScore())
+                .score(dictionaryScoreReqDTO.getScore())
                 .build();
 
         dictionaryScoreRepository.save(dictionaryScore);
