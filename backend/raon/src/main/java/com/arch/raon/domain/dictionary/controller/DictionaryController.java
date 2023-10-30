@@ -1,14 +1,13 @@
 package com.arch.raon.domain.dictionary.controller;
 
+import com.arch.raon.domain.dictionary.dto.request.DictionaryScoreReqDto;
 import com.arch.raon.domain.dictionary.dto.response.DictionaryQuizResDto;
 import com.arch.raon.domain.dictionary.service.DictionaryService;
 import com.arch.raon.global.dto.ResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("/dictionary")
 @RestController
@@ -27,6 +26,18 @@ public class DictionaryController {
                 .body(ResponseDto.builder()
                         .message("국어사전 퀴즈 리스트")
                         .data(dictionaryQuizzes)
+                        .build());
+    }
+
+    @PostMapping("/single-result")
+    public ResponseEntity<ResponseDto> saveResult(
+            @RequestBody DictionaryScoreReqDto dictionaryScoreReqDto
+            ) {
+        dictionaryService.saveDictionaryQuizResult(dictionaryScoreReqDto);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ResponseDto.builder()
+                        .message("국어사전 퀴즈 결과 저장 성공")
                         .build());
     }
 }
