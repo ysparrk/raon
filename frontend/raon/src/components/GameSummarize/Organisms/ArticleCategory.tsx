@@ -19,8 +19,8 @@ const CategoryContainer = styled.div`
 `;
 const ExitDiv = styled.div`
   position: absolute;
-  top: 95%;
-  left: 90%;
+  bottom: 5%;
+  right: 5%;
 `;
 
 const ArticleCategory = () => {
