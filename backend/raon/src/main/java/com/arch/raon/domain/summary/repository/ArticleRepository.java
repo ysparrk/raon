@@ -7,6 +7,6 @@ import org.springframework.data.repository.query.Param;
 
 
 public interface ArticleRepository extends JpaRepository<Article, Long> {
-    @Query(nativeQuery = true, value = "SELECT * FROM article WHERE category = :category AND ORDER BY RAND() LIMIT 1")
+    @Query(nativeQuery = true, value = "SELECT * FROM article WHERE category = :category AND LENGTH(content) >= 300 ORDER BY RAND() LIMIT 1")
     Article getRandomArticleWithMinimumLength(@Param("category") String category);
 }
