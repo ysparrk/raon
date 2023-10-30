@@ -32,7 +32,7 @@ const MainMenu = () => {
         <SelectOption
           imgSrc={main2}
           optionText="글 요약 놀이"
-          onClick={() => navigate('/game/summarize-quiz')}
+          onClick={() => navigate('/game/summarize-category')}
         />
         <SelectOption
           imgSrc={main3}
