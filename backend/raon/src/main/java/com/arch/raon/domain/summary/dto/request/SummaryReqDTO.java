@@ -1,4 +1,4 @@
 package com.arch.raon.domain.summary.dto.request;
 
-public class SummaryReqDto {
+public class SummaryReqDTO {
 }

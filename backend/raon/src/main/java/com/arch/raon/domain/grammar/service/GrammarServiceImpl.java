@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.arch.raon.domain.grammar.dto.request.GrammarScoreReqDto;
+import com.arch.raon.domain.grammar.dto.request.GrammarScoreReqDTO;
 import com.arch.raon.domain.grammar.entity.GrammarQuiz;
 import com.arch.raon.domain.grammar.entity.GrammarScore;
 import com.arch.raon.domain.grammar.repository.GrammarQuizRepository;
@@ -16,7 +16,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class GrammarQuizServiceImpl implements GrammarQuizService{
+public class GrammarServiceImpl implements GrammarService {
 
 	private final GrammarQuizRepository grammarQuizRepository;
 	private final GrammarScoreRepository grammarScoreRepository;
@@ -29,7 +29,7 @@ public class GrammarQuizServiceImpl implements GrammarQuizService{
 
 	@Transactional
 	@Override
-	public void saveQuizResult(GrammarScoreReqDto grammarScoreReqDto) {
+	public void saveQuizResult(GrammarScoreReqDTO grammarScoreReqDTO) {
 		// // 1. member_id가 유효한지 확인
 		// boolean isValidMember =
 
@@ -39,8 +39,8 @@ public class GrammarQuizServiceImpl implements GrammarQuizService{
 
 		GrammarScore grammarScoreEntity = GrammarScore
 			.builder()
-			.score(grammarScoreReqDto.getScore())
-			.play_time(grammarScoreReqDto.getPlay_time())
+			.score(grammarScoreReqDTO.getScore())
+			.play_time(grammarScoreReqDTO.getPlay_time())
 			.member_id(TEST_MEMBER_ID) // TODO: 현재 member_id가 없어서 임의로 저장.
 			.build();
 

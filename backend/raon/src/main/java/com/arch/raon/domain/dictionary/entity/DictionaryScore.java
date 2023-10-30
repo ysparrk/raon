@@ -3,6 +3,7 @@ package com.arch.raon.domain.dictionary.entity;
 import com.arch.raon.domain.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
@@ -38,4 +39,12 @@ public class DictionaryScore {
     @Column(name = "modified_at", nullable = false)
     private LocalDateTime modifiedAt;
 
+    @Builder
+    public DictionaryScore(Long id, Integer score, Member member, LocalDateTime createdAt, LocalDateTime modifiedAt) {
+        this.id = id;
+        this.score = score;
+        this.member = member;
+        this.createdAt = createdAt;
+        this.modifiedAt = modifiedAt;
+    }
 }
