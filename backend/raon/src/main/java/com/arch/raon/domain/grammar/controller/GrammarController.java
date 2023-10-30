@@ -1,23 +1,17 @@
 package com.arch.raon.domain.grammar.controller;
 
-import java.util.List;
-
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.arch.raon.domain.grammar.dto.request.GrammarScoreReqDto;
 import com.arch.raon.domain.grammar.entity.GrammarQuiz;
 import com.arch.raon.domain.grammar.entity.GrammarScore;
 import com.arch.raon.domain.grammar.service.GrammarQuizService;
 import com.arch.raon.global.dto.ResponseDto;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RequestMapping("/grammar")
 @RestController
@@ -27,7 +21,7 @@ public class GrammarController {
 
 	@GetMapping ("/quiz")
 	public ResponseEntity<ResponseDto> getQuizzes(
-		@AuthenticationPrincipal Long memberId
+//		@AuthenticationPrincipal Long memberId
 	){
 		List<GrammarQuiz> quizzes = grammarQuizService.getQuizzes();
 
