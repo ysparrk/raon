@@ -2,7 +2,7 @@ package com.arch.raon.domain.summary.controller;
 
 import com.arch.raon.domain.summary.dto.response.ArticleResponseDTO;
 import com.arch.raon.domain.summary.service.ArticleService;
-import com.arch.raon.global.dto.ResponseDto;
+import com.arch.raon.global.dto.ResponseDTO;
 import com.arch.raon.global.util.enums.ArticleCategory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -20,14 +20,14 @@ public class ArticleController {
     private final ArticleService articleService;
 
     @GetMapping("/{article-category}")
-    public ResponseEntity<ResponseDto> getArticle(
+    public ResponseEntity<ResponseDTO> getArticle(
             // @AuthenticationPrincipal Long memberId
             @PathVariable("article-category") ArticleCategory articleCategory){
 
         ArticleResponseDTO articleResponseDTO = articleService.getRandomArticle(articleCategory);
 
         return ResponseEntity.status(HttpStatus.OK)
-                .body(ResponseDto.builder()
+                .body(ResponseDTO.builder()
                         .message("뉴스 기사")
                         .data(articleResponseDTO)
                         .build());
