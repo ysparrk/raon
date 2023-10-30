@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import TitleBox from '../../Common/Atoms/TitleBox';
 import ExitButton from '../../Common/Atoms/ExitButton';
-import JoinInterface from '../Organisms/JoinInterface';
+import WaitInterface from '../Organisms/WaitInterface';
 
 const ContentDiv = styled.div`
   display: flex;
@@ -11,16 +11,15 @@ const ContentDiv = styled.div`
   align-items: center;
 `;
 
-const DictionaryJoin = () => {
+const DictionaryQuiz = () => {
   return (
     <div>
       <TitleBox>국어사전 놀이</TitleBox>
       <ContentDiv>
-        <JoinInterface />
+        <WaitInterface />
       </ContentDiv>
-      <ExitButton to="/main" />
     </div>
   );
 };
 
-export default DictionaryJoin;
+export default DictionaryQuiz;
