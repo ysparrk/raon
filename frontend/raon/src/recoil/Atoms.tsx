@@ -15,7 +15,12 @@ export const spellingCountState = atom<number>({
   default: 0,
 });
 
-export const summarizeState = atom<string>({
+export const summarizeState = atom({
   key: 'summarizeState',
-  default: '',
+  default: {
+    topic: '',
+    title: '',
+    content: '',
+    summarize_content: '',
+  },
 });

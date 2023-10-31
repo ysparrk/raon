@@ -19,9 +19,9 @@ import SummarizeQuiz from '../components/GameSummarize/Pages/SummarizeQuiz.tsx';
 import SummarizeResult from '../components/GameSummarize/Pages/SummarizeResult.tsx';
 
 // // GameDictionary
-// import DictionaryCategory from '../components/GameDictionary/Pages/DictionaryCategory.tsx';
-// import DictionaryJoin from '../components/GameDictionary/Pages/DictionaryJoin.tsx';
-// import DictionaryQuiz from '../components/GameDictionary/Pages/DictionaryQuiz.tsx';
+import DictionaryJoin from '../components/GameDictionary/Pages/DictionaryJoin.tsx';
+import DictionaryQuiz from '../components/GameDictionary/Pages/DictionaryQuiz.tsx';
+// import DictionaryResult from '../components/GameDictionary/Pages/DictionaryResult.tsx';
 
 // // Ranking
 // import Ranking from '../components/Ranking/Pages/Ranking.tsx';
@@ -41,6 +41,8 @@ const AppRouter: React.FC = () => {
         <Route path="/game/summarize-result" element={<SummarizeResult />} />
         <Route path="/game/spelling-quiz" element={<SpellingQuiz />} />
         <Route path="/game/spelling-result" element={<SpellingResult />} />
+        <Route path="/game/dictionary-join" element={<DictionaryJoin />} />
+        <Route path="/game/dictionary-quiz" element={<DictionaryQuiz />} />
         {/* <Route path="/user/" element={<Foundation />} /> */}
       </Routes>
     </BrowserRouter>

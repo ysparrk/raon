@@ -37,7 +37,7 @@ const MainMenu = () => {
         <SelectOption
           imgSrc={main3}
           optionText="국어사전 놀이"
-          //   onClick={() => handleOptionClick('Option 3')}
+          onClick={() => navigate('/game/dictionary-join')}
         />
         <SelectOption
           imgSrc={main4}
