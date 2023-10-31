@@ -1,8 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
-import { submitState, answerState } from '../../../recoil/Atoms.tsx';
+import { getSpellingList } from '../../../api/GameSpellingApi.tsx';
+import {
+  submitState,
+  answerState,
+  spellingCountState,
+} from '../../../recoil/Atoms.tsx';
 
 const Container = styled.div`
   display: flex;
@@ -36,107 +41,73 @@ const Option = styled.div`
   }
 `;
 
-const Quizlist = [
-  {
-    content: '문제1',
-    option_one: '1',
-    option_two: '2',
-    answer: '1',
-  },
-  {
-    content: '문제2',
-    option_one: '감',
-    option_two: '검',
-    answer: '감',
-  },
-  {
-    content: '문제3',
-    option_one: '하이',
-    option_two: '바이',
-    answer: '바이',
-  },
-  {
-    content: '문제4',
-    option_one: '그레이',
-    option_two: '그레용',
-    answer: '그레이',
-  },
-  {
-    content: '문제5',
-    option_one: '타이타닉',
-    option_two: '타요타요',
-    answer: '타이타닉',
-  },
-  {
-    content: '문제6',
-    option_one: '트럼프',
-    option_two: '푸틴',
-    answer: '푸틴',
-  },
-  {
-    content: '문제7',
-    option_one: '버스커버스커',
-    option_two: '버서커버서커',
-    answer: '버스커버스커',
-  },
-  {
-    content: '문제8',
-    option_one: '퍼레요',
-    option_two: '퍼래요',
-    answer: '퍼레요',
-  },
-  {
-    content: '문제9',
-    option_one: '커피',
-    option_two: '코피',
-    answer: '커피',
-  },
-  {
-    content: '문제10',
-    option_one: '사랑',
-    option_two: '사람',
-    answer: '사랑',
-  },
-];
+type Quiz = {
+  content: string;
+  option_one: string;
+  option_two: string;
+  answer: string;
+};
 
 const SpellingProblem = () => {
   const navigate = useNavigate();
 
+  const [quizList, setQuizList] = useState<Quiz[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const setSubmitList = useSetRecoilState(submitState);
   const setAnswerList = useSetRecoilState(answerState);
+  const setSpellingCountState = useSetRecoilState(spellingCountState);
+  const startTime = useRef(Date.now());
 
   const handleOptionClick = (option: string) => {
     setSubmitList((prevList: string[]) => [...prevList, option]);
 
-    if (currentIndex < Quizlist.length - 1) {
+    if (currentIndex < quizList.length - 1) {
       setCurrentIndex(currentIndex + 1);
     }
 
-    if (currentIndex === Quizlist.length - 1) {
+    if (currentIndex === quizList.length - 1) {
+      const endTime = Date.now();
+      setSpellingCountState(endTime - startTime.current);
       navigate('/game/spelling-result');
     }
   };
 
   useEffect(() => {
-    const correctAnswers = Quizlist.map((quiz) => quiz.answer);
+    const fetchQuizList = async () => {
+      try {
+        const response = await getSpellingList();
+        console.log(response.data.data);
+        if (response && response.data && Array.isArray(response.data.data)) {
+          setQuizList(response.data.data);
+        }
+      } catch (error) {
+        console.log('catcherror 발생');
+      }
+    };
+
+    startTime.current = Date.now();
+    fetchQuizList();
+  }, []);
+
+  useEffect(() => {
+    const correctAnswers = quizList.map((quiz) => quiz.answer);
     setAnswerList(correctAnswers);
     setSubmitList([]);
-  }, []);
+  }, [quizList]);
 
   return (
     <Container>
-      <Content>{Quizlist[currentIndex].content}</Content>
+      <Content>{quizList[currentIndex]?.content}</Content>
       <Options>
         <Option
-          onClick={() => handleOptionClick(Quizlist[currentIndex].option_one)}
+          onClick={() => handleOptionClick(quizList[currentIndex]?.option_one)}
         >
-          {Quizlist[currentIndex].option_one}
+          {quizList[currentIndex]?.option_one}
         </Option>
         <Option
-          onClick={() => handleOptionClick(Quizlist[currentIndex].option_two)}
+          onClick={() => handleOptionClick(quizList[currentIndex]?.option_two)}
         >
-          {Quizlist[currentIndex].option_two}
+          {quizList[currentIndex]?.option_two}
         </Option>
       </Options>
     </Container>
