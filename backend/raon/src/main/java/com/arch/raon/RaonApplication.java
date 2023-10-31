@@ -13,7 +13,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 @RequiredArgsConstructor
 @OpenAPIDefinition(
 		servers = {
-				@Server(url = "https://arch-raon.com", description = "Default Server url")
+				@Server(url = "https://arch-raon.com/api", description = "Default Server url")
 		}
 )
 public class RaonApplication {
