@@ -1,7 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useRecoilValue } from 'recoil';
-import { submitState, answerState } from '../../../recoil/Atoms.tsx';
+import {
+  submitState,
+  answerState,
+  spellingCountState,
+} from '../../../recoil/Atoms.tsx';
 import ExitButton from '../../Common/Atoms/ExitButton.tsx';
 
 const Container = styled.div`
@@ -16,7 +20,8 @@ const ScoreHeader = styled.h1`
   text-align: center;
   font-size: 4.375rem;
   width: 100%;
-  margin-top: 3.125rem;
+  margin-top: 1.5rem;
+  margin-bottom: 2rem;
 `;
 
 const Content = styled.div`
@@ -48,6 +53,7 @@ const CorrectAnswer = styled.span`
 const SpellingAnswer = () => {
   const userAnswers = useRecoilValue(submitState);
   const correctAnswers = useRecoilValue(answerState);
+  const playTime = useRecoilValue(spellingCountState);
 
   const leftAnswers = userAnswers.slice(0, 5);
   const rightAnswers = userAnswers.slice(5, 10);
@@ -58,7 +64,11 @@ const SpellingAnswer = () => {
 
   return (
     <Container>
-      <ScoreHeader>당신의 점수: {score * 10} 점</ScoreHeader>
+      <ScoreHeader>
+        당신의 점수:
+        <CorrectAnswer> {score * 10}</CorrectAnswer> 점, 소요 시간:{' '}
+        <CorrectAnswer>{(playTime / 1000).toFixed(3)} </CorrectAnswer>초
+      </ScoreHeader>
       <Content>
         <Columns>
           <Column>
