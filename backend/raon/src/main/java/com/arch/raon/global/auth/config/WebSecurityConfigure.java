@@ -14,8 +14,14 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.Arrays;
 
 @RequiredArgsConstructor
 @EnableWebSecurity
@@ -36,12 +42,16 @@ public class WebSecurityConfigure {
         http
                 .csrf(AbstractHttpConfigurer::disable
                 )
+                .cors(cors ->
+                        cors
+                                .configurationSource(corsConfigurationSource()))
                 .headers((headerConfig) ->
                         headerConfig.cacheControl(HeadersConfigurer.CacheControlConfig::disable)
                                 .frameOptions(HeadersConfigurer.FrameOptionsConfig::disable)
                 )
-                .sessionManagement(httpSecuritySessionManagementConfigurer -> httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .formLogin(AbstractHttpConfigurer::disable);
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .formLogin(AbstractHttpConfigurer::disable)
+                .httpBasic(httpBasic -> httpBasic.disable());
 
         //요청에 대한 권한 설정
         http.authorizeHttpRequests((authorizeRequests) ->
@@ -50,7 +60,10 @@ public class WebSecurityConfigure {
 //                        .requestMatchers("/", "/login/**").permitAll()
 //                        .requestMatchers("/posts/**", "/api/v1/posts/**").hasRole(Role.USER.name())
 //                        .requestMatchers("/admins/**", "/api/v1/admin/**").hasRole(Role.ADMIN.name())
-                                .anyRequest().permitAll()
+                                // TODO: 권한 없이도 접근 허가 -> requestMatchers 설정하기
+                                .requestMatchers("/**").permitAll()
+                                .anyRequest().authenticated()
+
         );
 
         //oauth2Login
@@ -70,6 +83,7 @@ public class WebSecurityConfigure {
                 .failureHandler(oAuth2AuthenticationFailureHandler));
 
         http.logout(logout -> logout
+                .logoutSuccessUrl("/")
                 .clearAuthentication(true)
                 .deleteCookies("JSESSIONID")
         );
@@ -78,5 +92,22 @@ public class WebSecurityConfigure {
         http.addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
         System.out.println("http = " + http);
         return http.build();
+    }
+
+    @Bean
+    public BCryptPasswordEncoder encoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000","https://arch-raon.com"));
+        configuration.setAllowedMethods(Arrays.asList("GET","POST"));
+        configuration.setAllowedHeaders(Arrays.asList("*"));
+        configuration.setAllowCredentials(true);
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
     }
 }
