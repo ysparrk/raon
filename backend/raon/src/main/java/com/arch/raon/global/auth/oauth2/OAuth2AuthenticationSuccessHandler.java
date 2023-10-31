@@ -1,6 +1,6 @@
 package com.arch.raon.global.auth.oauth2;
 
-import com.arch.raon.global.auth.dto.response.MemberTokenResponseDto;
+import com.arch.raon.global.auth.dto.response.MemberTokenResDTO;
 import com.arch.raon.global.auth.jwt.JwtTokenProvider;
 import com.arch.raon.global.auth.repository.CookieAuthorizationRequestRepository;
 import jakarta.servlet.http.HttpServletRequest;
@@ -49,7 +49,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 //        String targetUrl = redirectUri.orElse(getDefaultTargetUrl());
         String targetUrl = redirectUri;
         //JWT 생성
-        MemberTokenResponseDto.TokenInfo tokenInfo = jwtTokenProvider.generateToken(authentication);
+        MemberTokenResDTO.TokenInfo tokenInfo = jwtTokenProvider.generateToken(authentication);
 
         return UriComponentsBuilder.fromUriString(targetUrl)
                 .queryParam("token", tokenInfo.getAccessToken())

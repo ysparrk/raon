@@ -3,7 +3,7 @@ package com.arch.raon.global.auth.jwt;
 import com.arch.raon.domain.member.entity.Member;
 import com.arch.raon.domain.member.repository.MemberRepository;
 import com.arch.raon.global.auth.config.ExpireTime;
-import com.arch.raon.global.auth.dto.response.MemberTokenResponseDto;
+import com.arch.raon.global.auth.dto.response.MemberTokenResDTO;
 import com.arch.raon.global.exception.CustomException;
 import com.arch.raon.global.exception.ErrorCode;
 import io.jsonwebtoken.*;
@@ -51,12 +51,12 @@ public class JwtTokenProvider {
     }
 
     //Authentication 을 가지고 AccessToken, RefreshToken 을 생성하는 메서드
-    public MemberTokenResponseDto.TokenInfo generateToken(Authentication authentication) {
+    public MemberTokenResDTO.TokenInfo generateToken(Authentication authentication) {
         return generateToken(authentication.getName(), authentication.getAuthorities());
     }
 
     //name, authorities 를 가지고 AccessToken, RefreshToken 을 생성하는 메서드
-    public MemberTokenResponseDto.TokenInfo generateToken(String name, Collection<? extends GrantedAuthority> inputAuthorities) {
+    public MemberTokenResDTO.TokenInfo generateToken(String name, Collection<? extends GrantedAuthority> inputAuthorities) {
         //권한 가져오기
         String authorities = inputAuthorities.stream()
                 .map(GrantedAuthority::getAuthority)
@@ -82,7 +82,7 @@ public class JwtTokenProvider {
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
 
-        return MemberTokenResponseDto.TokenInfo.builder()
+        return MemberTokenResDTO.TokenInfo.builder()
                 .grantType(BEARER_TYPE)
                 .accessToken(accessToken)
                 .accessTokenExpirationTime(ExpireTime.ACCESS_TOKEN_EXPIRE_TIME)
