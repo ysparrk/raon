@@ -7,6 +7,7 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.arch.raon.domain.grammar.dto.request.GrammarScoreReqDTO;
 import com.arch.raon.domain.grammar.entity.GrammarQuiz;
@@ -37,6 +38,7 @@ class GrammarServiceImplTest {
 	}
 
 	@Test
+	@Transactional
 	void saveQuizResult() {
 		//given
 		GrammarScoreReqDTO grammarScore = GrammarScoreReqDTO.builder()
