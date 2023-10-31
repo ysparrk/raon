@@ -49,8 +49,8 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         }
         //가입되지 않은 경우
         else {
-            member = registerUser(authProvider, oAuth2UserInfo);
             System.out.println("가입되지 않은 경우");
+            member = registerUser(authProvider, oAuth2UserInfo);
         }
 
         System.out.println("커스텀 오어스 유저 서비스");
@@ -66,6 +66,8 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
                 .oauth2Id(oAuth2UserInfo.getOAuth2Id())
                 .authProvider(authProvider)
                 .roleType(RoleType.USER)
+                .mileage(0)
+                .isDeleted(false)
                 .build();
 
         return memberRepository.save(member);

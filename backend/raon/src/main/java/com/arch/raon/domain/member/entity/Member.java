@@ -46,7 +46,7 @@ public class Member {
     @Enumerated(EnumType.STRING)
     private School school;
 
-    @Column(name = "year_of_birth", nullable = false)
+    @Column(name = "year_of_birth")
     private Integer yearOfBirth;
 
     @ColumnDefault("0")
