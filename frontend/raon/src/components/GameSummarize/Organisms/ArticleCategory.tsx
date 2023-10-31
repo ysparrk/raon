@@ -1,6 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
+import { useSetRecoilState } from 'recoil';
+import { summarizeState } from '../../../recoil/Atoms.tsx';
 import SelectOption from '../../Common/Atoms/SelectOption';
 import social from '../../../assets/Images/social.png';
 import science from '../../../assets/Images/science.png';
@@ -25,9 +27,15 @@ const ExitDiv = styled.div`
 
 const ArticleCategory = () => {
   const navigate = useNavigate();
+  const setSummarizeTopic = useSetRecoilState(summarizeState);
 
-  const handleClick = (category: string) => {
+  const handleClick = async (category: string) => {
     console.log(category);
+    await setSummarizeTopic((prevSummarize) => ({
+      ...prevSummarize,
+      topic: category,
+      content: '',
+    }));
     navigate('/game/summarize-quiz');
   };
   return (
@@ -36,22 +44,22 @@ const ArticleCategory = () => {
         <SelectOption
           imgSrc={social}
           optionText="사회"
-          onClick={() => handleClick('social')}
+          onClick={() => handleClick('SOCIAL')}
         />
         <SelectOption
           imgSrc={life}
           optionText="생활"
-          onClick={() => handleClick('life')}
+          onClick={() => handleClick('LIFE')}
         />
         <SelectOption
           imgSrc={science}
           optionText="과학"
-          onClick={() => handleClick('science')}
+          onClick={() => handleClick('SCIENCE')}
         />
         <SelectOption
           imgSrc={world}
           optionText="세계"
-          onClick={() => handleClick('world')}
+          onClick={() => handleClick('WORLD')}
         />
       </CategoryContainer>
       <ExitDiv>

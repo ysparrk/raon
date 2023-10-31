@@ -66,7 +66,7 @@ function ResultModal({
   return (
     <ResultModalDiv>
       <ResultModalHeader>내 요약문</ResultModalHeader>
-      <ResultModalContent>{summarize}</ResultModalContent>
+      <ResultModalContent>{summarize.summarize_content}</ResultModalContent>
       <ResultModalHeader>맞춤법 검사</ResultModalHeader>
       <ResultModalContent>{spellResult}</ResultModalContent>
       <ResultModalHeader>요약 평가</ResultModalHeader>

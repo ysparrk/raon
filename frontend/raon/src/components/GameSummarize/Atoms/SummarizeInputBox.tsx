@@ -33,12 +33,19 @@ function SummarizeInputBox() {
   const setSummarize = useSetRecoilState(summarizeState);
 
   useEffect(() => {
-    setSummarize('');
+    setSummarize((prevSummarize) => ({
+      ...prevSummarize,
+      summarize_content: '',
+    }));
   }, []);
 
   const handleTextareaChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
-    setText(event.target.value);
-    setSummarize(event.target.value);
+    const newText = event.target.value;
+    setText(newText);
+    setSummarize((prevSummarize) => ({
+      ...prevSummarize,
+      summarize_content: newText,
+    }));
   };
 
   const isPlaceholderHidden = text !== '';
