@@ -61,7 +61,7 @@ function WaitInterface() {
   console.log("방만들기 들어옴")
 
   // 웹 소켓 클라이언트 설정
-  const socket = new SockJS(`${process.env.REACT_APP_API_URL}ws`);
+  const socket = new SockJS(`${process.env.REACT_APP_API_URL}api/ws`);
   const stompClient = new Client({
     webSocketFactory: () => socket,
     onConnect: () => {
