@@ -3,7 +3,7 @@ package com.arch.raon.global.quizRoom;
 import java.io.Serializable;
 
 public class User implements Serializable, Comparable<User> {
-	private String nickname; // 유저 닉네임
+	private String nickname; // 유저 닉네임, 닉네임은 중복 불가로 결정했으므로 이거로 구별
 
 	private int current_point; // 현재 점수
 
@@ -32,12 +32,9 @@ public class User implements Serializable, Comparable<User> {
 		return current_point;
 	}
 
-
-
 	public boolean isOwner() {
 		return isOwner;
 	}
-
 
 	public void setNickname(String nickname) {
 		this.nickname = nickname;
@@ -56,8 +53,6 @@ public class User implements Serializable, Comparable<User> {
 
 		this.current_point += point;
 	}
-
-
 
 	// 유저의 점수가 큰 순서대로 정렬하기 위해
 	@Override
