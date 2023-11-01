@@ -54,6 +54,7 @@ const ButtonDiv = styled.div`
 `;
 function WaitInterface() {
   const [participants, setParticipants] = useState([]);
+  const navigate = useNavigate();
 
   return (
     <>
@@ -75,7 +76,7 @@ function WaitInterface() {
         />
       </InterfaceDiv>
       <ButtonDiv>
-        <StartButton />
+        <StartButton onClick={() => navigate('/game/dictionary-game')} />
         <RoomExitButton />
       </ButtonDiv>
     </>
