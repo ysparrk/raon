@@ -4,6 +4,8 @@ import styled from 'styled-components';
 import JoinButton from '../Atoms/JoinButton';
 import StartButton from '../Atoms/StartButton';
 import RoomExitButton from '../Atoms/ExitButtonInRoom';
+import { Client } from '@stomp/stompjs';
+import SockJS from 'sockjs-client';
 
 const InterfaceDiv = styled.div`
   display: flex;
@@ -55,6 +57,26 @@ const ButtonDiv = styled.div`
 function WaitInterface() {
   const [participants, setParticipants] = useState([]);
   const navigate = useNavigate();
+
+  console.log("방만들기 들어옴")
+
+  // 웹 소켓 클라이언트 설정
+  const socket = new SockJS(`${process.env.REACT_APP_API_URL}ws`);
+  const stompClient = new Client({
+    webSocketFactory: () => socket,
+    onConnect: () => {
+      console.log('Connected to the WebSocket server');
+      const nickname = '박영서';
+      stompClient.publish({ destination: '/dictionary-quiz/create-room', body: nickname });
+    },
+  });
+
+
+  // 컴포넌트 마운트 시 웹 소켓 연결 시작
+  useEffect(() => {
+    stompClient.activate();
+  }, []);
+
 
   return (
     <>
