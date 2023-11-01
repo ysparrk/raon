@@ -22,6 +22,7 @@ import SummarizeResult from '../components/GameSummarize/Pages/SummarizeResult.t
 import DictionaryJoin from '../components/GameDictionary/Pages/DictionaryJoin.tsx';
 import DictionaryQuiz from '../components/GameDictionary/Pages/DictionaryQuiz.tsx';
 import DictionaryGame from '../components/GameDictionary/Pages/DictionaryGame.tsx';
+import DictionaryInit from '../components/GameDictionary/Pages/DictionaryInit.tsx';
 // import DictionaryResult from '../components/GameDictionary/Pages/DictionaryResult.tsx';
 
 // // Ranking
@@ -42,6 +43,7 @@ const AppRouter: React.FC = () => {
         <Route path="/game/summarize-result" element={<SummarizeResult />} />
         <Route path="/game/spelling-quiz" element={<SpellingQuiz />} />
         <Route path="/game/spelling-result" element={<SpellingResult />} />
+        <Route path="/game/dictionary-init" element={<DictionaryInit />} />
         <Route path="/game/dictionary-join" element={<DictionaryJoin />} />
         <Route path="/game/dictionary-quiz" element={<DictionaryQuiz />} />
         <Route path="/game/dictionary-game" element={<DictionaryGame />} />
