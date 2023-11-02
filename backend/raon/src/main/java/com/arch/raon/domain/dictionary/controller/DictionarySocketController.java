@@ -31,9 +31,11 @@ public class DictionarySocketController {
 
 		if(dictionarySocketService.isValidRoomId(roomId)){
 			sendToRoom("/dictionary-quiz/create-room", roomId, message);
+			System.out.println("sentToRoom");
 		}
 		else{
 			// TODO: exception에 대한 처리가 더 필요
+			System.out.println("error");
 			message.setMessage("error");
 			sendToRoom("/dictionary-quiz/error", roomId, message);
 		}
