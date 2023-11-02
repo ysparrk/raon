@@ -12,6 +12,7 @@ import Main from '../components/Interface/Pages/Main.tsx';
 // // GameSpelling
 import SpellingQuiz from '../components/GameSpelling/Pages/SpellingQuiz.tsx';
 import SpellingResult from '../components/GameSpelling/Pages/SpellingResult.tsx';
+import SpellingInit from '../components/GameSpelling/Pages/SpellingInit.tsx';
 
 // // GameSummarize
 import SummarizeCategory from '../components/GameSummarize/Pages/SummarizeCategory.tsx';
@@ -41,6 +42,7 @@ const AppRouter: React.FC = () => {
         />
         <Route path="/game/summarize-quiz" element={<SummarizeQuiz />} />
         <Route path="/game/summarize-result" element={<SummarizeResult />} />
+        <Route path="/game/spelling-init" element={<SpellingInit />} />
         <Route path="/game/spelling-quiz" element={<SpellingQuiz />} />
         <Route path="/game/spelling-result" element={<SpellingResult />} />
         <Route path="/game/dictionary-init" element={<DictionaryInit />} />

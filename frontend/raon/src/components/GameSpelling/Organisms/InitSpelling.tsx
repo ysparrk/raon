@@ -61,34 +61,6 @@ const GameExampleContentDiv = styled.div`
   height: 11.5rem;
   opacity: 0;
   animation: ${appearAnimation} 1.5s ease-in forwards;
-
-  /* 중앙 셀 스타일 */
-  & > div:nth-child(5) {
-    grid-column: 2 / 3;
-    grid-row: 2 / 3;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: 'ONE-Mobile-POP';
-    font-size: 2.8125rem;
-    border-radius: 1.5625rem;
-    background-color: black;
-    color: white;
-    /* border: 4px solid black; */
-  }
-
-  /* 위, 아래, 왼쪽, 오른쪽 셀 스타일 */
-  & > div:nth-child(2),
-  & > div:nth-child(4),
-  & > div:nth-child(6),
-  & > div:nth-child(8) {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: 'NanumBarunGothic';
-    font-size: 3.5rem;
-    border: '2px solid black';
-  }
 `;
 
 const ButtonDiv = styled.div`
@@ -108,34 +80,16 @@ function InitInterface() {
   return (
     <>
       <InterfaceDiv>
-        <GameHeaderDiv>국어사전 놀이</GameHeaderDiv>
+        <GameHeaderDiv>맞춤법 퀴즈</GameHeaderDiv>
         <GameExampleQuestionDiv>
-          <p>가운데에 한 글자를 넣어</p>
-          <p>각 단어를 완성하시오</p>
+          <p>다음 중 맞는 것을 고르세요</p>
         </GameExampleQuestionDiv>
-        <GameExampleContentDiv>
-          <div />
-          <div>지</div>
-          <div />
-          <div>신</div>
-          <div>?</div>
-          <div>제</div>
-          <div />
-          <div>집</div>
-          <div />
-        </GameExampleContentDiv>
+        <GameExampleContentDiv>d</GameExampleContentDiv>
       </InterfaceDiv>
       <ButtonDiv>
         <StartButton
-          fontColor="dodgerblue"
-          content="함께하기"
-          onClick={() => {
-            navigate('/game/dictionary-join');
-          }}
-        />
-        <StartButton
-          fontColor="slategrey"
-          content="혼자하기"
+          fontColor="sienna"
+          content="시작하기"
           onClick={() => {
             navigate('/game/dictionary-quiz');
           }}
