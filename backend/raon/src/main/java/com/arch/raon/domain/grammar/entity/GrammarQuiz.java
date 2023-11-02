@@ -8,9 +8,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "grammar_quiz")
@@ -63,6 +61,15 @@ public class GrammarQuiz implements Serializable {
 				", submit=" + submit +
 				", hit=" + hit +
 				'}';
+	}
+
+	public void quizCorrect() {
+		this.submit += 1;
+		this.hit += 1;
+	}
+
+	public void quizNotCorrect(){
+		this.submit += 1;
 	}
 
 }
