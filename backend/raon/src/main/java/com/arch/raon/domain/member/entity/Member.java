@@ -32,7 +32,7 @@ public class Member {
     @Column(name = "nickname", length = 10, nullable = false)
     private String nickname;
 
-    @Column(name = "profile_url", length = 255, nullable = false)
+    @Column(name = "profile_url", length = 255)
     private String profileUrl;
 
     @Column(name = "gender")
@@ -43,7 +43,7 @@ public class Member {
     @Enumerated(EnumType.STRING)
     private School school;
 
-    @Column(name = "year_of_birth", nullable = false)
+    @Column(name = "year_of_birth")
     private Integer yearOfBirth;
 
     @ColumnDefault("0")
@@ -58,8 +58,8 @@ public class Member {
     private LocalDateTime modifiedAt;
 
     @ColumnDefault("false")
-    @Column(name = "is_deleted", nullable = false)
-    private Boolean isDeleted;
+    @Column(name = "is_deleted")
+    private Boolean isDeleted=false;
 
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
