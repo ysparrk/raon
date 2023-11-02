@@ -1,6 +1,7 @@
 package com.arch.raon.domain.grammar.controller;
 
 import com.arch.raon.domain.grammar.dto.request.GrammarScoreReqDTO;
+import com.arch.raon.domain.grammar.dto.response.GrammarQuizResDTO;
 import com.arch.raon.domain.grammar.entity.GrammarQuiz;
 import com.arch.raon.domain.grammar.service.GrammarService;
 import com.arch.raon.global.dto.ResponseDTO;
@@ -21,7 +22,7 @@ public class GrammarController {
 	public ResponseEntity<ResponseDTO> getQuizzes(
 //		@AuthenticationPrincipal Long memberId
 	){
-		List<GrammarQuiz> quizzes = grammarService.getQuizzes();
+		List<GrammarQuizResDTO> quizzes = grammarService.getQuizzes();
 
 		return ResponseEntity.status(HttpStatus.OK)
 			.body(ResponseDTO.builder()
