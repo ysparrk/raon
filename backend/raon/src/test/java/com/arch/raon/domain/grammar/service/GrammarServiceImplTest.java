@@ -4,13 +4,13 @@ import static org.assertj.core.api.Assertions.*;
 
 import java.util.List;
 
+import com.arch.raon.domain.grammar.dto.response.GrammarQuizResDTO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.arch.raon.domain.grammar.dto.request.GrammarScoreReqDTO;
-import com.arch.raon.domain.grammar.entity.GrammarQuiz;
 import com.arch.raon.domain.grammar.repository.GrammarQuizRepository;
 import com.arch.raon.domain.grammar.repository.GrammarScoreRepository;
 
@@ -31,7 +31,7 @@ class GrammarServiceImplTest {
 		// given
 
 		// when
-		List<GrammarQuiz> expectQuizzes = grammarService.getQuizzes();
+		List<GrammarQuizResDTO> expectQuizzes = grammarService.getQuizzes();
 		System.out.println("expectQuizzes = " + expectQuizzes);
 		// then
 		assertThat(10).isEqualTo(expectQuizzes.size());

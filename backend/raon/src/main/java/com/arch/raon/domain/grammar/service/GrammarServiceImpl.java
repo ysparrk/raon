@@ -1,7 +1,9 @@
 package com.arch.raon.domain.grammar.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import com.arch.raon.domain.grammar.dto.response.GrammarQuizResDTO;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,8 +24,31 @@ public class GrammarServiceImpl implements GrammarService {
 	private final GrammarScoreRepository grammarScoreRepository;
 
 	@Override
-	public List<GrammarQuiz> getQuizzes() {
-		return grammarQuizRepository.random10();
+	public List<GrammarQuizResDTO> getQuizzes() {
+
+		List<GrammarQuiz> quizList = grammarQuizRepository.random10();
+		List<GrammarQuizResDTO> quizResDTOList = new ArrayList<>();
+
+		// DTO 변환
+		for (GrammarQuiz quiz : quizList) {
+
+			// 푼 사람이 없을 경우 50 퍼센트로 가정
+			int answer_percent = 50;
+			if(quiz.getSubmit() != 0){
+				answer_percent = quiz.getHit() * 100 / quiz.getSubmit();
+			}
+
+			GrammarQuizResDTO quizResDTO = GrammarQuizResDTO.builder()
+					.id(quiz.getId())
+					.content(quiz.getContent())
+					.option_one(quiz.getOption_one())
+					.option_two(quiz.getOption_two())
+					.answer(quiz.getAnswer())
+					.answer_percent(answer_percent).build();
+			quizResDTOList.add(quizResDTO);
+		}
+
+		return quizResDTOList;
 	}
 
 
