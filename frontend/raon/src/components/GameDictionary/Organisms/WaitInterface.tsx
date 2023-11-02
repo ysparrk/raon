@@ -60,22 +60,31 @@ function WaitInterface() {
   const [participants, setParticipants] = useState([]);
   const navigate = useNavigate();
 
+  // TODO: nickname 접속한 사용자 닉네임으로 바꾸기
+  const nickname = '박영서';
+  const roomId = uuidv4();
+
   // 웹 소켓 클라이언트 설정
   const socket = new SockJS(`${process.env.REACT_APP_API_URL}api/ws`, null, {transports: ["websocket", "xhr-streaming", "xhr-polling"]});
   const stompClient = new Client({
     webSocketFactory: () => socket,
+    // 구독
     onConnect: () => {
-      // TODO: nickname 접속한 사용자 닉네임으로 바꾸기
-      const nickname = '박영서';
-      const roomId = uuidv4();
+      stompClient.subscribe(`/topic/dictionary-quiz/create-room/${roomId}`, callback);
+
       stompClient.publish({ destination: '/dictionary-quiz/create-room', body: JSON.stringify({nickname, roomId}) });
       console.log('Connected to the WebSocket server');
-      stompClient.subscribe(`/topic/dictionary-quiz/create-room/${roomId}`, (message) => {
-        const body = JSON.parse(message.body);
-        console.log(body); // 메시지의 본문(body)를 출력
-      });
     },
   });
+
+
+    // 콜백함수 => roomId 받기
+    const callback: (message: any) => void = (message: any) => {
+      if (message.body) {
+        const body: any = JSON.parse(message.body);
+        console.log(body);
+      }
+    };
 
 
   // 컴포넌트 마운트 시 웹 소켓 연결 시작
