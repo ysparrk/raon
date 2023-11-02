@@ -41,11 +41,11 @@ public class DictionarySocketController {
 
 
 	@MessageMapping("/dictionary-quiz/join-room")
-	public void joinRoom(String nickname, String roomId) {
+	public void joinRoom(SocketReqDTO reqDTO) {
 
 		//boolean joinOk = dictionarySocketService.createRoom(nickname);
-		SocketResponseDTO message = new SocketResponseDTO(nickname, roomId);
-		sendToRoom("/dictionary-quiz/join-room", roomId, message);
+		SocketResponseDTO message = new SocketResponseDTO(reqDTO.getNickname(), reqDTO.getRoomId());
+		sendToRoom("/dictionary-quiz/join-room", reqDTO.getRoomId(), message);
 	}
 
 	@MessageMapping("/dictionary-quiz/leave")
