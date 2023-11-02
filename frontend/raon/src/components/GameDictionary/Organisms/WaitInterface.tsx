@@ -60,23 +60,20 @@ function WaitInterface() {
   const [participants, setParticipants] = useState([]);
   const navigate = useNavigate();
 
-  console.log("방만들기 들어옴")
-
   // 웹 소켓 클라이언트 설정
-  const socket = new SockJS(`${process.env.REACT_APP_API_URL}api/ws`);
+  const socket = new SockJS(`${process.env.REACT_APP_API_URL}api/ws`, null, {transports: ["websocket", "xhr-streaming", "xhr-polling"]});
   const stompClient = new Client({
     webSocketFactory: () => socket,
     onConnect: () => {
-      console.log("connect???")
       const nickname = '박영서';
       const roomId = uuidv4();
       console.log(roomId)
       stompClient.publish({ destination: '/dictionary-quiz/create-room', body: JSON.stringify({nickname, roomId}) });
-     // console.log('Connected to the WebSocket server');
-      stompClient.subscribe('/topic/dictionary-quiz/create-room/' + roomId, (message) => {
-        console.log(message)
+      console.log('Connected to the WebSocket server');
+      stompClient.subscribe(`/topic/dictionary-quiz/create-room/${roomId}`, (message) => {
+        const body = JSON.parse(message.body);
+        console.log(body); // 메시지의 본문(body)를 출력
       });
-
     },
   });
 
