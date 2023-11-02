@@ -7,6 +7,8 @@ import org.springframework.stereotype.Controller;
 import com.arch.raon.domain.dictionary.dto.request.SocketReqDTO;
 import com.arch.raon.domain.dictionary.dto.response.SocketResponseDTO;
 import com.arch.raon.domain.dictionary.service.DictionarySocketService;
+import com.arch.raon.global.quizRoom.Room;
+import com.arch.raon.global.util.enums.RoomResult;
 
 import lombok.RequiredArgsConstructor;
 
@@ -28,29 +30,52 @@ public class DictionarySocketController {
 	 */
 	@MessageMapping("/dictionary-quiz/create-room")
 	public void createRoom(SocketReqDTO reqDTO) {
-		if(dictionarySocketService.isValidRoomId(reqDTO.getRoomId())){
-			SocketResponseDTO message = new SocketResponseDTO(reqDTO.getNickname(), reqDTO.getRoomId());
-			sendToRoom("/dictionary-quiz/create-room", reqDTO.getRoomId(), message);
-		}
-		else{
-			// // TODO: exception에 대한 처리가 더 필요
-			// message.setMessage("error");
-			// sendToRoom("/dictionary-quiz/error", roomId, message);
+		RoomResult result = dictionarySocketService.createRoom(reqDTO.getNickname(), reqDTO.getRoomId());
+
+		switch (result){
+			case CREATE_SUCCESS:
+				SocketResponseDTO message = new SocketResponseDTO(reqDTO.getNickname(), reqDTO.getRoomId());
+				sendToRoom("/dictionary-quiz/create-room", reqDTO.getRoomId(), message);
+				break;
+
+			case FAIL_INVALID_USER:
+				// TODO: exception에 대한 처리가 더 필요
+				break;
+
+			case CREATE_FAIL_SAME_ROOMID:
+				// TODO: exception에 대한 처리가 더 필요
+				break;
 		}
 	}
 
 
 	@MessageMapping("/dictionary-quiz/join-room")
-	public void joinRoom(String nickname, String roomId) {
+	public void joinRoom(SocketReqDTO reqDTO) {
+		RoomResult result = dictionarySocketService.joinRoom(reqDTO.getNickname(), reqDTO.getRoomId());
 
-		//boolean joinOk = dictionarySocketService.createRoom(nickname);
-		SocketResponseDTO message = new SocketResponseDTO(nickname, roomId);
-		sendToRoom("/dictionary-quiz/join-room", roomId, message);
+		switch (result){
+			case JOIN_SUCCESS:
+				SocketResponseDTO message = new SocketResponseDTO(reqDTO.getNickname(), reqDTO.getRoomId());
+				sendToRoom("/dictionary-quiz/join-room", reqDTO.getRoomId(), message);
+				break;
+
+			case JOIN_FAIL_FULL:
+				// TODO: exception에 대한 처리가 더 필요
+				break;
+
+			case JOIN_FAIL_PLAYING:
+				// TODO: exception에 대한 처리가 더 필요
+				break;
+
+			case JOIN_FAIL_NONEXIST:
+				// TODO: exception에 대한 처리가 더 필요
+				break;
+		}
 	}
 
 	@MessageMapping("/dictionary-quiz/leave")
 	public void userLeaveRoom(String nickname, String roomId){
-		dictionarySocketService.leaveRoom(nickname, roomId);
+		RoomResult result = dictionarySocketService.leaveRoom(nickname, roomId);
 	}
 
 
