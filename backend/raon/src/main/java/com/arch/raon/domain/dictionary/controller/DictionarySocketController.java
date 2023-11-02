@@ -60,6 +60,7 @@ public class DictionarySocketController {
 	private void sendToRoom(String topic, String roomId, SocketVO message) {
 		// roomId를 포함한 토픽 주소로 메시지 전송
 		messagingTemplate.convertAndSend("/topic"+topic+"/"+roomId, message);
+		System.out.println("send Message");
 	}
 
 
