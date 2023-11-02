@@ -21,7 +21,7 @@ const InputTextarea = styled.textarea`
 function JoinInputBox({ onInputChange }: JoinInputBoxProps) {
   const [inputCode, setInputCode] = useState('');
 
-  const maxCharacterLimit = 20;
+  const maxCharacterLimit = 30;
 
   const handleTextareaChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
     const inputValue = event.target.value;
