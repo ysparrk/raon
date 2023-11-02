@@ -6,6 +6,7 @@ import StartButton from '../Atoms/StartButton';
 import RoomExitButton from '../Atoms/ExitButtonInRoom';
 import { Client } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
+import { v4 as uuidv4} from 'uuid';
 
 const InterfaceDiv = styled.div`
   display: flex;
@@ -54,6 +55,7 @@ const ButtonDiv = styled.div`
   bottom: 6.5%;
   right: 10%;
 `;
+
 function WaitInterface() {
   const [participants, setParticipants] = useState([]);
   const navigate = useNavigate();
@@ -65,9 +67,16 @@ function WaitInterface() {
   const stompClient = new Client({
     webSocketFactory: () => socket,
     onConnect: () => {
-      console.log('Connected to the WebSocket server');
+      console.log("connect???")
       const nickname = '박영서';
-      stompClient.publish({ destination: '/dictionary-quiz/create-room', body: nickname });
+      const roomId = uuidv4();
+      console.log(roomId)
+      stompClient.publish({ destination: '/dictionary-quiz/create-room', body: JSON.stringify({nickname, roomId}) });
+     // console.log('Connected to the WebSocket server');
+      stompClient.subscribe('/topic/dictionary-quiz/create-room/' + roomId, (message) => {
+        console.log(message)
+      });
+
     },
   });
 
