@@ -67,7 +67,6 @@ function WaitInterface() {
     onConnect: () => {
       const nickname = '박영서';
       const roomId = uuidv4();
-      console.log(roomId)
       stompClient.publish({ destination: '/dictionary-quiz/create-room', body: JSON.stringify({nickname, roomId}) });
       console.log('Connected to the WebSocket server');
       stompClient.subscribe(`/topic/dictionary-quiz/create-room/${roomId}`, (message) => {
