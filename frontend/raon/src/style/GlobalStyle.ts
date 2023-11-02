@@ -43,9 +43,14 @@ time, mark, audio, video {
   vertical-align: baseline;
 }
 
-  html {
-    font-size: 15px;
-  }
+html {
+  font-size: 15px;
+}
+
+body {
+  overflow-x: hidden;
+  overflow-y: hidden;
+}
 
 /* 화면 너비 1440px 이하인 경우 */
 @media (max-width: 1024px) {

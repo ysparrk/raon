@@ -77,7 +77,7 @@ function WaitInterface() {
       </InterfaceDiv>
       <ButtonDiv>
         <StartButton onClick={() => navigate('/game/dictionary-game')} />
-        <RoomExitButton />
+        <RoomExitButton onClick={() => navigate('/main')} />
       </ButtonDiv>
     </>
   );
