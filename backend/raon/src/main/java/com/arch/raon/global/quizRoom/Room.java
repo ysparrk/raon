@@ -45,6 +45,14 @@ public class Room {
 		return userInfo.size() >= MAX_PLAYER;
 	}
 
+	public List<String> getUsers(){
+		List<String> users = new ArrayList<>();
+		for(Map.Entry<String, User> entry : userInfo.entrySet()){
+			users.add(entry.getKey());
+		}
+		return users;
+	}
+
 	public void addUser(String enteredUser){
 		userInfo.put(enteredUser,new User(enteredUser, 0));
 	}
