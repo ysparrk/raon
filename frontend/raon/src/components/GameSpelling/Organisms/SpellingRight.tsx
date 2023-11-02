@@ -79,7 +79,7 @@ const SpellingRight: React.FC<Props> = ({ onClose, answer }) => {
   const navigate = useNavigate();
 
   return (
-    <React.Fragment>
+    <>
       {' '}
       {/* Fragment 사용 */}
       <Firework />
@@ -97,7 +97,7 @@ const SpellingRight: React.FC<Props> = ({ onClose, answer }) => {
           </ButtonGroup>
         </ModalContainer>
       </ModalOverlay>
-    </React.Fragment>
+    </>
   );
 };
 

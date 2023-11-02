@@ -79,7 +79,7 @@ const SpellingWrong: React.FC<Props> = ({ onClose, answer }) => {
   const navigate = useNavigate();
 
   return (
-    <React.Fragment>
+    <>
       {' '}
       <Tear />
       <ModalOverlay>
@@ -96,7 +96,7 @@ const SpellingWrong: React.FC<Props> = ({ onClose, answer }) => {
           </ButtonGroup>
         </ModalContainer>
       </ModalOverlay>
-    </React.Fragment>
+    </>
   );
 };
 
