@@ -1,21 +1,21 @@
-package com.arch.raon.domain.dictionary.dto;
+package com.arch.raon.domain.dictionary.dto.response;
 
 import java.io.Serializable;
 
-public class SocketVO implements Serializable {
+public class SocketResponseDTO implements Serializable {
 	private String nickname;
 	private String roomId;
 
 	private String message;
 
-	public SocketVO(String nickname, String roomId) {
+	public SocketResponseDTO(String nickname, String roomId) {
 		this.nickname = nickname;
 		this.roomId = roomId;
 	}
 
 
 
-	public SocketVO() {
+	public SocketResponseDTO() {
 		super();
 	}
 
