@@ -3,11 +3,12 @@ package com.arch.raon.domain.grammar.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.arch.raon.domain.grammar.dto.request.GrammarResultDTO;
+import com.arch.raon.domain.grammar.dto.request.GrammarResultSaveReqDTO;
 import com.arch.raon.domain.grammar.dto.response.GrammarQuizResDTO;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.arch.raon.domain.grammar.dto.request.GrammarScoreReqDTO;
 import com.arch.raon.domain.grammar.entity.GrammarQuiz;
 import com.arch.raon.domain.grammar.entity.GrammarScore;
 import com.arch.raon.domain.grammar.repository.GrammarQuizRepository;
@@ -54,21 +55,42 @@ public class GrammarServiceImpl implements GrammarService {
 
 	@Transactional
 	@Override
-	public void saveQuizResult(GrammarScoreReqDTO grammarScoreReqDTO) {
+	public void saveScoreResult(GrammarResultSaveReqDTO grammarResultSaveReqDTO) {
 		// // 1. member_id가 유효한지 확인
 		// boolean isValidMember =
-
 		//
 		// // 2.
-		final long TEST_MEMBER_ID = 6;
+		final long TEST_MEMBER_ID = 777;
+		int score = 0;
+
+		List<GrammarResultDTO> grammarResultList = grammarResultSaveReqDTO.getGrammarResultList();
+		for (GrammarResultDTO grammarResultDTO : grammarResultList) {
+			if(grammarResultDTO.getHit() == 1) {
+				score ++;
+			}
+		}
 
 		GrammarScore grammarScoreEntity = GrammarScore
 			.builder()
-			.score(grammarScoreReqDTO.getScore())
-			.play_time(grammarScoreReqDTO.getPlay_time())
+			.score(score)
 			.member_id(TEST_MEMBER_ID) // TODO: 현재 member_id가 없어서 임의로 저장.
 			.build();
 
 		 grammarScoreRepository.save(grammarScoreEntity);
+	}
+
+	@Transactional
+	@Override
+	public void updateStatistics(GrammarResultSaveReqDTO grammarResultSaveReqDTO) {
+		// 문제별 정답율 업데이트
+		List<GrammarResultDTO> grammarResultList = grammarResultSaveReqDTO.getGrammarResultList();
+		for (GrammarResultDTO grammarResultDTO : grammarResultList) {
+			GrammarQuiz grammarQuiz = grammarQuizRepository.findById(grammarResultDTO.getId()).get();
+			if(grammarResultDTO.getHit() == 1) {
+				grammarQuiz.quizCorrect(); // 정답 처리
+			} else {
+				grammarQuiz.quizNotCorrect(); // 오답 처리
+			}
+		}
 	}
 }
