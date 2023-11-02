@@ -8,6 +8,8 @@ import {
   answerState,
   spellingCountState,
 } from '../../../recoil/Atoms.tsx';
+import SpellingRight from './SpellingRight.tsx';
+import SpellingWrong from './SpellingWrong.tsx';
 
 const Container = styled.div`
   display: flex;
@@ -29,12 +31,16 @@ const Options = styled.div`
   gap: 25rem;
 `;
 
-const Option = styled.div`
+const Option = styled.button`
   font-family: 'ONE-Mobile-POP';
   color: white;
   font-size: 3rem;
   cursor: pointer;
   transition: background-color 0.2s;
+  background-color: #202fb2;
+  border: 3px solid black;
+  border-radius: 15px;
+  padding: 40px;
 
   &:hover {
     background-color: rgba(0, 0, 0, 0.05);
@@ -51,6 +57,9 @@ type Quiz = {
 const SpellingProblem = () => {
   const navigate = useNavigate();
 
+  const [isRightModalVisible, setRightModalVisible] = useState(false);
+  const [isWrongModalVisible, setWrongModalVisible] = useState(false);
+
   const [quizList, setQuizList] = useState<Quiz[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const setSubmitList = useSetRecoilState(submitState);
@@ -61,11 +70,20 @@ const SpellingProblem = () => {
   const handleOptionClick = (option: string) => {
     setSubmitList((prevList: string[]) => [...prevList, option]);
 
-    if (currentIndex < quizList.length - 1) {
-      setCurrentIndex(currentIndex + 1);
+    if (option === quizList[currentIndex]?.answer) {
+      setRightModalVisible(true);
+    } else {
+      setWrongModalVisible(true);
     }
+  };
 
-    if (currentIndex === quizList.length - 1) {
+  const handleCloseModal = () => {
+    setRightModalVisible(false);
+    setWrongModalVisible(false);
+
+    if (currentIndex < quizList.length - 1) {
+      setCurrentIndex((prevIndex) => prevIndex + 1);
+    } else {
       const endTime = Date.now();
       setSpellingCountState(endTime - startTime.current);
       navigate('/game/spelling-result');
@@ -110,6 +128,19 @@ const SpellingProblem = () => {
           {quizList[currentIndex]?.option_two}
         </Option>
       </Options>
+
+      {isRightModalVisible && (
+        <SpellingRight
+          answer={quizList[currentIndex]?.answer}
+          onClose={handleCloseModal}
+        />
+      )}
+      {isWrongModalVisible && (
+        <SpellingWrong
+          answer={quizList[currentIndex]?.answer}
+          onClose={handleCloseModal}
+        />
+      )}
     </Container>
   );
 };

@@ -1,10 +1,23 @@
 import React, { useState, useEffect } from 'react';
-import styled, { createGlobalStyle } from 'styled-components';
+import styled, { createGlobalStyle, keyframes } from 'styled-components';
+import { useNavigate } from 'react-router-dom';
 import gildong from '../../../assets/Images/gildong.png';
 
-const GlobalStyle = createGlobalStyle`
-  body {
-    overflow-x: hidden;
+const rollAndRotateFromLeft = keyframes`
+  0% {
+    transform: translateX(-100%) rotate(0deg);
+  }
+  25% {
+    transform: translateX(-75%) rotate(90deg);
+  }
+  50% {
+    transform: translateX(-50%) rotate(180deg);
+  }
+  75% {
+    transform: translateX(-25%) rotate(270deg);
+  }
+  100% {
+    transform: translateX(0) rotate(360deg);
   }
 `;
 
@@ -44,6 +57,14 @@ const StyledBox = styled.div`
   margin-bottom: 20px; // 아래쪽 마진 추가
 `;
 
+const StyledStart = styled.div`
+  font-family: 'CookieRun';
+  color: #ffcb4c;
+  font-size: 60px;
+  margin-top: 20px;
+  cursor: pointer;
+`;
+
 const StyledSquareBox = styled.div`
   background-color: #ffcd4a; // 노란색 배경
   color: #ffebb6;
@@ -57,6 +78,7 @@ const StyledSquareBox = styled.div`
   font-family: 'CookieRun';
   font-size: 100px; // 폰트 크기
   border-radius: 30px; // 모서리 둥글게
+  animation: ${rollAndRotateFromLeft} 2s ease-out;
 `;
 
 const StyledCaption = styled.div`
@@ -81,11 +103,12 @@ const GildongImage = styled.img<{ shouldMove: boolean }>`
 
 function LandingPage() {
   const [shouldMove, setShouldMove] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const timer = setTimeout(() => {
       setShouldMove(true);
-    }, 2000);
+    }, 1500);
 
     return () => {
       clearTimeout(timer);
@@ -94,7 +117,6 @@ function LandingPage() {
 
   return (
     <div>
-      <GlobalStyle />
       <ImageContainer>
         <GildongImage src={gildong} alt="gildong" shouldMove={shouldMove} />
         <BoxContainer>
@@ -104,6 +126,7 @@ function LandingPage() {
             <StyledSquareBox>온</StyledSquareBox>
           </div>
           <StyledCaption>'즐거운'이라는 순 우리말</StyledCaption>
+          <StyledStart onClick={() => navigate('/main')}>시작하기</StyledStart>
         </BoxContainer>
       </ImageContainer>
     </div>
