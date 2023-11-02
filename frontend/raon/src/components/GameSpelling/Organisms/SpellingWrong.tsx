@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import cry from '../../../assets/Images/cry.png';
+import Tear from '../../Common/Organisms/Tear.tsx';
 import StarOne from '../Atoms/StarOne.tsx';
 // import StarTwo from '../Atoms/StarTwo.tsx';
 // import StarThree from '../Atoms/StarThree.tsx';
@@ -80,6 +81,7 @@ const SpellingWrong: React.FC<Props> = ({ onClose, answer }) => {
   return (
     <React.Fragment>
       {' '}
+      <Tear />
       <ModalOverlay>
         <ModalContainer>
           <TopSection>
