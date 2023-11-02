@@ -65,6 +65,7 @@ function WaitInterface() {
   const stompClient = new Client({
     webSocketFactory: () => socket,
     onConnect: () => {
+      // TODO: nickname 접속한 사용자 닉네임으로 바꾸기
       const nickname = '박영서';
       const roomId = uuidv4();
       stompClient.publish({ destination: '/dictionary-quiz/create-room', body: JSON.stringify({nickname, roomId}) });
