@@ -53,12 +53,39 @@ const GameExampleQuestionDiv = styled.div`
   animation: ${appearAnimation} 1.25s ease-in forwards;
 `;
 const GameExampleContentDiv = styled.div`
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: repeat(3, 1fr);
-  gap: 0.3125rem;
-  width: 11.5rem;
-  height: 11.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  font-family: 'NanumBarunGothic';
+  font-size: 3.5rem;
+  margin-top: 2rem;
+  opacity: 0;
+  animation: ${appearAnimation} 1.5s ease-in forwards;
+`;
+
+const GameExampleSelectDiv = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 6.125rem;
+  font-family: 'NanumBarunGothic';
+  font-size: 56px;
+  opacity: 0;
+  animation: ${appearAnimation} 1.5s ease-in forwards;
+`;
+const GameExampleButtonDiv = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: indigo;
+  color: white;
+  border-radius: 1.25rem;
+  border: 0.125rem solid black;
+  padding: 1rem;
+  font-family: 'NanumBarunGothic';
+  font-size: 56px;
   opacity: 0;
   animation: ${appearAnimation} 1.5s ease-in forwards;
 `;
@@ -84,14 +111,20 @@ function InitInterface() {
         <GameExampleQuestionDiv>
           <p>다음 중 맞는 것을 고르세요</p>
         </GameExampleQuestionDiv>
-        <GameExampleContentDiv>d</GameExampleContentDiv>
+        <GameExampleContentDiv>
+          <p>승리는 __ 것</p>
+        </GameExampleContentDiv>
+        <GameExampleSelectDiv>
+          <GameExampleButtonDiv>나의</GameExampleButtonDiv>
+          <GameExampleButtonDiv>나에</GameExampleButtonDiv>
+        </GameExampleSelectDiv>
       </InterfaceDiv>
       <ButtonDiv>
         <StartButton
           fontColor="sienna"
           content="시작하기"
           onClick={() => {
-            navigate('/game/dictionary-quiz');
+            navigate('/game/spelling-quiz');
           }}
         />
         <ExitButton

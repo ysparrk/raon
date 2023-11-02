@@ -27,7 +27,7 @@ const MainMenu = () => {
         <SelectOption
           imgSrc={main1}
           optionText="맞춤법 놀이"
-          onClick={() => navigate('/game/spelling-quiz')}
+          onClick={() => navigate('/game/spelling-init')}
         />
         <SelectOption
           imgSrc={main2}
