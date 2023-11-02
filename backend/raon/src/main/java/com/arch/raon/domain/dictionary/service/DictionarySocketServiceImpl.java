@@ -1,5 +1,8 @@
 package com.arch.raon.domain.dictionary.service;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -11,6 +14,7 @@ import com.arch.raon.domain.member.repository.MemberRepository;
 import com.arch.raon.global.exception.CustomException;
 import com.arch.raon.global.exception.ErrorCode;
 import com.arch.raon.global.quizRoom.Room;
+import com.arch.raon.global.quizRoom.User;
 import com.arch.raon.global.util.enums.GameState;
 import com.arch.raon.global.util.enums.RoomResult;
 
@@ -19,16 +23,9 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class DictionarySocketServiceImpl implements DictionarySocketService{
-	private final int ENTER_SUCCESS = 0;
-	private final int ROOM_NOT_EXIST = 1;
-	private final int ROOM_ISFULL = 2;
-	private final int ALREADY_PLAYING = 3;
 
 	private final ConcurrentMap<String, Room> rooms = new ConcurrentHashMap<>();
 	private final MemberRepository memberRepository;
-
-
-
 
 	@Override
 	public RoomResult createRoom(String nickname, String roomId) {
@@ -83,14 +80,10 @@ public class DictionarySocketServiceImpl implements DictionarySocketService{
 		return RoomResult.LEAVE_FAIL_NONEXIST;
 	}
 
-	private String createRoomId() {
-		String roomId = null;
-
-		do {
-			roomId = UUID.randomUUID().toString();
-		} while (!rooms.containsKey(roomId));
-
-		return roomId;
+	@Override
+	public List<String> getUserNickNames(String roomId) {
+		Room room = rooms.get(roomId);
+		return room.getUsers();
 	}
 
 	private boolean isValidUser(String nickname){

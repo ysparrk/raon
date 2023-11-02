@@ -1,5 +1,8 @@
 package com.arch.raon.domain.dictionary.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
@@ -7,7 +10,6 @@ import org.springframework.stereotype.Controller;
 import com.arch.raon.domain.dictionary.dto.request.SocketReqDTO;
 import com.arch.raon.domain.dictionary.dto.response.SocketResponseDTO;
 import com.arch.raon.domain.dictionary.service.DictionarySocketService;
-import com.arch.raon.global.quizRoom.Room;
 import com.arch.raon.global.util.enums.RoomResult;
 
 import lombok.RequiredArgsConstructor;
@@ -55,8 +57,13 @@ public class DictionarySocketController {
 
 		switch (result){
 			case JOIN_SUCCESS:
-				SocketResponseDTO message = new SocketResponseDTO(reqDTO.getNickname(), reqDTO.getRoomId());
-				sendToRoom("/dictionary-quiz/join-room", reqDTO.getRoomId(), message);
+				List<String> users = dictionarySocketService.getUserNickNames(reqDTO.getRoomId());
+				List<SocketResponseDTO> responseDTOS = new ArrayList<>();
+
+				for(String user:users){
+					responseDTOS.add(new SocketResponseDTO(user,null));
+				}
+				sendToRoom("/dictionary-quiz/join-room", reqDTO.getRoomId(), responseDTOS);
 				break;
 
 			case JOIN_FAIL_FULL:
@@ -80,7 +87,7 @@ public class DictionarySocketController {
 
 
 	// 특정 roomId에 메시지를 전송하는 메서드
-	private void sendToRoom(String topic, String roomId, SocketResponseDTO message) {
+	private void sendToRoom(String topic, String roomId, Object message) {
 		// roomId를 포함한 토픽 주소로 메시지 전송
 		messagingTemplate.convertAndSend("/topic"+topic+"/"+roomId, message);
 		System.out.println("url : /topic"+topic+"/"+roomId);
