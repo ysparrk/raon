@@ -12,6 +12,7 @@ const RoomExitButton = ({ onClick }: JoinButtonProps) => {
     cursor: 'pointer',
     color: '#FFCD4A',
     fontSize: '6.25rem',
+    WebkitTextStroke: '1px black',
   };
 
   return (
