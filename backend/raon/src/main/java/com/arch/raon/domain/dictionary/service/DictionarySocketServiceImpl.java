@@ -43,6 +43,18 @@ public class DictionarySocketServiceImpl implements DictionarySocketService{
 		return false;
 	}
 
+	@Override
+	public boolean isValidRoomId(String roomId) {
+		return !rooms.containsKey(roomId);
+	}
+
+	@Override
+	public void leaveRoom(String nickname, String roomId) {
+		if(rooms.containsKey(roomId)){
+			rooms.get(roomId).leaveUser(nickname);
+		}
+	}
+
 	private String createRoomId() {
 		String roomId = null;
 

@@ -1,16 +1,11 @@
 package com.arch.raon.domain.dictionary.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 
 import com.arch.raon.domain.dictionary.dto.SocketVO;
 import com.arch.raon.domain.dictionary.service.DictionarySocketService;
-import com.arch.raon.domain.member.entity.Member;
-import com.arch.raon.domain.member.repository.MemberRepository;
-import com.arch.raon.global.exception.CustomException;
-import com.arch.raon.global.exception.ErrorCode;
 
 import lombok.RequiredArgsConstructor;
 
@@ -19,7 +14,6 @@ import lombok.RequiredArgsConstructor;
 public class DictionarySocketController {
 
 	private final SimpMessagingTemplate messagingTemplate;
-	private final MemberRepository memberRepository;
 	private final DictionarySocketService dictionarySocketService;
 
 	/**
@@ -32,43 +26,38 @@ public class DictionarySocketController {
 	 * @return message(roomId)
 	 */
 	@MessageMapping("/dictionary-quiz/create-room")
-	public void createRoom(String nickname) {
-		String roomId = dictionarySocketService.createRoom(nickname);
+	public void createRoom(String nickname, String roomId) {
 		SocketVO message = new SocketVO(nickname, roomId);
 
-		if(roomId != null){
-			sendToRoom("/dictionary-quiz/create-room", message);
+		if(dictionarySocketService.isValidRoomId(roomId)){
+			sendToRoom("/dictionary-quiz/create-room", roomId, message);
 		}
 		else{
+			// TODO: exception에 대한 처리가 더 필요
 			message.setMessage("error");
-			sendToRoom("/dictionary-quiz/error", message);
+			sendToRoom("/dictionary-quiz/error", roomId, message);
 		}
 	}
 
-	/**
-	 *
-	 *
-	 * @param nickname
-	 */
-	@MessageMapping("/dictionary-quiz/joinroom")
+
+	@MessageMapping("/dictionary-quiz/join-room")
 	public void joinRoom(String nickname, String roomId) {
 
 		//boolean joinOk = dictionarySocketService.createRoom(nickname);
-
-
 		SocketVO message = new SocketVO(nickname, roomId);
+		sendToRoom("/dictionary-quiz/join-room", roomId, message);
+	}
 
-
-
-		sendToRoom("/dictionary-quiz/join-room", message);
+	@MessageMapping("/dictionary-quiz/leave")
+	public void userLeaveRoom(String nickname, String roomId){
+		dictionarySocketService.leaveRoom(nickname, roomId);
 	}
 
 
-
 	// 특정 roomId에 메시지를 전송하는 메서드
-	private void sendToRoom(String topic, SocketVO message) {
+	private void sendToRoom(String topic, String roomId, SocketVO message) {
 		// roomId를 포함한 토픽 주소로 메시지 전송
-		messagingTemplate.convertAndSend("/topic"+topic, message);
+		messagingTemplate.convertAndSend("/topic"+topic+"/"+roomId, message);
 	}
 
 
