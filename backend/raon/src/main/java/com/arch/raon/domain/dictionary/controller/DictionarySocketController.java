@@ -58,6 +58,8 @@ public class DictionarySocketController {
 	 */
 	@MessageMapping("/dictionary-quiz/join-room")
 	public void joinRoom(SocketReqDTO reqDTO) {
+		System.out.println("join요청: 요청자:"+reqDTO.getNickname());
+
 		RoomResult result = dictionarySocketService.joinRoom(reqDTO.getNickname(), reqDTO.getRoomId());
 
 		switch (result){
