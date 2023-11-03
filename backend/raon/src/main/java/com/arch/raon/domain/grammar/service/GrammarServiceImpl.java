@@ -5,9 +5,13 @@ import java.util.List;
 
 import com.arch.raon.domain.grammar.dto.request.GrammarResultDTO;
 import com.arch.raon.domain.grammar.dto.request.GrammarResultSaveReqDTO;
+import com.arch.raon.domain.grammar.dto.query.GrammarMyRankQueryDTO;
 import com.arch.raon.domain.grammar.dto.response.GrammarQuizResDTO;
 import com.arch.raon.domain.member.entity.Member;
 import com.arch.raon.domain.member.repository.MemberRepository;
+import com.arch.raon.global.exception.CustomException;
+import com.arch.raon.global.exception.ErrorCode;
+import com.arch.raon.global.util.enums.GrammarRanking;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -96,4 +100,31 @@ public class GrammarServiceImpl implements GrammarService {
 			}
 		}
 	}
+
+	@Override
+	public List<GrammarMyRankQueryDTO> getMyRank(Long memberId, GrammarRanking grammarRanking) {
+		/**
+		 * 랭킹 조회
+		 * 1. 유저가 1~5등 사이면 1~6등 보내주기
+		 * 2. 그 밑이면 1~3등 / 유저 +-1 이랑 유저
+		 */
+
+		Member member = memberRepository.findById(memberId).orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND) {
+			@Override
+			public ErrorCode getErrorCode() {
+				return super.getErrorCode();
+			}
+		});
+
+		if (grammarRanking.equals(GrammarRanking.GRAMMAR_COUNTRY_MY)) {
+			// 전국 랭킹 조회
+		} else if (grammarRanking.equals(GrammarRanking.GRAMMAR_SCHOOL_MY)) {
+			// 교내 랭킹 조회
+
+		}
+		return null;
+	}
+
+
+
 }
