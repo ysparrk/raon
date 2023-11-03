@@ -49,7 +49,7 @@ public class Room {
 	public List<SocketResponseDTO> getUsers(){
 		List<SocketResponseDTO> users = new ArrayList<>();
 		for(Map.Entry<String, User> entry : userInfo.entrySet()){
-			users.add(new SocketResponseDTO(entry.getKey(), entry.getValue().isOwner()));
+			users.add(new SocketResponseDTO(entry.getKey(),"방에 있던 사람", entry.getValue().isOwner()));
 		}
 		return users;
 	}

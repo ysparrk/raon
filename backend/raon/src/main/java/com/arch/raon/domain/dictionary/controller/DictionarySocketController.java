@@ -35,7 +35,7 @@ public class DictionarySocketController {
 
 		switch (result){
 			case CREATE_SUCCESS:
-				SocketResponseDTO message = new SocketResponseDTO(reqDTO.getNickname(), reqDTO.getRoomId());
+				SocketResponseDTO message = new SocketResponseDTO(reqDTO.getNickname(), reqDTO.getRoomId(), "방 생성 성공", true);
 				sendToRoom(reqDTO.getRoomId(), message);
 				break;
 
@@ -69,7 +69,7 @@ public class DictionarySocketController {
 				sendResult(reqDTO.getNickname(), userAndOwnerInfo);
 
 				// 그 뒤 방 전체 사람들에게 입장 한 사람의 정보를 보내준다.(방에 방금 들어온 사람도 자신의 정보를 이때 받는다.)
-				sendToRoom(reqDTO.getRoomId(), new SocketResponseDTO(reqDTO.getNickname(), reqDTO.getRoomId()));
+				sendToRoom(reqDTO.getRoomId(), new SocketResponseDTO(reqDTO.getNickname(), reqDTO.getRoomId(), "나, 등장", false));
 				break;
 
 			case JOIN_FAIL_FULL:
@@ -87,8 +87,8 @@ public class DictionarySocketController {
 	}
 
 	@MessageMapping("/dictionary-quiz/leave")
-	public void userLeaveRoom(String nickname, String roomId){
-		RoomResult result = dictionarySocketService.leaveRoom(nickname, roomId);
+	public void userLeaveRoom(SocketReqDTO reqDTO){
+		RoomResult result = dictionarySocketService.leaveRoom(reqDTO.getNickname(), reqDTO.getRoomId());
 	}
 
 
