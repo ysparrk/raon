@@ -24,6 +24,7 @@ import DictionaryJoin from '../components/GameDictionary/Pages/DictionaryJoin.ts
 import DictionaryQuiz from '../components/GameDictionary/Pages/DictionaryQuiz.tsx';
 import DictionaryGame from '../components/GameDictionary/Pages/DictionaryGame.tsx';
 import DictionaryInit from '../components/GameDictionary/Pages/DictionaryInit.tsx';
+import DictionaryWaitingRoom from '../components/GameDictionary/Pages/DictionaryWaitingRoom.tsx';
 // import DictionaryResult from '../components/GameDictionary/Pages/DictionaryResult.tsx';
 
 // // Ranking
@@ -49,6 +50,7 @@ const AppRouter: React.FC = () => {
         <Route path="/game/dictionary-join" element={<DictionaryJoin />} />
         <Route path="/game/dictionary-quiz" element={<DictionaryQuiz />} />
         <Route path="/game/dictionary-game" element={<DictionaryGame />} />
+        <Route path="/game/dictionary-game/waiting-room" element={<DictionaryWaitingRoom />} />
         {/* <Route path="/user/" element={<Foundation />} /> */}
       </Routes>
     </BrowserRouter>

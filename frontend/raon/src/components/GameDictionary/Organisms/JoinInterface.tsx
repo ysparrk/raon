@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import JoinButton from '../Atoms/JoinButton';
 import JoinInputBox from '../Atoms/JoinInputBox';
+import { Client } from '@stomp/stompjs';
+import SockJS from 'sockjs-client';
 
 const InterfaceDiv = styled.div`
   display: flex;
@@ -12,6 +14,47 @@ const InterfaceDiv = styled.div`
   width: 80vw;
   height: 60vh;
 `;
+
+const connectToWebSocket = (nickname: string, roomId: string): Promise<Client> => {
+  return new Promise((resolve, reject) => {
+    const socket = new SockJS(`${process.env.REACT_APP_API_URL}api/ws`, null, {transports: ["websocket", "xhr-streaming", "xhr-polling"]});
+    const client = new Client({
+      webSocketFactory: () => socket,
+      onConnect: () => {
+        joinRoom(client, nickname, roomId);
+        resolve(client);
+        console.log("연결??")
+      },
+      onStompError: (error) => {
+        reject(error);
+      },
+      reconnectDelay: 5000, //자동 재 연결
+      heartbeatIncoming: 4000,
+      heartbeatOutgoing: 4000,
+    });
+
+    client.activate();
+  });
+};
+
+// 입장하는 사용자 닉네임, roomId 보내기
+const joinRoom = (client: Client, nickname: string, roomId: string): void => {
+  client.subscribe(`/topic/dictionary-quiz/room/${roomId}`, callback);
+  client.publish({
+    destination: `/dictionary-quiz/join-room`,
+    body: JSON.stringify({nickname, roomId}),
+  });
+};
+
+
+// 콜백함수 => roomId 받기
+const callback: (message: any) => void = (message: any) => {
+  if (message.body) {
+    const body: any = JSON.parse(message.body);
+    console.log(body);
+  }
+};
+
 
 function JoinInterface() {
   const [isJoin, setIsJoin] = useState(false);
@@ -43,9 +86,10 @@ function JoinInterface() {
       <JoinButton
         optionText="참여하기"
         buttoncolor="lightcoral"
-        onClick={() => {
+        onClick={async (async) => {
           console.log(inputBoxValue);
-          setIsJoin(false);
+          const client = await connectToWebSocket("김태현", inputBoxValue);
+          navigate('/game/dictionary-game/waiting-room')
         }}
       />
     </InterfaceDiv>
