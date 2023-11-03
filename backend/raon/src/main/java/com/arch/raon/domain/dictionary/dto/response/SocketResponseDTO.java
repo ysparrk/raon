@@ -49,4 +49,12 @@ public class SocketResponseDTO implements Serializable {
 	public String getMessage() {
 		return message;
 	}
+
+	public boolean isOwner() {
+		return isOwner;
+	}
+
+	public void setOwner(boolean owner) {
+		isOwner = owner;
+	}
 }
