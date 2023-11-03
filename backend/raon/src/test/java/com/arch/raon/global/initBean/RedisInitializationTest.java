@@ -3,6 +3,7 @@ package com.arch.raon.global.initBean;
 import static org.assertj.core.api.AssertionsForClassTypes.*;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -28,6 +29,7 @@ public class RedisInitializationTest {
 
 	}
 
+	@DisplayName("맞춤법 퀴즈 레디스 적용 확인")
 	@Test
 	@Transactional
 	public void testStrings() throws Exception {
@@ -37,7 +39,6 @@ public class RedisInitializationTest {
 		redisInitialization.loadData();
 		ListOperations<String, Object> opsForList = redisTemplate.opsForList();
 		GrammarQuiz result = (GrammarQuiz)opsForList.range("quizzes",4,4).get(0);
-		System.out.println("result.toString() = " + result.toString());
 		//then
 		assertThat(result).isNotNull();
 	}
