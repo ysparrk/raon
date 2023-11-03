@@ -31,6 +31,11 @@ public class DictionarySocketServiceImpl implements DictionarySocketService{
 	@Override
 	public RoomResult createRoom(String nickname, String roomId) {
 		if(isValidUser(nickname)) {
+			// 이미 존재하는 방에 대해 방 생성 요청시
+			if(rooms.containsKey(roomId)){
+				return RoomResult.CREATE_FAIL_SAME_ROOMID;
+			}
+			
 			// 만든 방 id로 방에 입장하고, 방 생성을 요청한 사람을 방장으로 넣는다.
 			rooms.put(roomId, new Room(nickname));
 			return RoomResult.CREATE_SUCCESS;
