@@ -1,6 +1,9 @@
 package com.arch.raon.global.exception;
 
+import com.arch.raon.global.auth.exception.TokenException;
 import com.arch.raon.global.dto.ErrorResponseDTO;
+import com.arch.raon.global.dto.ResponseDTO;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -83,6 +86,14 @@ public class GlobalExceptionHandler {
         e.printStackTrace();
         return ResponseEntity.status(INTERNAL_SERVER_ERROR)
                 .body(ErrorResponseDTO.of(ErrorCode.INTERNAL_SERVER_ERROR));
+    }
+
+    @ExceptionHandler(TokenException.class)
+    public ResponseEntity<ErrorResponseDTO> handleException(HttpServletRequest request, final TokenException e) {
+        log.error("[EXCEPTION] {}", e.getClass().getSimpleName());
+        e.printStackTrace();
+        return ResponseEntity.status(e.getErrorCode().getStatus())
+                .body(ErrorResponseDTO.of(e.getErrorCode()));
     }
 }
 
