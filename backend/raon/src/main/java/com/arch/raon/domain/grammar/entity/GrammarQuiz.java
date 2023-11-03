@@ -8,11 +8,11 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
 
 @Entity
 @Table(name = "grammar_quiz")
+@Getter
 public class GrammarQuiz implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,64 +29,47 @@ public class GrammarQuiz implements Serializable {
 	@Column(name = "answer", length = 32, nullable = false)
 	private String answer;
 
+	@Column(name = "submit")
+	private Integer submit;
+
+	@Column(name = "hit")
+	private Integer hit;
+
 
 	public GrammarQuiz() {
 		super();
 	}
 
-	public GrammarQuiz(Long id, String content, String option_one, String option_two, String answer) {
+	public GrammarQuiz(Long id, String content, String option_one, String option_two, String answer, Integer submit, Integer hit) {
 		this.id = id;
 		this.content = content;
 		this.option_one = option_one;
 		this.option_two = option_two;
 		this.answer = answer;
-
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public String getContent() {
-		return content;
-	}
-
-	public void setContent(String content) {
-		this.content = content;
-	}
-
-	public String getOption_one() {
-		return option_one;
-	}
-
-	public void setOption_one(String option_one) {
-		this.option_one = option_one;
-	}
-
-	public String getOption_two() {
-		return option_two;
-	}
-
-	public void setOption_two(String option_two) {
-		this.option_two = option_two;
-	}
-
-	public String getAnswer() {
-		return answer;
+		this.submit = submit;
+		this.hit = hit;
 	}
 
 	@Override
 	public String toString() {
 		return "GrammarQuiz{" +
-			"id=" + id +
-			", content='" + content + '\'' +
-			", option_one='" + option_one + '\'' +
-			", option_two='" + option_two + '\'' +
-			", answer='" + answer + '\'' +
-			'}';
+				"id=" + id +
+				", content='" + content + '\'' +
+				", option_one='" + option_one + '\'' +
+				", option_two='" + option_two + '\'' +
+				", answer='" + answer + '\'' +
+				", submit=" + submit +
+				", hit=" + hit +
+				'}';
 	}
+
+	public void quizCorrect() {
+		this.submit += 1;
+		this.hit += 1;
+	}
+
+	public void quizNotCorrect(){
+		this.submit += 1;
+	}
+
 }
