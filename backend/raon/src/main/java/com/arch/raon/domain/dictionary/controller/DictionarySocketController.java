@@ -88,7 +88,13 @@ public class DictionarySocketController {
 
 	@MessageMapping("/dictionary-quiz/leave")
 	public void userLeaveRoom(SocketReqDTO reqDTO){
+		// 일단 방 자료구조에서 제외
 		RoomResult result = dictionarySocketService.leaveRoom(reqDTO.getNickname(), reqDTO.getRoomId());
+
+		// 방 내의 사람들에게 나갔다는 것을 알림.
+		if(result == RoomResult.LEAVE_SUCCESS){
+			sendToRoom(reqDTO.getRoomId(), new SocketResponseDTO(reqDTO.getNickname(), "나갔다..", false));
+		}
 	}
 
 
