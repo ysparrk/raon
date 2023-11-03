@@ -62,19 +62,27 @@ function WaitInterface() {
 
   // TODO: nickname 접속한 사용자 닉네임으로 바꾸기
   const nickname = '박영서';
-  const roomId = uuidv4();
+  // const roomId = uuidv4();
+  const roomId = "1234";  // 테스트용
+
 
   // 웹 소켓 클라이언트 설정
   const socket = new SockJS(`${process.env.REACT_APP_API_URL}api/ws`, null, {transports: ["websocket", "xhr-streaming", "xhr-polling"]});
   const stompClient = new Client({
     webSocketFactory: () => socket,
-    // 구독
-    onConnect: () => {
-      stompClient.subscribe(`/topic/dictionary-quiz/create-room/${roomId}`, callback);
 
+    onConnect: () => {
+      // 구독 시작
+      stompClient.subscribe(`/topic/dictionary-quiz/room/${roomId}`, callback);
+      // 서버로 메시지 보내기
       stompClient.publish({ destination: '/dictionary-quiz/create-room', body: JSON.stringify({nickname, roomId}) });
       console.log('Connected to the WebSocket server');
+
+      
     },
+    reconnectDelay: 5000, //자동 재 연결
+    heartbeatIncoming: 4000,
+    heartbeatOutgoing: 4000,
   });
 
 
