@@ -2,16 +2,12 @@ package com.arch.raon.domain.grammar.entity;
 
 import java.time.LocalDateTime;
 
+import com.arch.raon.domain.member.entity.Member;
+import jakarta.persistence.*;
 import lombok.Getter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
 import lombok.Builder;
 
 @Entity
@@ -23,28 +19,31 @@ public class GrammarScore {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id", updatable = false)
 	private Long id;
-	@Column(name = "member_id", nullable = false)
-	private Long member_id;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	private Member member;
+
 	@Column(name = "score", nullable = false)
 	private int score;
 
 	@CreationTimestamp
 	@Column(name = "created_at", nullable = false)
-	private LocalDateTime created_at;
+	private LocalDateTime createdAt;
+
 	@UpdateTimestamp
 	@Column(name = "modified_at", nullable = false)
-	private LocalDateTime modified_at;
+	private LocalDateTime modifiedAt;
 
 	public GrammarScore() {
 		super();
 	}
 
 	@Builder
-	public GrammarScore(Long id, Long member_id, int score, LocalDateTime created_at, LocalDateTime modified_at) {
+	public GrammarScore(Long id, Member member, int score, LocalDateTime createdAt, LocalDateTime modifiedAt) {
 		this.id = id;
-		this.member_id = member_id;
+		this.member = member;
 		this.score = score;
-		this.created_at = created_at;
-		this.modified_at = modified_at;
+		this.createdAt = createdAt;
+		this.modifiedAt = modifiedAt;
 	}
 }

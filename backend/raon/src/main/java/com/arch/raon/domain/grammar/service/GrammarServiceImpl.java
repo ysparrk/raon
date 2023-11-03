@@ -6,6 +6,8 @@ import java.util.List;
 import com.arch.raon.domain.grammar.dto.request.GrammarResultDTO;
 import com.arch.raon.domain.grammar.dto.request.GrammarResultSaveReqDTO;
 import com.arch.raon.domain.grammar.dto.response.GrammarQuizResDTO;
+import com.arch.raon.domain.member.entity.Member;
+import com.arch.raon.domain.member.repository.MemberRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +25,7 @@ public class GrammarServiceImpl implements GrammarService {
 
 	private final GrammarQuizRepository grammarQuizRepository;
 	private final GrammarScoreRepository grammarScoreRepository;
+	private final MemberRepository memberRepository;
 
 	@Override
 	public List<GrammarQuizResDTO> getQuizzes() {
@@ -62,7 +65,7 @@ public class GrammarServiceImpl implements GrammarService {
 		// // 2.
 		final long TEST_MEMBER_ID = 777;
 		int score = 0;
-
+		Member member = memberRepository.findById(TEST_MEMBER_ID).get();
 		List<GrammarResultDTO> grammarResultList = grammarResultSaveReqDTO.getGrammarResultList();
 		for (GrammarResultDTO grammarResultDTO : grammarResultList) {
 			if(grammarResultDTO.getHit() == 1) {
@@ -73,7 +76,7 @@ public class GrammarServiceImpl implements GrammarService {
 		GrammarScore grammarScoreEntity = GrammarScore
 			.builder()
 			.score(score)
-			.member_id(TEST_MEMBER_ID) // TODO: 현재 member_id가 없어서 임의로 저장.
+			.member(member) // TODO: 현재 member_id가 없어서 임의로 저장.
 			.build();
 
 		 grammarScoreRepository.save(grammarScoreEntity);
