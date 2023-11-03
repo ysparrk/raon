@@ -1,6 +1,5 @@
 package com.arch.raon.domain.dictionary.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -37,7 +36,7 @@ public class DictionarySocketController {
 		switch (result){
 			case CREATE_SUCCESS:
 				SocketResponseDTO message = new SocketResponseDTO(reqDTO.getNickname(), reqDTO.getRoomId());
-				sendToRoom("/dictionary-quiz/create-room", reqDTO.getRoomId(), message);
+				sendToRoom(reqDTO.getRoomId(), message);
 				break;
 
 			case FAIL_INVALID_USER:
@@ -50,20 +49,25 @@ public class DictionarySocketController {
 		}
 	}
 
-
+	/**
+	 * 사용자가 방에 입장한다.
+	 *
+	 * 입장에 성공하면 방에 있는 사람들에게 업데이트 된 방 인원의 정보를 전달한다.
+	 *
+	 * @param reqDTO
+	 */
 	@MessageMapping("/dictionary-quiz/join-room")
 	public void joinRoom(SocketReqDTO reqDTO) {
 		RoomResult result = dictionarySocketService.joinRoom(reqDTO.getNickname(), reqDTO.getRoomId());
 
 		switch (result){
 			case JOIN_SUCCESS:
-				List<String> users = dictionarySocketService.getUserNickNames(reqDTO.getRoomId());
-				List<SocketResponseDTO> responseDTOS = new ArrayList<>();
+				// 방 입장 성공시 먼저 입장 한 사람에게 방에 있던 사람들의 정보를 보내준다.
+				List<SocketResponseDTO> userAndOwnerInfo = dictionarySocketService.getRoomInfo(reqDTO.getRoomId());
+				sendResult(reqDTO.getNickname(), userAndOwnerInfo);
 
-				for(String user:users){
-					responseDTOS.add(new SocketResponseDTO(user,null));
-				}
-				sendToRoom("/dictionary-quiz/join-room", reqDTO.getRoomId(), responseDTOS);
+				// 그 뒤 방 전체 사람들에게 입장 한 사람의 정보를 보내준다.(방에 방금 들어온 사람도 자신의 정보를 이때 받는다.)
+				sendToRoom(reqDTO.getRoomId(), new SocketResponseDTO(reqDTO.getNickname(), reqDTO.getRoomId()));
 				break;
 
 			case JOIN_FAIL_FULL:
@@ -86,13 +90,15 @@ public class DictionarySocketController {
 	}
 
 
-	// 특정 roomId에 메시지를 전송하는 메서드
-	private void sendToRoom(String topic, String roomId, Object message) {
+	// 특정 방에 있는 "모든 인원"에게 데이터를 보낼 때 (방 입장, 방 나가기, 문제 결과 전송 등)
+	private void sendToRoom(String roomId, Object message) {
 		// roomId를 포함한 토픽 주소로 메시지 전송
-		messagingTemplate.convertAndSend("/topic"+topic+"/"+roomId, message);
-		System.out.println("url : /topic"+topic+"/"+roomId);
-		System.out.println("message = " + message);
-		System.out.println("send Message");
+		messagingTemplate.convertAndSend("/topic/dictionary-quiz/room/"+roomId, message);
+	}
+
+	// 요청을 보낸 "개인"에게 요청의 결과(성공, 에러 등)를 전송
+	private void sendResult(String nickname, Object message){
+		messagingTemplate.convertAndSend("/topic/result/"+nickname, message);
 	}
 
 
