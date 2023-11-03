@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import InitInterface from '../Organisms/InitInterface';
+import InitSpelling from '../Organisms/InitSpelling';
 import LeftSpeakBalloon from '../../Common/Atoms/LeftSpeakBalloon';
 import RightSpeakBalloon from '../../Common/Atoms/RightSpeakBalloon';
 import HelpCharacter from '../../Common/Atoms/HelpCharacterDiv';
@@ -25,7 +25,7 @@ const SpeakEventRightTopDiv = styled.div`
   z-index: 5;
 `;
 
-const DictionaryInit = () => {
+const SpellingInit = () => {
   return (
     <div>
       <SpeakEventLeftDiv>
@@ -35,7 +35,7 @@ const DictionaryInit = () => {
         <RightSpeakBalloon content=" ! " />
       </SpeakEventRightTopDiv>
       <ContentDiv>
-        <InitInterface />
+        <InitSpelling />
       </ContentDiv>
       <HelpCharacter
         onClick={() => {
@@ -45,4 +45,4 @@ const DictionaryInit = () => {
     </div>
   );
 };
-export default DictionaryInit;
+export default SpellingInit;

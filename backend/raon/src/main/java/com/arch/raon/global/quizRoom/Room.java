@@ -7,9 +7,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
-import org.springframework.context.annotation.Bean;
-
-import com.arch.raon.domain.dictionary.dto.response.DictionaryQuizResDTO;
+import com.arch.raon.domain.dictionary.dto.response.SocketResponseDTO;
 import com.arch.raon.global.util.enums.GameState;
 
 /**
@@ -40,17 +38,24 @@ public class Room {
 
 
 	//========== WAITING일 때의 메소드들 =========================
+	public GameState getCurrentState(){
+		return state;
+	}
 
-	// 새로운 유저가 방에 참여한다.
-	public boolean addUser(String joined_nickname){
-		if(userInfo.size() < MAX_PLAYER && state.equals(GameState.WAITING)){
-			// TODO: test needed
-			synchronized(userInfo){
-				userInfo.put(joined_nickname, new User(joined_nickname,0));
-			}
-			return true;
+	public boolean isFull(){
+		return userInfo.size() >= MAX_PLAYER;
+	}
+
+	public List<SocketResponseDTO> getUsers(){
+		List<SocketResponseDTO> users = new ArrayList<>();
+		for(Map.Entry<String, User> entry : userInfo.entrySet()){
+			users.add(new SocketResponseDTO(entry.getKey(), entry.getValue().isOwner()));
 		}
-		return false;
+		return users;
+	}
+
+	public void addUser(String enteredUser){
+		userInfo.put(enteredUser,new User(enteredUser, 0));
 	}
 
 	// 방에 있는 유저가 방에 나간다.
@@ -60,7 +65,6 @@ public class Room {
 			if(isOwner){
 				changeOwner();
 			}
-
 			userInfo.remove(leaved_nickname);
 			return true;
 		}

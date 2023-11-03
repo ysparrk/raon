@@ -6,11 +6,18 @@ public class SocketResponseDTO implements Serializable {
 	private String nickname;
 	private String roomId;
 
+	private boolean isOwner;
+
 	private String message;
 
 	public SocketResponseDTO(String nickname, String roomId) {
 		this.nickname = nickname;
 		this.roomId = roomId;
+	}
+
+	public SocketResponseDTO(String nickname, boolean isOwner) {
+		this.nickname = nickname;
+		this.isOwner = isOwner;
 	}
 
 
@@ -41,5 +48,13 @@ public class SocketResponseDTO implements Serializable {
 
 	public String getMessage() {
 		return message;
+	}
+
+	public boolean isOwner() {
+		return isOwner;
+	}
+
+	public void setOwner(boolean owner) {
+		isOwner = owner;
 	}
 }

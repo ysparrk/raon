@@ -1,17 +1,23 @@
 package com.arch.raon.domain.dictionary.service;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 import org.springframework.stereotype.Service;
 
-import com.arch.raon.domain.dictionary.controller.DictionaryController;
+import com.arch.raon.domain.dictionary.dto.response.SocketResponseDTO;
 import com.arch.raon.domain.member.entity.Member;
 import com.arch.raon.domain.member.repository.MemberRepository;
 import com.arch.raon.global.exception.CustomException;
 import com.arch.raon.global.exception.ErrorCode;
 import com.arch.raon.global.quizRoom.Room;
+import com.arch.raon.global.quizRoom.User;
+import com.arch.raon.global.util.enums.GameState;
+import com.arch.raon.global.util.enums.RoomResult;
 
 import lombok.RequiredArgsConstructor;
 
@@ -23,24 +29,42 @@ public class DictionarySocketServiceImpl implements DictionarySocketService{
 	private final MemberRepository memberRepository;
 
 	@Override
-	public String createRoom(String nickname) {
+	public RoomResult createRoom(String nickname, String roomId) {
 		if(isValidUser(nickname)) {
-
-			// 방 id를 만든다.
-			String roomId = createRoomId();
-
 			// 만든 방 id로 방에 입장하고, 방 생성을 요청한 사람을 방장으로 넣는다.
 			rooms.put(roomId, new Room(nickname));
-
-			return roomId;
+			return RoomResult.CREATE_SUCCESS;
 		}
-
-		return null;
+		return RoomResult.FAIL_INVALID_USER;
 	}
 
+	/**
+	 * 유저가 방에 입장한다.
+	 *
+	 * @param nickname
+	 * @param roomId
+	 * @return
+	 */
 	@Override
-	public boolean joinRoom(String nickname, String roomId) {
-		return false;
+	public RoomResult joinRoom(String nickname, String roomId) {
+		if(rooms.containsKey(roomId)){
+			Room thatRoom = rooms.get(roomId);
+
+			if(thatRoom.getCurrentState().equals(GameState.PLAY)){
+				return RoomResult.JOIN_FAIL_PLAYING;
+			}
+			if(thatRoom.isFull()){
+				return RoomResult.JOIN_FAIL_FULL;
+			}
+
+			synchronized (thatRoom){
+				thatRoom.addUser(nickname);
+			}
+			return RoomResult.JOIN_SUCCESS;
+		}
+		else{
+			return RoomResult.JOIN_FAIL_NONEXIST;
+		}
 	}
 
 	@Override
@@ -49,20 +73,18 @@ public class DictionarySocketServiceImpl implements DictionarySocketService{
 	}
 
 	@Override
-	public void leaveRoom(String nickname, String roomId) {
+	public RoomResult leaveRoom(String nickname, String roomId) {
 		if(rooms.containsKey(roomId)){
 			rooms.get(roomId).leaveUser(nickname);
+			return RoomResult.LEAVE_SUCCESS;
 		}
+		return RoomResult.LEAVE_FAIL_NONEXIST;
 	}
 
-	private String createRoomId() {
-		String roomId = null;
-
-		do {
-			roomId = UUID.randomUUID().toString();
-		} while (!rooms.containsKey(roomId));
-
-		return roomId;
+	@Override
+	public List<SocketResponseDTO> getRoomInfo(String roomId) {
+		Room room = rooms.get(roomId);
+		return room.getUsers();
 	}
 
 	private boolean isValidUser(String nickname){

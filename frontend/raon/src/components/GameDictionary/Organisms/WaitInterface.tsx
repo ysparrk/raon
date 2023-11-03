@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import JoinButton from '../Atoms/JoinButton';
-import StartButton from '../Atoms/StartButton';
-import RoomExitButton from '../Atoms/ExitButtonInRoom';
 import { Client } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
-import { v4 as uuidv4} from 'uuid';
+import { v4 as uuidv4 } from 'uuid';
+import JoinButton from '../Atoms/JoinButton';
+import StartButton from '../../Common/Atoms/StartButton';
+import RoomExitButton from '../../Common/Atoms/ExitButtonInRoom';
 
 const InterfaceDiv = styled.div`
   display: flex;
@@ -67,7 +67,9 @@ function WaitInterface() {
 
 
   // 웹 소켓 클라이언트 설정
-  const socket = new SockJS(`${process.env.REACT_APP_API_URL}api/ws`, null, {transports: ["websocket", "xhr-streaming", "xhr-polling"]});
+  const socket = new SockJS(`${process.env.REACT_APP_API_URL}api/ws`, null, {
+    transports: ['websocket', 'xhr-streaming', 'xhr-polling'],
+  });
   const stompClient = new Client({
     webSocketFactory: () => socket,
 
@@ -99,7 +101,6 @@ function WaitInterface() {
   useEffect(() => {
     stompClient.activate();
   }, []);
-
 
   return (
     <>
