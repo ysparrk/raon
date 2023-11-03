@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
+import com.arch.raon.domain.dictionary.dto.response.SocketResponseDTO;
 import com.arch.raon.global.util.enums.GameState;
 
 /**
@@ -45,10 +46,10 @@ public class Room {
 		return userInfo.size() >= MAX_PLAYER;
 	}
 
-	public List<String> getUsers(){
-		List<String> users = new ArrayList<>();
+	public List<SocketResponseDTO> getUsers(){
+		List<SocketResponseDTO> users = new ArrayList<>();
 		for(Map.Entry<String, User> entry : userInfo.entrySet()){
-			users.add(entry.getKey());
+			users.add(new SocketResponseDTO(entry.getKey(), entry.getValue().isOwner()));
 		}
 		return users;
 	}

@@ -9,6 +9,7 @@ import java.util.concurrent.ConcurrentMap;
 
 import org.springframework.stereotype.Service;
 
+import com.arch.raon.domain.dictionary.dto.response.SocketResponseDTO;
 import com.arch.raon.domain.member.entity.Member;
 import com.arch.raon.domain.member.repository.MemberRepository;
 import com.arch.raon.global.exception.CustomException;
@@ -81,7 +82,7 @@ public class DictionarySocketServiceImpl implements DictionarySocketService{
 	}
 
 	@Override
-	public List<String> getUserNickNames(String roomId) {
+	public List<SocketResponseDTO> getRoomInfo(String roomId) {
 		Room room = rooms.get(roomId);
 		return room.getUsers();
 	}
