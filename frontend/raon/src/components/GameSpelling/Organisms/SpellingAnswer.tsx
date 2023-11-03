@@ -53,7 +53,6 @@ const CorrectAnswer = styled.span`
 const SpellingAnswer = () => {
   const userAnswers = useRecoilValue(submitState);
   const correctAnswers = useRecoilValue(answerState);
-  const playTime = useRecoilValue(spellingCountState);
 
   const leftAnswers = userAnswers.slice(0, 5);
   const rightAnswers = userAnswers.slice(5, 10);
@@ -66,8 +65,7 @@ const SpellingAnswer = () => {
     <Container>
       <ScoreHeader>
         당신의 점수:
-        <CorrectAnswer> {score * 10}</CorrectAnswer> 점, 소요 시간:{' '}
-        <CorrectAnswer>{(playTime / 1000).toFixed(3)} </CorrectAnswer>초
+        <CorrectAnswer> {score * 10}</CorrectAnswer> 점
       </ScoreHeader>
       <Content>
         <Columns>
