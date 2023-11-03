@@ -1,5 +1,6 @@
 package com.arch.raon.global.config;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,6 +16,7 @@ class RedisConfigTest {
     @Autowired
     RedisTemplate<String, String> redisTemplate;
 
+    @DisplayName("레디스 확인")
     @Test
     @Transactional
     public void testStrings() throws Exception {
