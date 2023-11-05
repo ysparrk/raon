@@ -1,6 +1,8 @@
 package com.arch.raon.domain.grammar.dto.response;
 
 import com.arch.raon.domain.grammar.dto.query.GrammarMyRankQueryDTO;
+import com.arch.raon.global.util.enums.RankState;
+import lombok.Builder;
 import lombok.Getter;
 
 import java.util.List;
@@ -9,11 +11,19 @@ import java.util.List;
 public class GrammarMyRankingResDTO {
     private int myRank;
     private int myScore;
-    private Boolean myState;
+    private RankState rankState;
     private List<GrammarMyRankQueryDTO> rankList;
 
     public GrammarMyRankingResDTO() {
         super();
+    }
+
+    @Builder
+    public GrammarMyRankingResDTO(int myRank, int myScore, RankState rankState, List<GrammarMyRankQueryDTO> rankList) {
+        this.myRank = myRank;
+        this.myScore = myScore;
+        this.rankState = rankState;
+        this.rankList = rankList;
     }
 
     @Override
@@ -21,7 +31,7 @@ public class GrammarMyRankingResDTO {
         return "GrammarMyRankingResDTO{" +
                 "myRank=" + myRank +
                 ", myScore=" + myScore +
-                ", myState=" + myState +
+                ", rankState=" + rankState +
                 ", rankList=" + rankList +
                 '}';
     }
