@@ -131,7 +131,7 @@ public class GrammarServiceImpl implements GrammarService {
 
 			if (myIdx < 6) {
 				// TOP_PLACE
-				List<GrammarMyRankQueryDTO> topPlaceRankResult = getTopPlaceRankResult(myIdx, allByCountry);
+				List<GrammarMyRankQueryDTO> topPlaceRankResult = getTopPlaceRankResult(allByCountry);
 
 				GrammarMyRankingResDTO grammarMyRankingResDTO = GrammarMyRankingResDTO.builder()
 						.myRank(myIdx+1)
@@ -189,7 +189,7 @@ public class GrammarServiceImpl implements GrammarService {
 	}
 
 	@Override
-	public List<GrammarMyRankQueryDTO> getTopPlaceRankResult(int myIndex, List<GrammarMyRankQueryDTO> allByCountry) {
+	public List<GrammarMyRankQueryDTO> getTopPlaceRankResult(List<GrammarMyRankQueryDTO> allByCountry) {
 
 		List<GrammarMyRankQueryDTO> selectedRankResults = new ArrayList<>();
 
@@ -204,6 +204,7 @@ public class GrammarServiceImpl implements GrammarService {
 
 		return selectedRankResults;
 	}
+
 
 
 }

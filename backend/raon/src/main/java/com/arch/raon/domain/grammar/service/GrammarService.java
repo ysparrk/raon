@@ -14,6 +14,6 @@ public interface GrammarService {
 	void updateStatistics(GrammarResultSaveReqDTO grammarResultSaveReqDTO);
 
 	List<GrammarMyRankQueryDTO> getMyRank(Long memberId, GrammarRanking grammarRanking);
-	List<GrammarMyRankQueryDTO> getMiddlePlaceRankResult(int myIndex, List<GrammarMyRankQueryDTO> allByCountry);
-	List<GrammarMyRankQueryDTO> getTopPlaceRankResult(int myIndex, List<GrammarMyRankQueryDTO> allByCountry);
+	List<GrammarMyRankQueryDTO> getMiddlePlaceRankResult(int myIdx, List<GrammarMyRankQueryDTO> allByCountry);
+	List<GrammarMyRankQueryDTO> getTopPlaceRankResult(List<GrammarMyRankQueryDTO> allByCountry);
 }

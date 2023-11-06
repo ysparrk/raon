@@ -307,7 +307,7 @@ class GrammarServiceImplTest {
 		List<GrammarMyRankQueryDTO> allByCountry = grammarScoreRepository.findAllByCountry();
 
 		// when
-		List<GrammarMyRankQueryDTO> expectResult = grammarService.getTopPlaceRankResult(3, allByCountry);
+		List<GrammarMyRankQueryDTO> expectResult = grammarService.getTopPlaceRankResult(allByCountry);
 
 		// then
 		assertThat(expectResult.get(3).getNickname()).isEqualTo("고재원고");
