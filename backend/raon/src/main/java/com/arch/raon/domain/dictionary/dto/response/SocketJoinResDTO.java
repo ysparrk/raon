@@ -9,7 +9,6 @@ import java.util.List;
  *
  */
 public class SocketJoinResDTO implements Serializable {
-	private String roomId; // 사실 없어도 됨
 	private String newComer; // 방금 들어온 녀석, 새로운 사람 입장 시 알림 용도로 넣음
 	private String owner; // 현재 방장
 	private List<String> users; // 방에 있는 사람들(방금 들어온 녀석 포함)
@@ -34,9 +33,32 @@ public class SocketJoinResDTO implements Serializable {
 
 
 		return "SocketJoinResDTO{" +
-			"roomId='" + roomId + '\'' +
 			", newComer='" + newComer + '\'' +
 			", users=" + users +
 			'}';
+	}
+
+	public String getNewComer() {
+		return newComer;
+	}
+
+	public void setNewComer(String newComer) {
+		this.newComer = newComer;
+	}
+
+	public String getOwner() {
+		return owner;
+	}
+
+	public void setOwner(String owner) {
+		this.owner = owner;
+	}
+
+	public List<String> getUsers() {
+		return users;
+	}
+
+	public void setUsers(List<String> users) {
+		this.users = users;
 	}
 }
