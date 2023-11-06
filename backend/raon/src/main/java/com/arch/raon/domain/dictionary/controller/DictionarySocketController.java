@@ -1,5 +1,6 @@
 package com.arch.raon.domain.dictionary.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -8,6 +9,8 @@ import org.springframework.stereotype.Controller;
 
 import com.arch.raon.domain.dictionary.dto.request.SocketReqDTO;
 import com.arch.raon.domain.dictionary.dto.response.DictionaryQuizResDTO;
+import com.arch.raon.domain.dictionary.dto.response.SocketJoinResDTO;
+import com.arch.raon.domain.dictionary.dto.response.SocketLeaveResDTO;
 import com.arch.raon.domain.dictionary.dto.response.SocketResponseDTO;
 import com.arch.raon.domain.dictionary.service.DictionarySocketService;
 import com.arch.raon.global.util.enums.RoomResult;
@@ -32,6 +35,8 @@ public class DictionarySocketController {
 	 */
 	@MessageMapping("/dictionary-quiz/create-room")
 	public void createRoom(SocketReqDTO reqDTO) {
+		System.out.println("[CREATE-ROOM] 방 생성 요청!!!! 요청자: " + reqDTO.getNickname() +" 방 아이디: "+ reqDTO.getRoomId());
+
 		RoomResult result = dictionarySocketService.createRoom(reqDTO.getNickname(), reqDTO.getRoomId());
 
 		switch (result){
@@ -41,10 +46,13 @@ public class DictionarySocketController {
 				break;
 
 			case FAIL_INVALID_USER:
+				System.err.println("[CREATE-FAIL] 방 생성 실패 : 존재하지 않는 사용자");
+
 				// TODO: exception에 대한 처리가 더 필요
 				break;
 
 			case CREATE_FAIL_SAME_ROOMID:
+				System.err.println("[CREATE-FAIL] 방 생성 실패 : 이미 존재하는 방 아이디");
 				// TODO: exception에 대한 처리가 더 필요
 				break;
 		}
@@ -59,18 +67,17 @@ public class DictionarySocketController {
 	 */
 	@MessageMapping("/dictionary-quiz/join-room")
 	public void joinRoom(SocketReqDTO reqDTO) {
-		System.out.println("join요청: "+ reqDTO);
+		System.out.println("[JOIN-ROOM] 방 참가 요청!!!! 요청자: " + reqDTO.getNickname() +" 방 아이디: "+ reqDTO.getRoomId());
 
 		RoomResult result = dictionarySocketService.joinRoom(reqDTO.getNickname(), reqDTO.getRoomId());
 
 		switch (result){
 			case JOIN_SUCCESS:
-				// 방 입장 성공시 먼저 입장 한 사람에게 방에 있던 사람들의 정보를 보내준다.
-				List<SocketResponseDTO> userAndOwnerInfo = dictionarySocketService.getRoomInfo(reqDTO.getRoomId());
-				sendResult(reqDTO.getNickname(), userAndOwnerInfo);
+				List<String> users = dictionarySocketService.getRoomInfo(reqDTO.getRoomId());
+				String owner = dictionarySocketService.getOwner(reqDTO.getRoomId());
 
 				// 그 뒤 방 전체 사람들에게 입장 한 사람의 정보를 보내준다.(방에 방금 들어온 사람도 자신의 정보를 이때 받는다.)
-				sendToRoom(reqDTO.getRoomId(), new SocketResponseDTO(reqDTO.getNickname(), reqDTO.getRoomId(), "나, 등장", false));
+				sendToRoom(reqDTO.getRoomId(), new SocketJoinResDTO(reqDTO.getNickname(), owner, users));
 				break;
 
 			case JOIN_FAIL_FULL:
@@ -89,12 +96,15 @@ public class DictionarySocketController {
 
 	@MessageMapping("/dictionary-quiz/leave")
 	public void userLeaveRoom(SocketReqDTO reqDTO){
+		System.out.println("[LEAVE-ROOM] 방 나가기 요청!!!! 요청자: " + reqDTO.getNickname() +" 방 아이디: "+ reqDTO.getRoomId());
+
 		// 일단 방 자료구조에서 제외
 		RoomResult result = dictionarySocketService.leaveRoom(reqDTO.getNickname(), reqDTO.getRoomId());
 
 		// 방 내의 사람들에게 나갔다는 것을 알림.
 		if(result == RoomResult.LEAVE_SUCCESS){
-			sendToRoom(reqDTO.getRoomId(), new SocketResponseDTO(reqDTO.getNickname(), "나갔다..", false));
+			String owner = dictionarySocketService.getOwner(reqDTO.getRoomId());
+			sendToRoom(reqDTO.getRoomId(), new SocketLeaveResDTO(reqDTO.getNickname(),owner));
 		}
 	}
 
@@ -128,7 +138,7 @@ public class DictionarySocketController {
 		messagingTemplate.convertAndSend("/topic/dictionary-quiz/room/"+roomId, message);
 	}
 
-	// 요청을 보낸 "개인"에게 요청의 결과(성공, 에러 등)를 전송
+	// 에러 전송용으로 사용 할 것.
 	private void sendResult(String nickname, Object message){
 		System.out.println("==== 방 입장 성공, 방에 있는 애들 : "+ nickname +" 메세지(주소값만 뜰 수 있음) : " + message);
 		messagingTemplate.convertAndSend("/topic/result/"+nickname, message);
