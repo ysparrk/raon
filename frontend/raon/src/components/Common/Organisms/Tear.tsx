@@ -13,6 +13,7 @@ const Tear = () => {
     width: 100vw;
     height: 100vh;
     z-index: 10000;
+    pointer-events: none;
   `;
 
   useEffect(() => {
