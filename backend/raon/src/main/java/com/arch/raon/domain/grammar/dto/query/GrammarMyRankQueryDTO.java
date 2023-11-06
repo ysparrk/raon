@@ -14,8 +14,13 @@ public class GrammarMyRankQueryDTO {
         super();
     }
 
-    @Builder
     @QueryProjection
+    public GrammarMyRankQueryDTO(String nickname, int score) {
+        this.nickname = nickname;
+        this.score = score;
+    }
+
+    @Builder
     public GrammarMyRankQueryDTO(int rank, String nickname, int score) {
         this.rank = rank;
         this.nickname = nickname;

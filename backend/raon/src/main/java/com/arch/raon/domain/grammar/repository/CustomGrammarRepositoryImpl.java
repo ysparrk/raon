@@ -31,7 +31,7 @@ public class CustomGrammarRepositoryImpl implements CustomGrammarRepository {
                 ))
                 .from(qGrammarScore)
                 .join(qGrammarScore.member, qMember)
-                .orderBy(qGrammarScore.score.asc())
+                .orderBy(qGrammarScore.score.desc())
                 .fetch();
 
         return rankResults;
