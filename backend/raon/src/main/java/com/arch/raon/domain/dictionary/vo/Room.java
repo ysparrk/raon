@@ -1,4 +1,4 @@
-package com.arch.raon.global.quizRoom;
+package com.arch.raon.domain.dictionary.vo;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -8,7 +8,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 import com.arch.raon.domain.dictionary.dto.response.DictionaryQuizResDTO;
-import com.arch.raon.domain.dictionary.dto.response.SocketResponseDTO;
 import com.arch.raon.global.util.enums.GameState;
 
 /**
@@ -38,6 +37,11 @@ public class Room {
 
 
 	//========== WAITING일 때의 메소드들 =========================
+
+	public boolean isUserInRoom(String nickname){
+		return userInfo.containsKey(nickname);
+	}
+
 	public GameState getCurrentState(){
 		return state;
 	}
@@ -125,7 +129,7 @@ public class Room {
 
 	//============= getter and setter ====================
 
-	public String getOwner() {
+	public String getRoomOwner() {
 		return owner;
 	}
 	public void setOwner(String owner) {

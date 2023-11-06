@@ -7,7 +7,6 @@ import java.util.concurrent.ConcurrentMap;
 import org.springframework.stereotype.Service;
 
 import com.arch.raon.domain.dictionary.dto.response.DictionaryQuizResDTO;
-import com.arch.raon.domain.dictionary.dto.response.SocketResponseDTO;
 import com.arch.raon.domain.dictionary.entity.DictionaryDirectionQuiz;
 import com.arch.raon.domain.dictionary.entity.DictionaryInitialQuiz;
 import com.arch.raon.domain.dictionary.repository.DictionaryDirectionQuizRepository;
@@ -16,7 +15,7 @@ import com.arch.raon.domain.member.entity.Member;
 import com.arch.raon.domain.member.repository.MemberRepository;
 import com.arch.raon.global.exception.CustomException;
 import com.arch.raon.global.exception.ErrorCode;
-import com.arch.raon.global.quizRoom.Room;
+import com.arch.raon.domain.dictionary.vo.Room;
 import com.arch.raon.global.util.enums.GameState;
 import com.arch.raon.global.util.enums.RoomResult;
 
@@ -85,7 +84,7 @@ public class DictionarySocketServiceImpl implements DictionarySocketService{
 	@Override
 	public RoomResult startGame(String roomId, String nickname) {
 		if(rooms.containsKey(roomId)){
-			String roomOwner = rooms.get(roomId).getOwner();
+			String roomOwner = rooms.get(roomId).getRoomOwner();
 			if(roomOwner.equals(nickname)){
 				rooms.get(roomId).PLAY();
 
@@ -128,7 +127,7 @@ public class DictionarySocketServiceImpl implements DictionarySocketService{
 
 	@Override
 	public String getOwner(String roomId) {
-		return rooms.get(roomId).getOwner();
+		return rooms.get(roomId).getRoomOwner();
 	}
 
 }

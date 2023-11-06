@@ -1,4 +1,4 @@
-package com.arch.raon.global.quizRoom;
+package com.arch.raon.domain.dictionary.vo;
 
 import java.io.Serializable;
 
