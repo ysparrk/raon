@@ -104,73 +104,6 @@ public class GrammarServiceImpl implements GrammarService {
 		}
 	}
 
-	@Override
-	public List<GrammarMyRankQueryDTO> getMyRank(Long memberId, GrammarRanking grammarRanking) {
-		/**
-		 * 랭킹 조회
-		 * 1. 유저가 1~5등 사이면 1~6등 보내주기
-		 * 2. 그 밑이면 1~3등 / 유저 +-1 이랑 유저
-		 */
-
-		Member member = memberRepository.findById(memberId).orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND) {
-			@Override
-			public ErrorCode getErrorCode() {
-				return super.getErrorCode();
-			}
-		});
-
-		if (grammarRanking.equals(GrammarRanking.GRAMMAR_COUNTRY_MY)) {
-			// 전국 랭킹 조회
-			List<GrammarMyRankQueryDTO> allByCountry = grammarScoreRepository.findAllByCountry();
-
-			// 순위 리스트에서 내 인덱스
-			int myIdx = IntStream.range(0, allByCountry.size())
-					.filter(i -> allByCountry.get(i).getNickname().equals(member.getNickname()))
-					.findFirst()
-					.orElse(-1);
-
-			if (myIdx < 6) {
-				// TOP_PLACE
-				List<GrammarMyRankQueryDTO> topPlaceRankResult = getTopPlaceRankResult(allByCountry);
-
-				GrammarMyRankingResDTO grammarMyRankingResDTO = GrammarMyRankingResDTO.builder()
-						.myRank(myIdx+1)
-						.myScore(topPlaceRankResult.get(myIdx).getScore())
-						.rankState(RankState.TOP_PLACE)
-						.rankList(topPlaceRankResult)
-						.build();
-
-			} else if (myIdx == allByCountry.size() - 1) {
-				// LAST_PLACE
-				List<GrammarMyRankQueryDTO> lastPlaceRankResult = getLastPlaceRankResult(allByCountry);
-
-				GrammarMyRankingResDTO grammarMyRankingResDTO = GrammarMyRankingResDTO.builder()
-						.myRank(myIdx+1)
-						.myScore(lastPlaceRankResult.get(5).getScore())
-						.rankState(RankState.LAST_PLACE)
-						.rankList(lastPlaceRankResult)
-						.build();
-
-			} else {
-				// MIDDLE_PLACE
-				List<GrammarMyRankQueryDTO> middlePlaceRankResult = getMiddlePlaceRankResult(myIdx, allByCountry);
-
-				GrammarMyRankingResDTO grammarMyRankingResDTO = GrammarMyRankingResDTO.builder()
-						.myRank(myIdx+1)
-						.myScore(middlePlaceRankResult.get(4).getScore())
-						.rankState(RankState.MIDDLE_PLACE)
-						.rankList(middlePlaceRankResult)
-						.build();
-			}
-
-
-
-		} else if (grammarRanking.equals(GrammarRanking.GRAMMAR_SCHOOL_MY)) {
-			// 교내 랭킹 조회
-
-		}
-		return null;
-	}
 
 	@Override
 	public List<GrammarMyRankQueryDTO> getMiddlePlaceRankResult(int myIdx, List<GrammarMyRankQueryDTO> allByCountry) {
@@ -240,5 +173,71 @@ public class GrammarServiceImpl implements GrammarService {
 		return selectedRankResults;
 	}
 
+
+	@Override
+	public GrammarMyRankingResDTO getMyCountryRank(Long memberId) {
+		/**
+		 * 랭킹 조회
+		 * 1. 유저가 1~5등 사이면 1~6등 보내주기
+		 * 2. 그 밑이면 1~3등 / 유저 +-1 이랑 유저
+		 */
+
+		Member member = memberRepository.findById(memberId).orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND) {
+			@Override
+			public ErrorCode getErrorCode() {
+				return super.getErrorCode();
+			}
+		});
+
+
+		// 전국 랭킹 조회
+		List<GrammarMyRankQueryDTO> allByCountry = grammarScoreRepository.findAllByCountry();
+
+		// 순위 리스트에서 내 인덱스
+		int myIdx = IntStream.range(0, allByCountry.size())
+				.filter(i -> allByCountry.get(i).getNickname().equals(member.getNickname()))
+				.findFirst()
+				.orElse(-1);
+
+		if (myIdx < 5) {
+			// TOP_PLACE
+			List<GrammarMyRankQueryDTO> topPlaceRankResult = getTopPlaceRankResult(allByCountry);
+
+			GrammarMyRankingResDTO grammarMyRankingResDTO = GrammarMyRankingResDTO.builder()
+					.myRank(myIdx+1)
+					.myScore(topPlaceRankResult.get(myIdx).getScore())
+					.rankState(RankState.TOP_PLACE)
+					.rankList(topPlaceRankResult)
+					.build();
+
+			return grammarMyRankingResDTO;
+
+		} else if (myIdx == allByCountry.size() - 1) {
+			// LAST_PLACE
+			List<GrammarMyRankQueryDTO> lastPlaceRankResult = getLastPlaceRankResult(allByCountry);
+
+			GrammarMyRankingResDTO grammarMyRankingResDTO = GrammarMyRankingResDTO.builder()
+					.myRank(myIdx+1)
+					.myScore(lastPlaceRankResult.get(5).getScore())
+					.rankState(RankState.LAST_PLACE)
+					.rankList(lastPlaceRankResult)
+					.build();
+
+			return grammarMyRankingResDTO;
+
+		} else {
+			// MIDDLE_PLACE
+			List<GrammarMyRankQueryDTO> middlePlaceRankResult = getMiddlePlaceRankResult(myIdx, allByCountry);
+
+			GrammarMyRankingResDTO grammarMyRankingResDTO = GrammarMyRankingResDTO.builder()
+					.myRank(myIdx+1)
+					.myScore(middlePlaceRankResult.get(4).getScore())
+					.rankState(RankState.MIDDLE_PLACE)
+					.rankList(middlePlaceRankResult)
+					.build();
+
+			return grammarMyRankingResDTO;
+		}
+	}
 
 }

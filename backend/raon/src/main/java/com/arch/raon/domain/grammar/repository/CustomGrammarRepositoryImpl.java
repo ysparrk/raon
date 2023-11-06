@@ -18,22 +18,23 @@ public class CustomGrammarRepositoryImpl implements CustomGrammarRepository {
     QGrammarScore qGrammarScore = QGrammarScore.grammarScore;
 
     /**
-     * score 전체 오름차순으로 정렬
+     * score 전체 내림차순으로 정렬
      * @return
      */
     @Override
     public List<GrammarMyRankQueryDTO> findAllByCountry() {
 
         List<GrammarMyRankQueryDTO> rankResults = queryFactory
-                .select(Projections.constructor(GrammarMyRankQueryDTO.class,
+                .selectDistinct(Projections.constructor(GrammarMyRankQueryDTO.class,
                     qMember.nickname,
                     qGrammarScore.score
                 ))
                 .from(qGrammarScore)
-                .join(qGrammarScore.member, qMember)
+                .leftJoin(qGrammarScore.member, qMember)
                 .orderBy(qGrammarScore.score.desc())
                 .fetch();
 
         return rankResults;
     }
+
 }

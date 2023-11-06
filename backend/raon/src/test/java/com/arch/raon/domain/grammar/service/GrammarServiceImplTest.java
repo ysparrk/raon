@@ -9,6 +9,7 @@ import java.util.List;
 import com.arch.raon.domain.grammar.dto.query.GrammarMyRankQueryDTO;
 import com.arch.raon.domain.grammar.dto.request.GrammarResultDTO;
 import com.arch.raon.domain.grammar.dto.request.GrammarResultSaveReqDTO;
+import com.arch.raon.domain.grammar.dto.response.GrammarMyRankingResDTO;
 import com.arch.raon.domain.grammar.dto.response.GrammarQuizResDTO;
 import com.arch.raon.domain.grammar.entity.GrammarQuiz;
 import com.arch.raon.domain.grammar.entity.GrammarScore;
@@ -325,5 +326,23 @@ class GrammarServiceImplTest {
 
 		// then
 		assertThat(allByCountry.size()).isEqualTo(expectResult.get(5).getRank());
+	}
+
+	@DisplayName("나의 전국 랭킹 조회")
+	@Test
+	@Transactional
+	void getMyCountryRank() {
+		// given
+		List<GrammarMyRankQueryDTO> allByCountry = grammarScoreRepository.findAllByCountry();
+
+		// when
+		GrammarMyRankingResDTO topPlaceRank = grammarService.getMyCountryRank(MEMBER4.getId());
+		GrammarMyRankingResDTO middlePlaceRank = grammarService.getMyCountryRank(MEMBER6.getId());
+		GrammarMyRankingResDTO lastPlaceRank = grammarService.getMyCountryRank(MEMBER9.getId());
+
+		// then
+		assertThat(allByCountry.get(3).getNickname()).isEqualTo(topPlaceRank.getRankList().get(3).getNickname());
+		assertThat("young서").isEqualTo(middlePlaceRank.getRankList().get(4).getNickname());
+		assertThat(allByCountry.size()).isEqualTo(lastPlaceRank.getRankList().get(5).getRank());
 	}
 }
