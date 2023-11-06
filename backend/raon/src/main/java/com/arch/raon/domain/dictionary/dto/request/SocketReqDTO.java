@@ -1,8 +1,14 @@
 package com.arch.raon.domain.dictionary.dto.request;
 
-public class SocketReqDTO {
+import java.io.Serializable;
+
+public class SocketReqDTO implements Serializable {
 	private String nickname;
 	private String roomId;
+
+	public SocketReqDTO() {
+		super();
+	}
 
 	public SocketReqDTO(String nickname, String roomId) {
 		this.nickname = nickname;
@@ -23,5 +29,13 @@ public class SocketReqDTO {
 
 	public void setRoomId(String roomId) {
 		this.roomId = roomId;
+	}
+
+	@Override
+	public String toString() {
+		return "SocketReqDTO{" +
+			"nickname='" + nickname + '\'' +
+			", roomId='" + roomId + '\'' +
+			'}';
 	}
 }
