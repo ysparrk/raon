@@ -2,6 +2,7 @@ package com.arch.raon.domain.grammar.repository;
 
 import com.arch.raon.domain.grammar.dto.query.GrammarMyRankQueryDTO;
 import com.arch.raon.domain.grammar.entity.QGrammarScore;
+import com.arch.raon.domain.member.entity.Member;
 import com.arch.raon.domain.member.entity.QMember;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -37,4 +38,24 @@ public class CustomGrammarRepositoryImpl implements CustomGrammarRepository {
         return rankResults;
     }
 
+    /**
+     * member의 학교 내 내림차순 정렬
+     * @return
+     */
+    @Override
+    public List<GrammarMyRankQueryDTO> findAllBySchool(Member member) {
+
+        List<GrammarMyRankQueryDTO> rankResults = queryFactory
+                .selectDistinct(Projections.constructor(GrammarMyRankQueryDTO.class,
+                        qMember.nickname,
+                        qGrammarScore.score
+                ))
+                .from(qGrammarScore)
+                .leftJoin(qGrammarScore.member, qMember)
+                .where(qMember.school.eq(member.getSchool()))
+                .orderBy(qGrammarScore.score.desc())
+                .fetch();
+
+        return rankResults;
+    }
 }

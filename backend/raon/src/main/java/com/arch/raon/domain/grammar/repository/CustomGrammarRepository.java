@@ -8,5 +8,5 @@ import java.util.List;
 public interface CustomGrammarRepository {
     // 전국 랭킹
     List<GrammarMyRankQueryDTO> findAllByCountry();
-
+    List<GrammarMyRankQueryDTO> findAllBySchool(Member member);
 }

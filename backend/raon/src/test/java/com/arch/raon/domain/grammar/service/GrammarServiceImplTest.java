@@ -16,6 +16,7 @@ import com.arch.raon.domain.grammar.entity.GrammarScore;
 import com.arch.raon.domain.member.entity.Member;
 import com.arch.raon.domain.member.repository.MemberRepository;
 import com.arch.raon.global.util.enums.Gender;
+import com.arch.raon.global.util.enums.GrammarRanking;
 import com.arch.raon.global.util.enums.School;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -51,6 +52,7 @@ class GrammarServiceImplTest {
 	static Member MEMBER7;
 	static Member MEMBER8;
 	static Member MEMBER9;
+	static Member MEMBER10;
 	@BeforeEach
 	void beforeEach() {
 		MEMBER1 = Member.builder()
@@ -127,7 +129,7 @@ class GrammarServiceImplTest {
 				.nickname("태현태현태현")
 				.profileUrl("https://")
 				.gender(Gender.MALE)
-				.school(School.YOUNGSEO)
+				.school(School.ARCH)
 				.yearOfBirth(2017)
 				.mileage(0)
 				.createdAt(LocalDateTime.now())
@@ -144,7 +146,7 @@ class GrammarServiceImplTest {
 				.nickname("young서")
 				.profileUrl("https://")
 				.gender(Gender.FEMALE)
-				.school(School.YOUNGSEO)
+				.school(School.ARCH)
 				.yearOfBirth(2017)
 				.mileage(0)
 				.createdAt(LocalDateTime.now())
@@ -161,7 +163,7 @@ class GrammarServiceImplTest {
 				.nickname("히진상")
 				.profileUrl("https://")
 				.gender(Gender.FEMALE)
-				.school(School.YOUNGSEO)
+				.school(School.ARCH)
 				.yearOfBirth(2017)
 				.mileage(0)
 				.createdAt(LocalDateTime.now())
@@ -206,6 +208,23 @@ class GrammarServiceImplTest {
 
 		memberRepository.save(MEMBER9);
 
+		MEMBER10 = Member.builder()
+				.id(6L)
+				.email("arch@arch.com")
+				.nickname("키무상")
+				.profileUrl("https://")
+				.gender(Gender.FEMALE)
+				.school(School.ARCH)
+				.yearOfBirth(2017)
+				.mileage(0)
+				.createdAt(LocalDateTime.now())
+				.modifiedAt(LocalDateTime.now())
+				.isDeleted(false)
+				.deletedAt(LocalDateTime.now())
+				.build();
+
+		memberRepository.save(MEMBER10);
+
 		// 점수 등록
 		GrammarScore grammarScore1 = GrammarScore.builder().member(MEMBER1).score(100).build();
 		GrammarScore grammarScore2 = GrammarScore.builder().member(MEMBER2).score(90).build();
@@ -216,6 +235,7 @@ class GrammarServiceImplTest {
 		GrammarScore grammarScore7 = GrammarScore.builder().member(MEMBER7).score(40).build();
 		GrammarScore grammarScore8 = GrammarScore.builder().member(MEMBER8).score(30).build();
 		GrammarScore grammarScore9 = GrammarScore.builder().member(MEMBER9).score(20).build();
+		GrammarScore grammarScore10 = GrammarScore.builder().member(MEMBER10).score(10).build();
 
 		grammarScoreRepository.save(grammarScore1);
 		grammarScoreRepository.save(grammarScore2);
@@ -226,6 +246,7 @@ class GrammarServiceImplTest {
 		grammarScoreRepository.save(grammarScore7);
 		grammarScoreRepository.save(grammarScore8);
 		grammarScoreRepository.save(grammarScore9);
+		grammarScoreRepository.save(grammarScore10);
 
 	}
 
@@ -336,13 +357,32 @@ class GrammarServiceImplTest {
 		List<GrammarMyRankQueryDTO> allByCountry = grammarScoreRepository.findAllByCountry();
 
 		// when
-		GrammarMyRankingResDTO topPlaceRank = grammarService.getMyCountryRank(MEMBER4.getId());
-		GrammarMyRankingResDTO middlePlaceRank = grammarService.getMyCountryRank(MEMBER6.getId());
-		GrammarMyRankingResDTO lastPlaceRank = grammarService.getMyCountryRank(MEMBER9.getId());
+		GrammarMyRankingResDTO topPlaceRank = grammarService.getMyRank(MEMBER4.getId(), GrammarRanking.GRAMMAR_COUNTRY_MY);
+		GrammarMyRankingResDTO middlePlaceRank = grammarService.getMyRank(MEMBER6.getId(), GrammarRanking.GRAMMAR_COUNTRY_MY);
+		GrammarMyRankingResDTO lastPlaceRank = grammarService.getMyRank(MEMBER10.getId(), GrammarRanking.GRAMMAR_COUNTRY_MY);
 
 		// then
 		assertThat(allByCountry.get(3).getNickname()).isEqualTo(topPlaceRank.getRankList().get(3).getNickname());
 		assertThat("young서").isEqualTo(middlePlaceRank.getRankList().get(4).getNickname());
 		assertThat(allByCountry.size()).isEqualTo(lastPlaceRank.getRankList().get(5).getRank());
+	}
+
+	@DisplayName("나의 교내 랭킹 조회")
+	@Test
+	@Transactional
+	void getMyRank() {
+		// given
+		List<GrammarMyRankQueryDTO> allBySchool = grammarScoreRepository.findAllBySchool(MEMBER6);
+
+		// when
+		GrammarMyRankingResDTO topPlaceRank = grammarService.getMyRank(MEMBER2.getId(), GrammarRanking.GRAMMAR_SCHOOL_MY);
+		GrammarMyRankingResDTO middlePlaceRank = grammarService.getMyRank(MEMBER6.getId(), GrammarRanking.GRAMMAR_SCHOOL_MY);
+		GrammarMyRankingResDTO lastPlaceRank = grammarService.getMyRank(MEMBER10.getId(), GrammarRanking.GRAMMAR_SCHOOL_MY);
+
+		// then
+		assertThat(allBySchool.get(3).getNickname()).isEqualTo(topPlaceRank.getRankList().get(3).getNickname());
+		assertThat("히진상").isEqualTo(middlePlaceRank.getRankList().get(4).getNickname());
+		assertThat(allBySchool.size()).isEqualTo(lastPlaceRank.getRankList().get(5).getRank());
+
 	}
 }

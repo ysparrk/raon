@@ -106,14 +106,14 @@ public class GrammarServiceImpl implements GrammarService {
 
 
 	@Override
-	public List<GrammarMyRankQueryDTO> getMiddlePlaceRankResult(int myIdx, List<GrammarMyRankQueryDTO> allByCountry) {
+	public List<GrammarMyRankQueryDTO> getMiddlePlaceRankResult(int myIdx, List<GrammarMyRankQueryDTO> allRanks) {
 
 		List<GrammarMyRankQueryDTO> selectedRankResults = new ArrayList<>();
 
 		// TOP3
 		for (int i = 0; i < 3; i++) {
-			if (i < allByCountry.size()) {
-				GrammarMyRankQueryDTO baseDTO = allByCountry.get(i);
+			if (i < allRanks.size()) {
+				GrammarMyRankQueryDTO baseDTO = allRanks.get(i);
 				selectedRankResults.add(new GrammarMyRankQueryDTO(i+1, baseDTO.getNickname(), baseDTO.getScore()));
 			}
 
@@ -121,8 +121,8 @@ public class GrammarServiceImpl implements GrammarService {
 
 		// member의 바로 위 한명, member, member의 바로 아래 한명
 		for (int i = myIdx - 1; i <= myIdx + 1; i++) {
-			if (i >= 0 && i < allByCountry.size()) {
-				GrammarMyRankQueryDTO baseDTO = allByCountry.get(i);
+			if (i >= 0 && i < allRanks.size()) {
+				GrammarMyRankQueryDTO baseDTO = allRanks.get(i);
 				selectedRankResults.add(new GrammarMyRankQueryDTO(i+1, baseDTO.getNickname(), baseDTO.getScore()));
 			}
 		}
@@ -131,14 +131,14 @@ public class GrammarServiceImpl implements GrammarService {
 	}
 
 	@Override
-	public List<GrammarMyRankQueryDTO> getTopPlaceRankResult(List<GrammarMyRankQueryDTO> allByCountry) {
+	public List<GrammarMyRankQueryDTO> getTopPlaceRankResult(List<GrammarMyRankQueryDTO> allRanks) {
 
 		List<GrammarMyRankQueryDTO> selectedRankResults = new ArrayList<>();
 
 		// TOP6
 		for (int i = 0; i < 6; i++) {
-			if (i < allByCountry.size()) {
-				GrammarMyRankQueryDTO baseDTO = allByCountry.get(i);
+			if (i < allRanks.size()) {
+				GrammarMyRankQueryDTO baseDTO = allRanks.get(i);
 				selectedRankResults.add(new GrammarMyRankQueryDTO(i+1, baseDTO.getNickname(), baseDTO.getScore()));
 			}
 
@@ -174,34 +174,39 @@ public class GrammarServiceImpl implements GrammarService {
 	}
 
 
+	/**
+	 * 랭크 리스트, memberId 받아서
+	 * @param memberId
+	 * @param rankList
+	 * @return
+	 */
 	@Override
-	public GrammarMyRankingResDTO getMyCountryRank(Long memberId) {
+	public GrammarMyRankingResDTO getMyRankByGrammarRanking(Long memberId, List<GrammarMyRankQueryDTO> rankList) {
+
 		/**
 		 * 랭킹 조회
 		 * 1. 유저가 1~5등 사이면 1~6등 보내주기
 		 * 2. 그 밑이면 1~3등 / 유저 +-1 이랑 유저
+		 * 3. 최하위 순위 / top1~3 최하위 1~3
 		 */
-
+		
 		Member member = memberRepository.findById(memberId).orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND) {
 			@Override
 			public ErrorCode getErrorCode() {
 				return super.getErrorCode();
 			}
 		});
-
-
-		// 전국 랭킹 조회
-		List<GrammarMyRankQueryDTO> allByCountry = grammarScoreRepository.findAllByCountry();
+		
 
 		// 순위 리스트에서 내 인덱스
-		int myIdx = IntStream.range(0, allByCountry.size())
-				.filter(i -> allByCountry.get(i).getNickname().equals(member.getNickname()))
+		int myIdx = IntStream.range(0, rankList.size())
+				.filter(i -> rankList.get(i).getNickname().equals(member.getNickname()))
 				.findFirst()
 				.orElse(-1);
 
 		if (myIdx < 5) {
 			// TOP_PLACE
-			List<GrammarMyRankQueryDTO> topPlaceRankResult = getTopPlaceRankResult(allByCountry);
+			List<GrammarMyRankQueryDTO> topPlaceRankResult = getTopPlaceRankResult(rankList);
 
 			GrammarMyRankingResDTO grammarMyRankingResDTO = GrammarMyRankingResDTO.builder()
 					.myRank(myIdx+1)
@@ -212,9 +217,9 @@ public class GrammarServiceImpl implements GrammarService {
 
 			return grammarMyRankingResDTO;
 
-		} else if (myIdx == allByCountry.size() - 1) {
+		} else if (myIdx == rankList.size() - 1) {
 			// LAST_PLACE
-			List<GrammarMyRankQueryDTO> lastPlaceRankResult = getLastPlaceRankResult(allByCountry);
+			List<GrammarMyRankQueryDTO> lastPlaceRankResult = getLastPlaceRankResult(rankList);
 
 			GrammarMyRankingResDTO grammarMyRankingResDTO = GrammarMyRankingResDTO.builder()
 					.myRank(myIdx+1)
@@ -227,7 +232,7 @@ public class GrammarServiceImpl implements GrammarService {
 
 		} else {
 			// MIDDLE_PLACE
-			List<GrammarMyRankQueryDTO> middlePlaceRankResult = getMiddlePlaceRankResult(myIdx, allByCountry);
+			List<GrammarMyRankQueryDTO> middlePlaceRankResult = getMiddlePlaceRankResult(myIdx, rankList);
 
 			GrammarMyRankingResDTO grammarMyRankingResDTO = GrammarMyRankingResDTO.builder()
 					.myRank(myIdx+1)
@@ -238,6 +243,39 @@ public class GrammarServiceImpl implements GrammarService {
 
 			return grammarMyRankingResDTO;
 		}
+		
+	}
+
+	@Override
+	public GrammarMyRankingResDTO getMyRank(Long memberId, GrammarRanking grammarRanking) {
+
+		Member member = memberRepository.findById(memberId).orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND) {
+			@Override
+			public ErrorCode getErrorCode() {
+				return super.getErrorCode();
+			}
+		});
+
+		
+		if (grammarRanking.equals(GrammarRanking.GRAMMAR_COUNTRY_MY)) {
+
+			List<GrammarMyRankQueryDTO> allByCountry = grammarScoreRepository.findAllByCountry();
+
+			GrammarMyRankingResDTO myRank = getMyRankByGrammarRanking(memberId, allByCountry);
+
+			return myRank;
+
+		} else if (grammarRanking.equals(GrammarRanking.GRAMMAR_SCHOOL_MY)) {
+			List<GrammarMyRankQueryDTO> allBySchool = grammarScoreRepository.findAllBySchool(member);
+			GrammarMyRankingResDTO myRank = getMyRankByGrammarRanking(memberId, allBySchool);
+
+			return myRank;
+
+		} else {
+			// TODO: 옳지 않은 enum으로 올때 예외처리
+			return null;
+		}
+
 	}
 
 }

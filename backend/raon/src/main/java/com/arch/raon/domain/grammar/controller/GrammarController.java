@@ -5,6 +5,7 @@ import com.arch.raon.domain.grammar.dto.response.GrammarMyRankingResDTO;
 import com.arch.raon.domain.grammar.dto.response.GrammarQuizResDTO;
 import com.arch.raon.domain.grammar.service.GrammarService;
 import com.arch.raon.global.dto.ResponseDTO;
+import com.arch.raon.global.util.enums.GrammarRanking;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -43,16 +44,17 @@ public class GrammarController {
 				.build());
 	}
 
-	@GetMapping("/ranking/country-my")
+	@GetMapping("/ranking/{grammarRanking}")
 	public ResponseEntity<ResponseDTO> getMyCountryRank(
-			@AuthenticationPrincipal Long memberId
-	) {
-		GrammarMyRankingResDTO myCountryRank = grammarService.getMyCountryRank(memberId);
+			@AuthenticationPrincipal Long memberId,
+			@PathVariable GrammarRanking grammarRanking
+			) {
+		GrammarMyRankingResDTO myRank = grammarService.getMyRank(memberId, grammarRanking);;
 
 		return ResponseEntity.status(HttpStatus.OK)
 				.body(ResponseDTO.builder()
-						.message("맞춤법 퀴즈 전국 나의 랭킹")
-						.data(myCountryRank)
+						.message("맞춤법 퀴즈 나의 랭킹")
+						.data(myRank)
 						.build());
 	}
 
