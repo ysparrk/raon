@@ -22,9 +22,10 @@ import SummarizeResult from '../components/GameSummarize/Pages/SummarizeResult.t
 // // GameDictionary
 import DictionaryJoin from '../components/GameDictionary/Pages/DictionaryJoin.tsx';
 import DictionaryQuiz from '../components/GameDictionary/Pages/DictionaryQuiz.tsx';
-import DictionaryGame from '../components/GameDictionary/Pages/DictionaryGame.tsx';
+import DictionarySingleGame from '../components/GameDictionary/Pages/DictionarySingleGame.tsx';
 import DictionaryInit from '../components/GameDictionary/Pages/DictionaryInit.tsx';
 import DictionaryWaitingRoom from '../components/GameDictionary/Pages/DictionaryWaitingRoom.tsx';
+import DictionarySingleResult from '../components/GameDictionary/Pages/DictionarySingleResult.tsx';
 // import DictionaryResult from '../components/GameDictionary/Pages/DictionaryResult.tsx';
 
 // // Ranking
@@ -50,8 +51,18 @@ const AppRouter: React.FC = () => {
         <Route path="/game/dictionary-init" element={<DictionaryInit />} />
         <Route path="/game/dictionary-join" element={<DictionaryJoin />} />
         <Route path="/game/dictionary-quiz" element={<DictionaryQuiz />} />
-        <Route path="/game/dictionary-game" element={<DictionaryGame />} />
-        <Route path="/game/dictionary-game/waiting-room" element={<DictionaryWaitingRoom />} />
+        <Route
+          path="/game/dictionary-single-game"
+          element={<DictionarySingleGame />}
+        />
+        <Route
+          path="/game/dictionary-game/waiting-room"
+          element={<DictionaryWaitingRoom />}
+        />
+        <Route
+          path="/game/dictionary-single-result"
+          element={<DictionarySingleResult />}
+        />
         {/* <Route path="/user/" element={<Foundation />} /> */}
       </Routes>
     </BrowserRouter>

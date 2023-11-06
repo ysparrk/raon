@@ -52,8 +52,8 @@ body {
   overflow-y: hidden;
 }
 
-/* 화면 너비 1440px 이하인 경우 */
-@media (max-width: 1024px) {
+/* 화면 너비 1140px 이하인 경우 */
+@media (max-width: 1140px) {
   html {
     font-size: 12px; 
   }

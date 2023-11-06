@@ -7,7 +7,7 @@ import ExitButton from '../../Common/Atoms/ExitButtonInRoom';
 const appearAnimation = keyframes`
   0% {
     opacity: 0;
-    transform: translateY(5px);
+    transform: translateY(0.3125rem);
   }
   70% {
     opacity: 0;
@@ -48,7 +48,7 @@ const GameExampleQuestionDiv = styled.div`
   align-items: center;
   flex-direction: column;
   font-family: 'NanumBarunGothic';
-  font-size: 40px;
+  font-size: 2.5rem;
   opacity: 0;
   animation: ${appearAnimation} 1.25s ease-in forwards;
 `;
@@ -87,7 +87,7 @@ const GameExampleContentDiv = styled.div`
     justify-content: center;
     font-family: 'NanumBarunGothic';
     font-size: 3.5rem;
-    border: '2px solid black';
+    border: '0.125rem solid black';
   }
 `;
 
@@ -137,7 +137,7 @@ function InitInterface() {
           fontColor="slategrey"
           content="혼자하기"
           onClick={() => {
-            navigate('/game/dictionary-quiz');
+            navigate('/game/dictionary-single-game');
           }}
         />
         <ExitButton

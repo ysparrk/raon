@@ -19,3 +19,8 @@ export const summarizeState = atom({
     summarize_content: '',
   },
 });
+
+export const dictScoreState = atom<number>({
+  key: 'dictScoreState',
+  default: 0,
+});

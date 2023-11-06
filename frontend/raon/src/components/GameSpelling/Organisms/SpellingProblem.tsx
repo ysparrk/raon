@@ -34,9 +34,9 @@ const Option = styled.button`
   cursor: pointer;
   transition: background-color 0.2s;
   background-color: #202fb2;
-  border: 3px solid black;
-  border-radius: 15px;
-  padding: 40px;
+  border: 0.1875rem solid black;
+  border-radius: 0.9375rem;
+  padding: 2.5rem;
 
   &:hover {
     background-color: rgba(0, 0, 0, 0.05);
