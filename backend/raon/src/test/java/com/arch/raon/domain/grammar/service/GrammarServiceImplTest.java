@@ -251,8 +251,8 @@ class GrammarServiceImplTest {
 	}
 
 
-
 	@Test
+	@Transactional
 	void getQuizzes() {
 		// given
 
