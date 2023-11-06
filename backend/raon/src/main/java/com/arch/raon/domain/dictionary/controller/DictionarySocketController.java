@@ -7,6 +7,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 
 import com.arch.raon.domain.dictionary.dto.request.SocketReqDTO;
+import com.arch.raon.domain.dictionary.dto.response.DictionaryQuizResDTO;
 import com.arch.raon.domain.dictionary.dto.response.SocketResponseDTO;
 import com.arch.raon.domain.dictionary.service.DictionarySocketService;
 import com.arch.raon.global.util.enums.RoomResult;
@@ -35,7 +36,7 @@ public class DictionarySocketController {
 
 		switch (result){
 			case CREATE_SUCCESS:
-				SocketResponseDTO message = new SocketResponseDTO(reqDTO.getNickname(), reqDTO.getRoomId());
+				SocketResponseDTO message = new SocketResponseDTO(reqDTO.getNickname(), reqDTO.getRoomId(), "방 생성 성공", true);
 				sendToRoom(reqDTO.getRoomId(), message);
 				break;
 
@@ -58,7 +59,7 @@ public class DictionarySocketController {
 	 */
 	@MessageMapping("/dictionary-quiz/join-room")
 	public void joinRoom(SocketReqDTO reqDTO) {
-		System.out.println("join요청: 요청자:"+reqDTO.getNickname());
+		System.out.println("join요청: "+ reqDTO);
 
 		RoomResult result = dictionarySocketService.joinRoom(reqDTO.getNickname(), reqDTO.getRoomId());
 
@@ -68,8 +69,9 @@ public class DictionarySocketController {
 				List<SocketResponseDTO> userAndOwnerInfo = dictionarySocketService.getRoomInfo(reqDTO.getRoomId());
 				sendResult(reqDTO.getNickname(), userAndOwnerInfo);
 
+
 				// 그 뒤 방 전체 사람들에게 입장 한 사람의 정보를 보내준다.(방에 방금 들어온 사람도 자신의 정보를 이때 받는다.)
-				sendToRoom(reqDTO.getRoomId(), new SocketResponseDTO(reqDTO.getNickname(), reqDTO.getRoomId()));
+				sendToRoom(reqDTO.getRoomId(), new SocketResponseDTO(reqDTO.getNickname(), reqDTO.getRoomId(), "나, 등장", false));
 				break;
 
 			case JOIN_FAIL_FULL:
@@ -80,16 +82,44 @@ public class DictionarySocketController {
 				// TODO: exception에 대한 처리가 더 필요
 				break;
 
-			case JOIN_FAIL_NONEXIST:
+			case FAIL_NONEXIST_ROOM:
 				// TODO: exception에 대한 처리가 더 필요
 				break;
 		}
 	}
 
 	@MessageMapping("/dictionary-quiz/leave")
-	public void userLeaveRoom(String nickname, String roomId){
-		RoomResult result = dictionarySocketService.leaveRoom(nickname, roomId);
+	public void userLeaveRoom(SocketReqDTO reqDTO){
+		// 일단 방 자료구조에서 제외
+		RoomResult result = dictionarySocketService.leaveRoom(reqDTO.getNickname(), reqDTO.getRoomId());
+
+		// 방 내의 사람들에게 나갔다는 것을 알림.
+		if(result == RoomResult.LEAVE_SUCCESS){
+			sendToRoom(reqDTO.getRoomId(), new SocketResponseDTO(reqDTO.getNickname(), "나갔다..", false));
+		}
 	}
+
+	@MessageMapping("/dictionary-quiz/game-start")
+	public void startGame(SocketReqDTO reqDTO){
+		System.out.println("==== 게임 시작 요청 : "+ reqDTO);
+
+		RoomResult result = dictionarySocketService.startGame(reqDTO.getRoomId(), reqDTO.getNickname());
+
+		switch(result){
+			case GAME_START_SUCCESS:
+				DictionaryQuizResDTO quizes = dictionarySocketService.getQuizes();
+				// 퀴즈의 정답을 room에 넣어야 한다 재원아
+				dictionarySocketService.addQuizToRoom(quizes, reqDTO.getRoomId());
+
+				sendToRoom(reqDTO.getRoomId(), quizes);
+				break;
+			case GAME_START_FAIL_NOT_A_OWNER:
+				// TODO: 예외 처리 할 것
+				break;
+		}
+	}
+
+
 
 
 	// 특정 방에 있는 "모든 인원"에게 데이터를 보낼 때 (방 입장, 방 나가기, 문제 결과 전송 등)

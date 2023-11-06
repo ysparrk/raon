@@ -5,22 +5,21 @@ import java.io.Serializable;
 public class SocketResponseDTO implements Serializable {
 	private String nickname;
 	private String roomId;
-
 	private boolean isOwner;
-
 	private String message;
 
-	public SocketResponseDTO(String nickname, String roomId) {
+	public SocketResponseDTO(String nickname, String roomId, String message, boolean isOwner) {
 		this.nickname = nickname;
 		this.roomId = roomId;
-	}
-
-	public SocketResponseDTO(String nickname, boolean isOwner) {
-		this.nickname = nickname;
+		this.message = message;
 		this.isOwner = isOwner;
 	}
 
-
+	public SocketResponseDTO(String nickname, String message, boolean isOwner) {
+		this.nickname = nickname;
+		this.isOwner = isOwner;
+		this.message = message;
+	}
 
 	public SocketResponseDTO() {
 		super();

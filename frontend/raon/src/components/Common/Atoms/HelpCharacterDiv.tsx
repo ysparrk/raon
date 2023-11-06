@@ -49,8 +49,6 @@ const CloudBalloonDiv = styled.div`
   height: 16rem;
   background-image: url(${cloudBalloon});
   background-size: cover;
-  opacity: 0;
-  transition: opacity 0.1s;
   animation: ${BalloonfloatAnimation} 0.8s infinite alternate;
 `;
 
@@ -60,27 +58,12 @@ const TextP = styled.p`
 `;
 
 function HelpCharacter({ onClick }: HelpCharacterProps) {
-  const [isCloudBalloonVisible, setIsCloudBalloonVisible] =
-    React.useState(false);
-
-  const handleMouseEnter = () => {
-    setIsCloudBalloonVisible(true);
-  };
-
-  const handleMouseLeave = () => {
-    setIsCloudBalloonVisible(false);
-  };
-
   return (
     <div>
-      <CloudBalloonDiv style={{ opacity: isCloudBalloonVisible ? 1 : 0 }}>
+      <CloudBalloonDiv>
         <TextP>도움말</TextP>
       </CloudBalloonDiv>
-      <HelpCharacterDiv
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
-        onClick={onClick}
-      />
+      <HelpCharacterDiv onClick={onClick} />
     </div>
   );
 }
