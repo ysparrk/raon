@@ -5,9 +5,7 @@ import java.io.Serializable;
 public class SocketResponseDTO implements Serializable {
 	private String nickname;
 	private String roomId;
-
 	private boolean isOwner;
-
 	private String message;
 
 	public SocketResponseDTO(String nickname, String roomId, String message, boolean isOwner) {
