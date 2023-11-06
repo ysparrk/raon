@@ -1,11 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useRecoilValue } from 'recoil';
-import {
-  submitState,
-  answerState,
-  spellingCountState,
-} from '../../../recoil/Atoms.tsx';
+import { submitState, answerState } from '../../../recoil/Atoms.tsx';
 import ExitButton from '../../Common/Atoms/ExitButton.tsx';
 
 const Container = styled.div`

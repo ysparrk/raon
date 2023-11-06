@@ -59,7 +59,7 @@ public class DictionarySocketController {
 	 */
 	@MessageMapping("/dictionary-quiz/join-room")
 	public void joinRoom(SocketReqDTO reqDTO) {
-		System.out.println("join요청: 요청자:"+reqDTO.getNickname());
+		System.out.println("join요청: "+ reqDTO);
 
 		RoomResult result = dictionarySocketService.joinRoom(reqDTO.getNickname(), reqDTO.getRoomId());
 
@@ -98,12 +98,19 @@ public class DictionarySocketController {
 		}
 	}
 
+	@MessageMapping("/dictionary-quiz/game-start")
 	public void startGame(SocketReqDTO reqDTO){
+		System.out.println("==== 게임 시작 요청 : "+ reqDTO);
+
 		RoomResult result = dictionarySocketService.startGame(reqDTO.getRoomId(), reqDTO.getNickname());
 
 		switch(result){
 			case GAME_START_SUCCESS:
-				sendToRoom(reqDTO.getRoomId(), dictionarySocketService.getQuizes());
+				DictionaryQuizResDTO quizes = dictionarySocketService.getQuizes();
+				// 퀴즈의 정답을 room에 넣어야 한다 재원아
+				dictionarySocketService.addQuizToRoom(quizes, reqDTO.getRoomId());
+
+				sendToRoom(reqDTO.getRoomId(), quizes);
 				break;
 			case GAME_START_FAIL_NOT_A_OWNER:
 				// TODO: 예외 처리 할 것
@@ -116,12 +123,14 @@ public class DictionarySocketController {
 
 	// 특정 방에 있는 "모든 인원"에게 데이터를 보낼 때 (방 입장, 방 나가기, 문제 결과 전송 등)
 	private void sendToRoom(String roomId, Object message) {
+		System.out.println("==== 요청 성공 : "+ roomId +" 메세지(주소값만 뜰 수 있음) : " + message);
 		// roomId를 포함한 토픽 주소로 메시지 전송
 		messagingTemplate.convertAndSend("/topic/dictionary-quiz/room/"+roomId, message);
 	}
 
 	// 요청을 보낸 "개인"에게 요청의 결과(성공, 에러 등)를 전송
 	private void sendResult(String nickname, Object message){
+		System.out.println("==== 방 입장 성공, 방에 있는 애들 : "+ nickname +" 메세지(주소값만 뜰 수 있음) : " + message);
 		messagingTemplate.convertAndSend("/topic/result/"+nickname, message);
 	}
 

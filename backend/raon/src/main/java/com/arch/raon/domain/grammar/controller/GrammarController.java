@@ -1,12 +1,15 @@
 package com.arch.raon.domain.grammar.controller;
 
 import com.arch.raon.domain.grammar.dto.request.GrammarResultSaveReqDTO;
+import com.arch.raon.domain.grammar.dto.response.GrammarMyRankingResDTO;
 import com.arch.raon.domain.grammar.dto.response.GrammarQuizResDTO;
 import com.arch.raon.domain.grammar.service.GrammarService;
 import com.arch.raon.global.dto.ResponseDTO;
+import com.arch.raon.global.util.enums.GrammarRanking;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -39,6 +42,34 @@ public class GrammarController {
 			.body(ResponseDTO.builder()
 				.message("결과 저장 성공")
 				.build());
+	}
+
+	@GetMapping("/ranking/{grammarRanking}")
+	public ResponseEntity<ResponseDTO> getMyRank(
+			@AuthenticationPrincipal Long memberId,
+			@PathVariable GrammarRanking grammarRanking
+			) {
+		GrammarMyRankingResDTO myRank = grammarService.getMyRank(memberId, grammarRanking);
+
+		if (grammarRanking.equals(GrammarRanking.GRAMMAR_COUNTRY_MY)) {
+			return ResponseEntity.status(HttpStatus.OK)
+					.body(ResponseDTO.builder()
+							.message("맞춤법 퀴즈 전국 나의 랭킹")
+							.data(myRank)
+							.build());
+
+		} else if (grammarRanking.equals(GrammarRanking.GRAMMAR_SCHOOL_MY)) {
+			return ResponseEntity.status(HttpStatus.OK)
+					.body(ResponseDTO.builder()
+							.message("맞춤법 퀴즈 교내 나의 랭킹")
+							.data(myRank)
+							.build());
+		} else {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+					.body(ResponseDTO.builder()
+							.message("해당하는 랭킹 카테고리가 없습니다.")
+							.build());
+		}
 	}
 
 }

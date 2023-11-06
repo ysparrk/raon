@@ -4,8 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import cry from '../../../assets/Images/cry.png';
 import Tear from '../../Common/Organisms/Tear.tsx';
 import StarOne from '../Atoms/StarOne.tsx';
-// import StarTwo from '../Atoms/StarTwo.tsx';
-// import StarThree from '../Atoms/StarThree.tsx';
+import StarTwo from '../Atoms/StarTwo.tsx';
+import StarThree from '../Atoms/StarThree.tsx';
 
 const ModalOverlay = styled.div`
   position: fixed;
@@ -73,10 +73,21 @@ const Button = styled.button`
 type Props = {
   onClose: () => void;
   answer: string;
+  difficulty: number;
 };
 
-const SpellingWrong: React.FC<Props> = ({ onClose, answer }) => {
+const SpellingWrong: React.FC<Props> = ({ onClose, answer, difficulty }) => {
   const navigate = useNavigate();
+
+  const renderStars = () => {
+    if (difficulty >= 70) {
+      return <StarOne />;
+    } else if (difficulty >= 50) {
+      return <StarTwo />;
+    } else {
+      return <StarThree />;
+    }
+  };
 
   return (
     <>
@@ -88,7 +99,7 @@ const SpellingWrong: React.FC<Props> = ({ onClose, answer }) => {
             <div>틀렸어요...</div>
             <CryImage src={cry} alt="Cry" />
             <div>난이도</div>
-            <StarOne />
+            {renderStars()}
           </TopSection>
           <ButtonGroup>
             <Button onClick={onClose}>다음 문제</Button>

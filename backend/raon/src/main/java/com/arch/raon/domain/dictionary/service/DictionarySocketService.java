@@ -36,4 +36,6 @@ public interface DictionarySocketService {
 	List<SocketResponseDTO> getRoomInfo(String roomId);
 
 	DictionaryQuizResDTO getQuizes();
+
+	void addQuizToRoom(DictionaryQuizResDTO quizes, String roomId);
 }

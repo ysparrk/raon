@@ -7,7 +7,7 @@ import Main from '../components/Interface/Pages/Main.tsx';
 
 // // User
 // import Login from '../components/User/Pages/Login.tsx';
-// import Information from '../components/User/Pages/Information.tsx';
+import Information from '../components/User/Pages/Information.tsx';
 
 // // GameSpelling
 import SpellingQuiz from '../components/GameSpelling/Pages/SpellingQuiz.tsx';
@@ -37,6 +37,7 @@ const AppRouter: React.FC = () => {
       <Routes>
         <Route path="/" element={<Landing />} />
         <Route path="/main" element={<Main />} />
+        <Route path="/information/submit" element={<Information />} />
         <Route
           path="/game/summarize-category"
           element={<SummarizeCategory />}

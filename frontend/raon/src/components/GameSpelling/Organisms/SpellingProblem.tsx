@@ -3,11 +3,7 @@ import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
 import { getSpellingList } from '../../../api/GameSpellingApi.tsx';
-import {
-  submitState,
-  answerState,
-  spellingCountState,
-} from '../../../recoil/Atoms.tsx';
+import { submitState, answerState } from '../../../recoil/Atoms.tsx';
 import SpellingRight from './SpellingRight.tsx';
 import SpellingWrong from './SpellingWrong.tsx';
 
@@ -52,6 +48,7 @@ type Quiz = {
   option_one: string;
   option_two: string;
   answer: string;
+  answer_percent: number;
 };
 
 const SpellingProblem = () => {
@@ -64,7 +61,6 @@ const SpellingProblem = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const setSubmitList = useSetRecoilState(submitState);
   const setAnswerList = useSetRecoilState(answerState);
-  const setSpellingCountState = useSetRecoilState(spellingCountState);
   const startTime = useRef(Date.now());
 
   const handleOptionClick = (option: string) => {
@@ -84,8 +80,6 @@ const SpellingProblem = () => {
     if (currentIndex < quizList.length - 1) {
       setCurrentIndex((prevIndex) => prevIndex + 1);
     } else {
-      const endTime = Date.now();
-      setSpellingCountState(endTime - startTime.current);
       navigate('/game/spelling-result');
     }
   };
@@ -132,12 +126,14 @@ const SpellingProblem = () => {
       {isRightModalVisible && (
         <SpellingRight
           answer={quizList[currentIndex]?.answer}
+          difficulty={quizList[currentIndex]?.answer_percent}
           onClose={handleCloseModal}
         />
       )}
       {isWrongModalVisible && (
         <SpellingWrong
           answer={quizList[currentIndex]?.answer}
+          difficulty={quizList[currentIndex]?.answer_percent}
           onClose={handleCloseModal}
         />
       )}
