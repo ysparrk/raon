@@ -45,17 +45,31 @@ public class GrammarController {
 	}
 
 	@GetMapping("/ranking/{grammarRanking}")
-	public ResponseEntity<ResponseDTO> getMyCountryRank(
+	public ResponseEntity<ResponseDTO> getMyRank(
 			@AuthenticationPrincipal Long memberId,
 			@PathVariable GrammarRanking grammarRanking
 			) {
-		GrammarMyRankingResDTO myRank = grammarService.getMyRank(memberId, grammarRanking);;
+		GrammarMyRankingResDTO myRank = grammarService.getMyRank(memberId, grammarRanking);
 
-		return ResponseEntity.status(HttpStatus.OK)
-				.body(ResponseDTO.builder()
-						.message("맞춤법 퀴즈 나의 랭킹")
-						.data(myRank)
-						.build());
+		if (grammarRanking.equals(GrammarRanking.GRAMMAR_COUNTRY_MY)) {
+			return ResponseEntity.status(HttpStatus.OK)
+					.body(ResponseDTO.builder()
+							.message("맞춤법 퀴즈 전국 나의 랭킹")
+							.data(myRank)
+							.build());
+
+		} else if (grammarRanking.equals(GrammarRanking.GRAMMAR_SCHOOL_MY)) {
+			return ResponseEntity.status(HttpStatus.OK)
+					.body(ResponseDTO.builder()
+							.message("맞춤법 퀴즈 교내 나의 랭킹")
+							.data(myRank)
+							.build());
+		} else {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+					.body(ResponseDTO.builder()
+							.message("해당하는 랭킹 카테고리가 없습니다.")
+							.build());
+		}
 	}
 
 }
