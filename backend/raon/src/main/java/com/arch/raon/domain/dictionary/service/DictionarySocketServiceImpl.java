@@ -109,7 +109,7 @@ public class DictionarySocketServiceImpl implements DictionarySocketService{
 		return member != null;
 	}
 
-	public List<SocketResponseDTO> getRoomInfo(String roomId) {
+	public List<String> getRoomInfo(String roomId) {
 		Room room = rooms.get(roomId);
 		return room.getUsers();
 	}
@@ -124,6 +124,11 @@ public class DictionarySocketServiceImpl implements DictionarySocketService{
 	@Override
 	public void addQuizToRoom(DictionaryQuizResDTO quizes, String roomId) {
 		rooms.get(roomId).setQuizes(quizes);
+	}
+
+	@Override
+	public String getOwner(String roomId) {
+		return rooms.get(roomId).getOwner();
 	}
 
 }
