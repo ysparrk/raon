@@ -121,4 +121,9 @@ public class DictionarySocketServiceImpl implements DictionarySocketService{
 		return new DictionaryQuizResDTO(initialQuizes, directionQuizes);
 	}
 
+	@Override
+	public void addQuizToRoom(DictionaryQuizResDTO quizes, String roomId) {
+		rooms.get(roomId).setQuizes(quizes);
+	}
+
 }

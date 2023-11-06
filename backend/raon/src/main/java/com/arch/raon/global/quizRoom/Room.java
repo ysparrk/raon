@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
+import com.arch.raon.domain.dictionary.dto.response.DictionaryQuizResDTO;
 import com.arch.raon.domain.dictionary.dto.response.SocketResponseDTO;
 import com.arch.raon.global.util.enums.GameState;
 
@@ -27,7 +28,7 @@ public class Room {
 	private GameState state = GameState.WAITING;
 	private final ConcurrentMap<String, User> userInfo = new ConcurrentHashMap<>();
 	private ConcurrentMap<String, String> latestAnswer = new ConcurrentHashMap<>();
-	private List<String> answers;
+	private DictionaryQuizResDTO quizes;
 	private String owner;
 
 	public Room(String nickname){
@@ -137,7 +138,7 @@ public class Room {
 	public void setState(GameState state) {
 		this.state = state;
 	}
-	public void setAnswers(List<String> answers) {
-		this.answers = answers;
+	public void setQuizes(DictionaryQuizResDTO quizes) {
+		this.quizes = quizes;
 	}
 }
