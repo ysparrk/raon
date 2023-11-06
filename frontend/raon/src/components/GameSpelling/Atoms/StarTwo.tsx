@@ -8,7 +8,7 @@ const StarContainer = styled.div`
 `;
 
 const StarImage = styled.img`
-  margin: 0 5px;
+  margin: 0 0.3125rem;
 `;
 
 const StarOne = () => {

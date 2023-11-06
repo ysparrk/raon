@@ -50,7 +50,10 @@ const AppRouter: React.FC = () => {
         <Route path="/game/dictionary-join" element={<DictionaryJoin />} />
         <Route path="/game/dictionary-quiz" element={<DictionaryQuiz />} />
         <Route path="/game/dictionary-game" element={<DictionaryGame />} />
-        <Route path="/game/dictionary-game/waiting-room" element={<DictionaryWaitingRoom />} />
+        <Route
+          path="/game/dictionary-game/waiting-room"
+          element={<DictionaryWaitingRoom />}
+        />
         {/* <Route path="/user/" element={<Foundation />} /> */}
       </Routes>
     </BrowserRouter>
