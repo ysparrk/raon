@@ -296,7 +296,7 @@ class GrammarServiceImplTest {
 		List<GrammarMyRankQueryDTO> expectResult = grammarService.getMiddlePlaceRankResult(6, allByCountry);
 
 		// then
-		assertThat(expectResult.get(4).getNickname()).isEqualTo("히진상");
+		assertThat("히진상").isEqualTo(expectResult.get(4).getNickname());
     }
 
 	@DisplayName("내가 상위 순위 일 때")
@@ -310,7 +310,7 @@ class GrammarServiceImplTest {
 		List<GrammarMyRankQueryDTO> expectResult = grammarService.getTopPlaceRankResult(allByCountry);
 
 		// then
-		assertThat(expectResult.get(3).getNickname()).isEqualTo("고재원고");
+		assertThat("고재원고").isEqualTo(expectResult.get(3).getNickname());
 	}
 
 	@DisplayName("내가 최하위 순위 일 때")
