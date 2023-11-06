@@ -285,7 +285,7 @@ class GrammarServiceImplTest {
 	}
 
 
-	@DisplayName("내가 중간 순위 일때")
+	@DisplayName("내가 중간 순위 일 때")
     @Test
 	@Transactional
     void getMiddlePlaceRankResult() {
@@ -297,7 +297,7 @@ class GrammarServiceImplTest {
 		List<GrammarMyRankQueryDTO> expectResult = grammarService.getMiddlePlaceRankResult(6, allByCountry);
 
 		// then
-		System.out.println(expectResult);
+		assertThat(expectResult.get(4).getNickname()).isEqualTo("히진상");
     }
 
 }
