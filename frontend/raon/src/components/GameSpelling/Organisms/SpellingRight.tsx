@@ -4,8 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import smile from '../../../assets/Images/smile.png';
 import Firework from '../../Common/Organisms/Firework.tsx';
 import StarOne from '../Atoms/StarOne.tsx';
-// import StarTwo from '../Atoms/StarTwo.tsx';
-// import StarThree from '../Atoms/StarThree.tsx';
+import StarTwo from '../Atoms/StarTwo.tsx';
+import StarThree from '../Atoms/StarThree.tsx';
 
 const ModalOverlay = styled.div`
   position: fixed;
@@ -73,15 +73,25 @@ const Button = styled.button`
 type Props = {
   onClose: () => void;
   answer: string;
+  difficulty: number;
 };
 
-const SpellingRight: React.FC<Props> = ({ onClose, answer }) => {
+const SpellingRight: React.FC<Props> = ({ onClose, answer, difficulty }) => {
   const navigate = useNavigate();
+
+  const renderStars = () => {
+    if (difficulty >= 70) {
+      return <StarOne />;
+    } else if (difficulty >= 50) {
+      return <StarTwo />;
+    } else {
+      return <StarThree />;
+    }
+  };
 
   return (
     <React.Fragment>
       {' '}
-      {/* Fragment 사용 */}
       <Firework />
       <ModalOverlay>
         <ModalContainer>
@@ -89,7 +99,7 @@ const SpellingRight: React.FC<Props> = ({ onClose, answer }) => {
             <div>맞았어요!</div>
             <SmileImage src={smile} alt="Smile" />
             <div>난이도</div>
-            <StarOne />
+            {renderStars()}
           </TopSection>
           <ButtonGroup>
             <Button onClick={onClose}>다음 문제</Button>
