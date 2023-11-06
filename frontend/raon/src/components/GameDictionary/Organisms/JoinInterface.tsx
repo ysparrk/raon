@@ -23,7 +23,6 @@ const connectToWebSocket = (nickname: string, roomId: string): Promise<Client> =
       onConnect: () => {
         joinRoom(client, nickname, roomId);
         resolve(client);
-        console.log("연결??")
       },
       onStompError: (error) => {
         reject(error);
@@ -39,7 +38,10 @@ const connectToWebSocket = (nickname: string, roomId: string): Promise<Client> =
 
 // 입장하는 사용자 닉네임, roomId 보내기
 const joinRoom = (client: Client, nickname: string, roomId: string): void => {
+  // TODO: subname 소셜로그인 구현 후 입장하는 사용자의 닉네임으로 변경
+  const subname = "김태현";
   client.subscribe(`/topic/dictionary-quiz/room/${roomId}`, callback);
+  client.subscribe(`/topic/result/${subname}`, callbackJoinList);
   client.publish({
     destination: `/dictionary-quiz/join-room`,
     body: JSON.stringify({nickname, roomId}),
@@ -49,6 +51,14 @@ const joinRoom = (client: Client, nickname: string, roomId: string): void => {
 
 // 콜백함수 => roomId 받기
 const callback: (message: any) => void = (message: any) => {
+  if (message.body) {
+    const body: any = JSON.parse(message.body);
+    console.log(body);
+  }
+};
+
+const callbackJoinList: (message: any) => void = (message: any) => {
+  console.log("참여 리스트 받기")
   if (message.body) {
     const body: any = JSON.parse(message.body);
     console.log(body);
@@ -89,7 +99,7 @@ function JoinInterface() {
         onClick={async (async) => {
           console.log(inputBoxValue);
           const client = await connectToWebSocket("김태현", inputBoxValue);
-          navigate('/game/dictionary-game/waiting-room')
+          navigate('/game/dictionary-quiz')
         }}
       />
     </InterfaceDiv>
