@@ -312,4 +312,18 @@ class GrammarServiceImplTest {
 		// then
 		assertThat(expectResult.get(3).getNickname()).isEqualTo("고재원고");
 	}
+
+	@DisplayName("내가 최하위 순위 일 때")
+	@Test
+	@Transactional
+	void getLastPlaceRankResult() {
+		// given
+		List<GrammarMyRankQueryDTO> allByCountry = grammarScoreRepository.findAllByCountry();
+
+		// when
+		List<GrammarMyRankQueryDTO> expectResult = grammarService.getLastPlaceRankResult(allByCountry);
+
+		// then
+		assertThat(allByCountry.size()).isEqualTo(expectResult.get(5).getRank());
+	}
 }
