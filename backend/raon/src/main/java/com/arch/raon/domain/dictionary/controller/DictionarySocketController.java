@@ -69,7 +69,6 @@ public class DictionarySocketController {
 				List<SocketResponseDTO> userAndOwnerInfo = dictionarySocketService.getRoomInfo(reqDTO.getRoomId());
 				sendResult(reqDTO.getNickname(), userAndOwnerInfo);
 
-
 				// 그 뒤 방 전체 사람들에게 입장 한 사람의 정보를 보내준다.(방에 방금 들어온 사람도 자신의 정보를 이때 받는다.)
 				sendToRoom(reqDTO.getRoomId(), new SocketResponseDTO(reqDTO.getNickname(), reqDTO.getRoomId(), "나, 등장", false));
 				break;
@@ -124,12 +123,14 @@ public class DictionarySocketController {
 
 	// 특정 방에 있는 "모든 인원"에게 데이터를 보낼 때 (방 입장, 방 나가기, 문제 결과 전송 등)
 	private void sendToRoom(String roomId, Object message) {
+		System.out.println("==== 요청 성공 : "+ roomId +" 메세지(주소값만 뜰 수 있음) : " + message);
 		// roomId를 포함한 토픽 주소로 메시지 전송
 		messagingTemplate.convertAndSend("/topic/dictionary-quiz/room/"+roomId, message);
 	}
 
 	// 요청을 보낸 "개인"에게 요청의 결과(성공, 에러 등)를 전송
 	private void sendResult(String nickname, Object message){
+		System.out.println("==== 방 입장 성공, 방에 있는 애들 : "+ nickname +" 메세지(주소값만 뜰 수 있음) : " + message);
 		messagingTemplate.convertAndSend("/topic/result/"+nickname, message);
 	}
 
