@@ -2,16 +2,19 @@ package com.arch.raon.domain.grammar.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.IntStream;
 
 import com.arch.raon.domain.grammar.dto.request.GrammarResultDTO;
 import com.arch.raon.domain.grammar.dto.request.GrammarResultSaveReqDTO;
 import com.arch.raon.domain.grammar.dto.query.GrammarMyRankQueryDTO;
+import com.arch.raon.domain.grammar.dto.response.GrammarMyRankingResDTO;
 import com.arch.raon.domain.grammar.dto.response.GrammarQuizResDTO;
 import com.arch.raon.domain.member.entity.Member;
 import com.arch.raon.domain.member.repository.MemberRepository;
 import com.arch.raon.global.exception.CustomException;
 import com.arch.raon.global.exception.ErrorCode;
 import com.arch.raon.global.util.enums.GrammarRanking;
+import com.arch.raon.global.util.enums.RankState;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -118,6 +121,32 @@ public class GrammarServiceImpl implements GrammarService {
 
 		if (grammarRanking.equals(GrammarRanking.GRAMMAR_COUNTRY_MY)) {
 			// 전국 랭킹 조회
+			List<GrammarMyRankQueryDTO> allByCountry = grammarScoreRepository.findAllByCountry();
+
+			// 순위 리스트에서 내 인덱스
+			int myIdx = IntStream.range(0, allByCountry.size())
+					.filter(i -> allByCountry.get(i).getNickname().equals(member.getNickname()))
+					.findFirst()
+					.orElse(-1);
+
+			if (myIdx < 6) {
+				// TOP3
+			} else if (myIdx == allByCountry.size() - 1) {
+				// LAST_PLACE
+			} else {
+				// MIDDLE_PLACE
+				List<GrammarMyRankQueryDTO> middlePlaceRankResult = getMiddlePlaceRankResult(myIdx, allByCountry);
+
+				GrammarMyRankingResDTO grammarMyRankingResDTO = GrammarMyRankingResDTO.builder()
+						.myRank(myIdx+1)
+						.myScore(middlePlaceRankResult.get(4).getScore())
+						.rankState(RankState.MIDDLE_PLACE)
+						.rankList(middlePlaceRankResult)
+						.build();
+			}
+
+
+
 		} else if (grammarRanking.equals(GrammarRanking.GRAMMAR_SCHOOL_MY)) {
 			// 교내 랭킹 조회
 
@@ -125,6 +154,30 @@ public class GrammarServiceImpl implements GrammarService {
 		return null;
 	}
 
+	@Override
+	public List<GrammarMyRankQueryDTO> getMiddlePlaceRankResult(int myIdx, List<GrammarMyRankQueryDTO> allByCountry) {
+
+		List<GrammarMyRankQueryDTO> selectedRankResults = new ArrayList<>();
+
+		// TOP3
+		for (int i = 0; i < 3; i++) {
+			if (i < allByCountry.size()) {
+				GrammarMyRankQueryDTO baseDTO = allByCountry.get(i);
+				selectedRankResults.add(new GrammarMyRankQueryDTO(i+1, baseDTO.getNickname(), baseDTO.getScore()));
+			}
+
+		}
+
+		// member의 바로 위 한명, member, member의 바로 아래 한명
+		for (int i = myIdx - 1; i <= myIdx + 1; i++) {
+			if (i >= 0 && i < allByCountry.size()) {
+				GrammarMyRankQueryDTO baseDTO = allByCountry.get(i);
+				selectedRankResults.add(new GrammarMyRankQueryDTO(i+1, baseDTO.getNickname(), baseDTO.getScore()));
+			}
+		}
+
+		return selectedRankResults;
+	}
 
 
 }

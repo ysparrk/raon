@@ -1,6 +1,7 @@
 package com.arch.raon.domain.grammar.dto.query;
 
 import com.querydsl.core.annotations.QueryProjection;
+import lombok.Builder;
 import lombok.Getter;
 
 @Getter
@@ -13,6 +14,7 @@ public class GrammarMyRankQueryDTO {
         super();
     }
 
+    @Builder
     @QueryProjection
     public GrammarMyRankQueryDTO(int rank, String nickname, int score) {
         this.rank = rank;

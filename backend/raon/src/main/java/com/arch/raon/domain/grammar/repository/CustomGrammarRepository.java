@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface CustomGrammarRepository {
     // 전국 랭킹
-    List<GrammarMyRankQueryDTO> findByCountry(Long memberId);
+    List<GrammarMyRankQueryDTO> findAllByCountry();
 }
