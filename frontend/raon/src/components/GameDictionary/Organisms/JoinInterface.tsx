@@ -46,6 +46,7 @@ const joinRoom = (client: Client, nickname: string, roomId: string): void => {
     destination: `/dictionary-quiz/join-room`,
     body: JSON.stringify({nickname, roomId}),
   });
+  sessionStorage.setItem('roomId', roomId);  // 세션에 roomId 저장
 };
 
 
