@@ -59,7 +59,7 @@ public class DictionarySocketServiceImpl implements DictionarySocketService{
 			}
 
 			synchronized (thatRoom){
-				thatRoom.addUser(nickname);
+				thatRoom.enter(nickname);
 			}
 			return RoomResult.JOIN_SUCCESS;
 		}
@@ -76,7 +76,7 @@ public class DictionarySocketServiceImpl implements DictionarySocketService{
 	@Override
 	public RoomResult leaveRoom(String nickname, String roomId) {
 		if(rooms.containsKey(roomId)){
-			rooms.get(roomId).leaveUser(nickname);
+			rooms.get(roomId).leave(nickname);
 			return RoomResult.LEAVE_SUCCESS;
 		}
 		return RoomResult.LEAVE_FAIL_NONEXIST;
@@ -119,7 +119,6 @@ public class DictionarySocketServiceImpl implements DictionarySocketService{
 		List<DictionaryDirectionQuiz> directionQuizes = dictionaryDirectionQuizRepository.random3();
 		List<DictionaryInitialQuiz> initialQuizes = dictionaryInitialQuizRepository.random7();
 		return new DictionaryQuizResDTO(initialQuizes, directionQuizes);
-
 	}
 
 }
