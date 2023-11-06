@@ -1,5 +1,6 @@
 package com.arch.raon.domain.member.entity;
 
+import com.arch.raon.domain.member.dto.request.MemberSignupReqDTO;
 import com.arch.raon.global.util.enums.Gender;
 import com.arch.raon.global.util.enums.School;
 import jakarta.persistence.*;
@@ -69,7 +70,6 @@ public class Member {
     private Boolean isActive=false; // 기본 정보 입력 후 회원 가입 확정
 
     @Builder
-
     public Member(Long id, String email, String nickname, String profileUrl, Gender gender, School school,
                   Integer yearOfBirth, Integer mileage, LocalDateTime createdAt, LocalDateTime modifiedAt,
                   Boolean isDeleted, LocalDateTime deletedAt, Boolean isActive) {
@@ -86,5 +86,13 @@ public class Member {
         this.isDeleted = isDeleted;
         this.deletedAt = deletedAt;
         this.isActive = isActive;
+    }
+
+    public void signup(MemberSignupReqDTO memberSignupReqDTO){
+        this.nickname = memberSignupReqDTO.getNickname();
+        this.school = memberSignupReqDTO.getSchool();
+        this.yearOfBirth = memberSignupReqDTO.getYearOfBirth();
+        this.gender = memberSignupReqDTO.getGender();
+        this.isActive = Boolean.TRUE;
     }
 }

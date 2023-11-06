@@ -1,5 +1,6 @@
 package com.arch.raon.domain.member.service;
 
+import com.arch.raon.domain.member.dto.request.MemberSignupReqDTO;
 import com.arch.raon.domain.member.entity.Member;
 import com.arch.raon.domain.member.repository.MemberRepository;
 import com.arch.raon.global.auth.dto.AuthUserInfo;
@@ -39,5 +40,12 @@ public class MemberServiceImpl implements MemberService{
             memberRepository.save(member);
         }
         return new AuthUserInfo(member.getId(), member.getEmail(), Arrays.asList("USER"));
+    }
+
+    @Override
+    @Transactional
+    public void signup(Long id, MemberSignupReqDTO memberSignupReqDTO) {
+        Member member = memberRepository.findById(id).orElseThrow();
+        member.signup(memberSignupReqDTO);
     }
 }
