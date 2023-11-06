@@ -15,4 +15,5 @@ public interface GrammarService {
 
 	List<GrammarMyRankQueryDTO> getMyRank(Long memberId, GrammarRanking grammarRanking);
 	List<GrammarMyRankQueryDTO> getMiddlePlaceRankResult(int myIndex, List<GrammarMyRankQueryDTO> allByCountry);
+	List<GrammarMyRankQueryDTO> getTopPlaceRankResult(int myIndex, List<GrammarMyRankQueryDTO> allByCountry);
 }

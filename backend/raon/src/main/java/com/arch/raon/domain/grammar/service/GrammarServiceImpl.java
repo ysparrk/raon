@@ -130,7 +130,16 @@ public class GrammarServiceImpl implements GrammarService {
 					.orElse(-1);
 
 			if (myIdx < 6) {
-				// TOP3
+				// TOP_PLACE
+				List<GrammarMyRankQueryDTO> topPlaceRankResult = getTopPlaceRankResult(myIdx, allByCountry);
+
+				GrammarMyRankingResDTO grammarMyRankingResDTO = GrammarMyRankingResDTO.builder()
+						.myRank(myIdx+1)
+						.myScore(topPlaceRankResult.get(myIdx).getScore())
+						.rankState(RankState.TOP_PLACE)
+						.rankList(topPlaceRankResult)
+						.build();
+
 			} else if (myIdx == allByCountry.size() - 1) {
 				// LAST_PLACE
 			} else {
@@ -174,6 +183,23 @@ public class GrammarServiceImpl implements GrammarService {
 				GrammarMyRankQueryDTO baseDTO = allByCountry.get(i);
 				selectedRankResults.add(new GrammarMyRankQueryDTO(i+1, baseDTO.getNickname(), baseDTO.getScore()));
 			}
+		}
+
+		return selectedRankResults;
+	}
+
+	@Override
+	public List<GrammarMyRankQueryDTO> getTopPlaceRankResult(int myIndex, List<GrammarMyRankQueryDTO> allByCountry) {
+
+		List<GrammarMyRankQueryDTO> selectedRankResults = new ArrayList<>();
+
+		// TOP6
+		for (int i = 0; i < 6; i++) {
+			if (i < allByCountry.size()) {
+				GrammarMyRankQueryDTO baseDTO = allByCountry.get(i);
+				selectedRankResults.add(new GrammarMyRankQueryDTO(i+1, baseDTO.getNickname(), baseDTO.getScore()));
+			}
+
 		}
 
 		return selectedRankResults;
