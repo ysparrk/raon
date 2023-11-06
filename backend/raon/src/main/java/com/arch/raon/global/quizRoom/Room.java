@@ -46,11 +46,10 @@ public class Room {
 		return userInfo.size() >= MAX_PLAYER;
 	}
 
-	public List<SocketResponseDTO> getUsers(){
-		List<SocketResponseDTO> users = new ArrayList<>();
+	public List<String> getUsers(){
+		List<String> users = new ArrayList<>();
 		for(Map.Entry<String, User> entry : userInfo.entrySet()){
-			boolean isOwner = entry.getValue().getNickname().equals(owner);
-			users.add(new SocketResponseDTO(entry.getKey(),"방에 있던 사람", isOwner));
+			users.add(entry.getKey());
 		}
 		return users;
 	}
