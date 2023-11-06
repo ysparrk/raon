@@ -52,7 +52,7 @@ function SingleModeResult() {
   }, [userScore]); // 두 번째 매개변수로 userScore를 의존성으로 설정
 
   let content = '';
-  if (userScore >= 70) {
+  if (userScore >= 80) {
     content = '훌륭해요!';
   } else if (userScore >= 40) {
     content = '잘했어요!';
