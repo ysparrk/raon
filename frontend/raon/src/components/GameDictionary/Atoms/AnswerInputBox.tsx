@@ -1,11 +1,16 @@
-import React, { useState, ChangeEvent } from 'react';
+import React, { useState, ChangeEvent, KeyboardEvent } from 'react';
 
 interface AnswerInputBoxProps {
   inputText: string;
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  onEnter: () => void;
 }
 
-const AnswerInputBox = ({ inputText, onChange }: AnswerInputBoxProps) => {
+const AnswerInputBox = ({
+  inputText,
+  onChange,
+  onEnter,
+}: AnswerInputBoxProps) => {
   const [isFocused, setIsFocused] = useState(false);
 
   const handleFocus = () => {
@@ -18,6 +23,12 @@ const AnswerInputBox = ({ inputText, onChange }: AnswerInputBoxProps) => {
 
   const handleFormSubmit = (event: React.FormEvent) => {
     event.preventDefault();
+  };
+  const handleKeyPress = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      // Enter 키를 눌렀을 때 onEnter 함수 호출
+      onEnter();
+    }
   };
 
   const formStyle = {
@@ -47,6 +58,7 @@ const AnswerInputBox = ({ inputText, onChange }: AnswerInputBoxProps) => {
         onFocus={handleFocus}
         onBlur={handleBlur}
         onChange={onChange}
+        onKeyPress={handleKeyPress}
         autoComplete="off"
       />
     </form>

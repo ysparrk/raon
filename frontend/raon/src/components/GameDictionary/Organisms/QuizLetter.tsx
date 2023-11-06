@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import { useSetRecoilState } from 'recoil';
+import { dictScoreState } from '../../../recoil/Atoms';
 import AnswerInputBox from '../Atoms/AnswerInputBox';
 import SingleModeAnswer from './SingleModeAnswer';
 
@@ -7,6 +9,7 @@ interface QuizLetterProps {
   word: string;
   initial: string;
   meaning: string;
+  nextClick: () => void;
 }
 
 const QuizDiv = styled.div`
@@ -21,7 +24,7 @@ const QuizDiv = styled.div`
 const QuizQuestion = styled.div`
   display: flex;
   font-family: 'NanumBarunGothic';
-  font-size: 5rem;
+  font-size: 4rem;
   color: white;
   justify-content: center;
   align-items: center;
@@ -56,17 +59,22 @@ const QuizEnterBtn = styled.div`
   font-size: 2.5rem;
 `;
 
-function QuizLetter({ word, initial, meaning }: QuizLetterProps) {
+function QuizLetter({ word, initial, meaning, nextClick }: QuizLetterProps) {
   const [inputValue, setInputValue] = useState('');
   const [isSolved, setIsSolved] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
+
+  const setDictScore = useSetRecoilState(dictScoreState);
   const handleClick = (value: string) => {
     if (value === word) {
       setIsCorrect(true);
       setIsSolved(true);
+      setInputValue('');
+      setDictScore((prevValue) => prevValue + 10);
     } else {
       setIsCorrect(false);
       setIsSolved(true);
+      setInputValue('');
     }
   };
   return (
@@ -75,6 +83,7 @@ function QuizLetter({ word, initial, meaning }: QuizLetterProps) {
         <SingleModeAnswer
           onClose={() => {
             setIsSolved(false);
+            nextClick();
           }}
           answer={word}
           isCorrect={isCorrect}
@@ -87,6 +96,11 @@ function QuizLetter({ word, initial, meaning }: QuizLetterProps) {
           inputText={inputValue}
           onChange={(event) => {
             setInputValue(event.target.value);
+          }}
+          onEnter={() => {
+            if (!isSolved) {
+              handleClick(inputValue);
+            }
           }}
         />
         <QuizEnterBtn

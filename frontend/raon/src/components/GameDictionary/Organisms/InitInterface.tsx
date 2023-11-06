@@ -137,7 +137,7 @@ function InitInterface() {
           fontColor="slategrey"
           content="혼자하기"
           onClick={() => {
-            navigate('/game/dictionary-quiz');
+            navigate('/game/dictionary-single-game');
           }}
         />
         <ExitButton
