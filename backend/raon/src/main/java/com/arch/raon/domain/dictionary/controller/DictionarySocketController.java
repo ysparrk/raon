@@ -7,6 +7,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 
 import com.arch.raon.domain.dictionary.dto.request.SocketReqDTO;
+import com.arch.raon.domain.dictionary.dto.response.DictionaryQuizResDTO;
 import com.arch.raon.domain.dictionary.dto.response.SocketResponseDTO;
 import com.arch.raon.domain.dictionary.service.DictionarySocketService;
 import com.arch.raon.global.util.enums.RoomResult;
@@ -80,7 +81,7 @@ public class DictionarySocketController {
 				// TODO: exception에 대한 처리가 더 필요
 				break;
 
-			case JOIN_FAIL_NONEXIST:
+			case FAIL_NONEXIST_ROOM:
 				// TODO: exception에 대한 처리가 더 필요
 				break;
 		}
@@ -96,6 +97,21 @@ public class DictionarySocketController {
 			sendToRoom(reqDTO.getRoomId(), new SocketResponseDTO(reqDTO.getNickname(), "나갔다..", false));
 		}
 	}
+
+	public void startGame(SocketReqDTO reqDTO){
+		RoomResult result = dictionarySocketService.startGame(reqDTO.getRoomId(), reqDTO.getNickname());
+
+		switch(result){
+			case GAME_START_SUCCESS:
+				sendToRoom(reqDTO.getRoomId(), dictionarySocketService.getQuizes());
+				break;
+			case GAME_START_FAIL_NOT_A_OWNER:
+				// TODO: 예외 처리 할 것
+				break;
+		}
+	}
+
+
 
 
 	// 특정 방에 있는 "모든 인원"에게 데이터를 보낼 때 (방 입장, 방 나가기, 문제 결과 전송 등)
