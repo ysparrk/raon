@@ -82,11 +82,11 @@ const SpellingWrong: React.FC<Props> = ({ onClose, answer, difficulty }) => {
   const renderStars = () => {
     if (difficulty >= 70) {
       return <StarOne />;
-    } else if (difficulty >= 50) {
-      return <StarTwo />;
-    } else {
-      return <StarThree />;
     }
+    if (difficulty >= 50) {
+      return <StarTwo />;
+    }
+    return <StarThree />;
   };
 
   return (
