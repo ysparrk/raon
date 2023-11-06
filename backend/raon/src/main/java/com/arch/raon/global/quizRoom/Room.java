@@ -24,19 +24,10 @@ import com.arch.raon.global.util.enums.GameState;
 
 public class Room {
 	private final int MAX_PLAYER = 3;
-
-	// WAITING, PLAY
 	private GameState state = GameState.WAITING;
-
-	// Key : nickname, value : MemberInfo
 	private final ConcurrentMap<String, User> userInfo = new ConcurrentHashMap<>();
-
-	// Key : nickname, value : answer, 즉 최근의 문제에 대한 답만 가지고 있는다.
 	private ConcurrentMap<String, String> latestAnswer = new ConcurrentHashMap<>();
-
-
-
-	// 방에는 방장이 한 명 있다.
+	private List<String> answers;
 	private String owner;
 
 	public Room(String nickname){
@@ -63,12 +54,12 @@ public class Room {
 		return users;
 	}
 
-	public void addUser(String enteredUser){
+	public void enter(String enteredUser){
 		userInfo.put(enteredUser,new User(enteredUser, 0));
 	}
 
 	// 방에 있는 유저가 방에 나간다.
-	public boolean leaveUser(String leaved_nickname){
+	public boolean leave(String leaved_nickname){
 		if(userInfo.containsKey(leaved_nickname)){
 			if(leaved_nickname.equals(owner)){
 				changeOwner();
@@ -99,9 +90,6 @@ public class Room {
 		return rank;
 	}
 
-
-
-
 	//============ 방장에 대한 메소드들 =========================
 
 	// 방장이 나간 경우 현재 방장을 바꾼다.
@@ -127,7 +115,6 @@ public class Room {
 	private void addUserToAnswerMap(String nickname){
 		latestAnswer.put(nickname,null);
 	}
-
 	private boolean addAnswerToMap(String nickname, String newAnswer){
 		if(userInfo.containsKey(nickname) && latestAnswer.containsKey(nickname)){
 			latestAnswer.replace(nickname, newAnswer);
@@ -136,23 +123,21 @@ public class Room {
 		return false;
 	}
 
-
-
 	//============= getter and setter ====================
 
 	public String getOwner() {
 		return owner;
 	}
-
 	public void setOwner(String owner) {
 		this.owner = owner;
 	}
-
 	public GameState getState() {
 		return state;
 	}
-
 	public void setState(GameState state) {
 		this.state = state;
+	}
+	public void setAnswers(List<String> answers) {
+		this.answers = answers;
 	}
 }

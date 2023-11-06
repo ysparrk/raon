@@ -4,7 +4,6 @@ import java.io.Serializable;
 
 public class User implements Serializable, Comparable<User> {
 	private String nickname; // 유저 닉네임, 닉네임은 중복 불가로 결정했으므로 이거로 구별
-
 	private int current_point; // 현재 점수
 
 

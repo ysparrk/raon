@@ -59,7 +59,7 @@ public class DictionarySocketController {
 	 */
 	@MessageMapping("/dictionary-quiz/join-room")
 	public void joinRoom(SocketReqDTO reqDTO) {
-		System.out.println("join요청: 요청자:"+reqDTO.getNickname());
+		System.out.println("join요청: "+ reqDTO);
 
 		RoomResult result = dictionarySocketService.joinRoom(reqDTO.getNickname(), reqDTO.getRoomId());
 
@@ -68,6 +68,7 @@ public class DictionarySocketController {
 				// 방 입장 성공시 먼저 입장 한 사람에게 방에 있던 사람들의 정보를 보내준다.
 				List<SocketResponseDTO> userAndOwnerInfo = dictionarySocketService.getRoomInfo(reqDTO.getRoomId());
 				sendResult(reqDTO.getNickname(), userAndOwnerInfo);
+
 
 				// 그 뒤 방 전체 사람들에게 입장 한 사람의 정보를 보내준다.(방에 방금 들어온 사람도 자신의 정보를 이때 받는다.)
 				sendToRoom(reqDTO.getRoomId(), new SocketResponseDTO(reqDTO.getNickname(), reqDTO.getRoomId(), "나, 등장", false));
@@ -99,10 +100,15 @@ public class DictionarySocketController {
 	}
 
 	public void startGame(SocketReqDTO reqDTO){
+		System.out.println("==== 게임 시작 요청 : "+ reqDTO);
+
 		RoomResult result = dictionarySocketService.startGame(reqDTO.getRoomId(), reqDTO.getNickname());
 
 		switch(result){
 			case GAME_START_SUCCESS:
+				DictionaryQuizResDTO quizes = dictionarySocketService.getQuizes();
+				// 퀴즈의 정답을 room에 넣어야 한다 재원아
+
 				sendToRoom(reqDTO.getRoomId(), dictionarySocketService.getQuizes());
 				break;
 			case GAME_START_FAIL_NOT_A_OWNER:
