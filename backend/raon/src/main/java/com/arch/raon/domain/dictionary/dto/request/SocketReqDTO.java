@@ -24,4 +24,12 @@ public class SocketReqDTO {
 	public void setRoomId(String roomId) {
 		this.roomId = roomId;
 	}
+
+	@Override
+	public String toString() {
+		return "SocketReqDTO{" +
+			"nickname='" + nickname + '\'' +
+			", roomId='" + roomId + '\'' +
+			'}';
+	}
 }

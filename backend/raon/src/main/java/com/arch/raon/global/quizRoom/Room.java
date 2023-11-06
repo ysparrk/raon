@@ -34,7 +34,7 @@ public class Room {
 	// Key : nickname, value : answer, 즉 최근의 문제에 대한 답만 가지고 있는다.
 	private ConcurrentMap<String, String> latestAnswer = new ConcurrentHashMap<>();
 
-
+	private List<String> answers;
 
 	// 방에는 방장이 한 명 있다.
 	private String owner;
@@ -154,5 +154,9 @@ public class Room {
 
 	public void setState(GameState state) {
 		this.state = state;
+	}
+
+	public void setAnswers(List<String> answers) {
+		this.answers = answers;
 	}
 }

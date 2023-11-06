@@ -59,7 +59,7 @@ public class DictionarySocketController {
 	 */
 	@MessageMapping("/dictionary-quiz/join-room")
 	public void joinRoom(SocketReqDTO reqDTO) {
-		System.out.println("join요청: 요청자:"+reqDTO.getNickname());
+		System.out.println("join요청: "+ reqDTO);
 
 		RoomResult result = dictionarySocketService.joinRoom(reqDTO.getNickname(), reqDTO.getRoomId());
 
@@ -99,10 +99,15 @@ public class DictionarySocketController {
 	}
 
 	public void startGame(SocketReqDTO reqDTO){
+		System.out.println("==== 게임 시작 요청 : "+ reqDTO);
+
 		RoomResult result = dictionarySocketService.startGame(reqDTO.getRoomId(), reqDTO.getNickname());
 
 		switch(result){
 			case GAME_START_SUCCESS:
+				DictionaryQuizResDTO quizes = dictionarySocketService.getQuizes();
+				// 퀴즈의 정답을 room에 넣어야 한다 재원아
+
 				sendToRoom(reqDTO.getRoomId(), dictionarySocketService.getQuizes());
 				break;
 			case GAME_START_FAIL_NOT_A_OWNER:
