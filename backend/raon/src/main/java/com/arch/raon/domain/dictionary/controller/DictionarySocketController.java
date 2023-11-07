@@ -43,6 +43,7 @@ public class DictionarySocketController {
 	 */
 	@PostMapping("/dictionary-quiz/check-room")
 	public ResponseEntity<ResponseDTO> ckeckRoomIdValid(SocketReqDTO reqDTO) {
+		System.out.println("[CHECK-ROOM] 방 확인 요청!!!! 요청자: " + reqDTO.getNickname() +" 방 아이디: "+ reqDTO.getRoomId());
 		DictionaryRoomResDTO roomResDTO = new DictionaryRoomResDTO(Rooms.hasRoomThatIdIs(reqDTO.getRoomId()));
 		return ResponseEntity.status(HttpStatus.OK)
 			.body(ResponseDTO.builder()
