@@ -1,4 +1,4 @@
-package com.arch.raon.global.quizRoom;
+package com.arch.raon.domain.dictionary.vo;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -8,7 +8,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 import com.arch.raon.domain.dictionary.dto.response.DictionaryQuizResDTO;
-import com.arch.raon.domain.dictionary.dto.response.SocketResponseDTO;
 import com.arch.raon.global.util.enums.GameState;
 
 /**
@@ -24,7 +23,6 @@ import com.arch.raon.global.util.enums.GameState;
  */
 
 public class Room {
-	private final int MAX_PLAYER = 3;
 	private GameState state = GameState.WAITING;
 	private final ConcurrentMap<String, User> userInfo = new ConcurrentHashMap<>();
 	private ConcurrentMap<String, String> latestAnswer = new ConcurrentHashMap<>();
@@ -38,13 +36,14 @@ public class Room {
 
 
 	//========== WAITING일 때의 메소드들 =========================
-	public GameState getCurrentState(){
-		return state;
+	public boolean hasUserNamed(String nickname){
+		return userInfo.containsKey(nickname);
 	}
 
-	public boolean isFull(){
-		return userInfo.size() >= MAX_PLAYER;
+	public boolean isRoomFull(int maxPlayer){
+		return userInfo.size() >= maxPlayer;
 	}
+	public int getRoomSize(){return userInfo.size();}
 
 	public List<String> getUsers(){
 		List<String> users = new ArrayList<>();
@@ -125,7 +124,7 @@ public class Room {
 
 	//============= getter and setter ====================
 
-	public String getOwner() {
+	public String getRoomOwner() {
 		return owner;
 	}
 	public void setOwner(String owner) {
