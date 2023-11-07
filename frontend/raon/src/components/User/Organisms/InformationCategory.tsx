@@ -48,7 +48,7 @@ const InformationCategory = () => {
 
   const [nickname, setNickname] = useState('');
   const [birthday, setBirthday] = useState('');
-  const [gender, setGender] = useState('');
+  const [gender, setGender] = useState('MALE');
   const [school, setSchool] = useState('');
 
   const genderOptions = ['MALE', 'FEMALE'];
@@ -63,6 +63,7 @@ const InformationCategory = () => {
     try {
       const response = await postMemberSignup(memberData);
       console.log('회원가입 성공:', response);
+      localStorage.setItem('nickname', nickname);
       navigate('/main');
     } catch (error) {
       console.error('회원가입 실패:', error);

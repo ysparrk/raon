@@ -46,7 +46,7 @@ const ComboBox = ({ selectedOption, onChange, options }: ComboBoxProps) => {
       onChange={onChange}
     >
       {options.map((option, index) => (
-        <option key={index} value={option}>
+        <option key={option} value={option}>
           {option}
         </option>
       ))}
