@@ -4,6 +4,7 @@ import com.arch.raon.domain.grammar.dto.request.GrammarResultSaveReqDTO;
 import com.arch.raon.domain.grammar.dto.response.GrammarMyRankingResDTO;
 import com.arch.raon.domain.grammar.dto.response.GrammarQuizResDTO;
 import com.arch.raon.domain.grammar.service.GrammarService;
+import com.arch.raon.global.auth.dto.UserAuthentication;
 import com.arch.raon.global.dto.ResponseDTO;
 import com.arch.raon.global.util.enums.GrammarRanking;
 import lombok.RequiredArgsConstructor;
@@ -34,8 +35,10 @@ public class GrammarController {
 	}
 
 	@PostMapping("/result")
-	public ResponseEntity<ResponseDTO> saveResult(@RequestBody GrammarResultSaveReqDTO grammarResultSaveReqDTO){
-		grammarService.saveScoreResult(grammarResultSaveReqDTO); // 해당 판의 점수를 저장(0~10)
+	public ResponseEntity<ResponseDTO> saveResult(
+			@AuthenticationPrincipal UserAuthentication userAuth,
+			@RequestBody GrammarResultSaveReqDTO grammarResultSaveReqDTO){
+		grammarService.saveScoreResult(grammarResultSaveReqDTO, userAuth.getId()); // 해당 판의 점수를 저장(0~10)
 		grammarService.updateStatistics(grammarResultSaveReqDTO); // 문제의 정답률을 업데이트
 
 		return ResponseEntity.status(HttpStatus.OK)

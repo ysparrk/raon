@@ -65,14 +65,9 @@ public class GrammarServiceImpl implements GrammarService {
 
 	@Transactional
 	@Override
-	public void saveScoreResult(GrammarResultSaveReqDTO grammarResultSaveReqDTO) {
-		// // 1. member_id가 유효한지 확인
-		// boolean isValidMember =
-		//
-		// // 2.
-		final long TEST_MEMBER_ID = 777;
+	public Long saveScoreResult(GrammarResultSaveReqDTO grammarResultSaveReqDTO, Long id) {
 		int score = 0;
-		Member member = memberRepository.findById(TEST_MEMBER_ID).get();
+		Member member = memberRepository.findById(id).get();
 		List<GrammarResultDTO> grammarResultList = grammarResultSaveReqDTO.getGrammarResultList();
 		for (GrammarResultDTO grammarResultDTO : grammarResultList) {
 			if(grammarResultDTO.getHit() == 1) {
@@ -83,10 +78,11 @@ public class GrammarServiceImpl implements GrammarService {
 		GrammarScore grammarScoreEntity = GrammarScore
 			.builder()
 			.score(score)
-			.member(member) // TODO: 현재 member_id가 없어서 임의로 저장.
+			.member(member)
 			.build();
 
 		 grammarScoreRepository.save(grammarScoreEntity);
+		 return grammarScoreEntity.getId();
 	}
 
 	@Transactional
