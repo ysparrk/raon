@@ -14,7 +14,8 @@ const SocialLogin = () => {
 
     getMemberActive()
       .then((response) => {
-        if (response.data.active) {
+        if (response.data.data.active) {
+          localStorage.setItem('nickname', response.data.data.nickname);
           navigate('/main');
         } else {
           navigate('/information/submit');
