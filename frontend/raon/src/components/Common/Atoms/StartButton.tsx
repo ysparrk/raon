@@ -22,7 +22,7 @@ const StartButton = ({ onClick, content, fontColor }: StartButtonProps) => {
     backgroundColor: `${fontColor}`,
     borderRadius: '1.5rem',
     border: `0.3rem solid black`,
-    boxShadow: `1px 1px 4px black`,
+    boxShadow: `0.0625rem 0.0625rem 0.25rem black`,
     padding: '0.75rem',
     cursor: 'pointer',
   };

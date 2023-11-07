@@ -13,6 +13,7 @@ const Firework = () => {
     width: 100vw;
     height: 100vh;
     z-index: 10000; // ModalOverlay보다 높은 z-index 설정
+    pointer-events: none;
   `;
 
   useEffect(() => {

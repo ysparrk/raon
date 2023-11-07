@@ -1,11 +1,16 @@
-import React, { useState, ChangeEvent } from 'react';
+import React, { useState, ChangeEvent, KeyboardEvent } from 'react';
 
-interface InputBoxProps {
+interface AnswerInputBoxProps {
   inputText: string;
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  onEnter: () => void;
 }
 
-const InputBox = ({ inputText, onChange }: InputBoxProps) => {
+const AnswerInputBox = ({
+  inputText,
+  onChange,
+  onEnter,
+}: AnswerInputBoxProps) => {
   const [isFocused, setIsFocused] = useState(false);
 
   const handleFocus = () => {
@@ -19,6 +24,12 @@ const InputBox = ({ inputText, onChange }: InputBoxProps) => {
   const handleFormSubmit = (event: React.FormEvent) => {
     event.preventDefault();
   };
+  const handleKeyPress = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      // Enter 키를 눌렀을 때 onEnter 함수 호출
+      onEnter();
+    }
+  };
 
   const formStyle = {
     width: '100%',
@@ -26,13 +37,16 @@ const InputBox = ({ inputText, onChange }: InputBoxProps) => {
 
   const inputStyle: React.CSSProperties = {
     boxSizing: 'border-box',
-    height: '3.125rem',
-    width: '31.25rem',
+    height: '5.125rem',
+    width: '10.25rem',
     padding: '0.625rem',
     borderRadius: '1rem',
     borderColor: isFocused ? '#a2d6ab' : '#c0c0c0',
     borderStyle: 'solid',
     outline: 'none',
+    fontFamily: 'ONE-Mobile-POP',
+    fontSize: '2.125rem',
+    textAlign: 'center',
   };
 
   return (
@@ -40,14 +54,15 @@ const InputBox = ({ inputText, onChange }: InputBoxProps) => {
       <input
         value={inputText}
         style={inputStyle}
-        placeholder="값을 입력해주세요"
+        placeholder="정답 입력"
         onFocus={handleFocus}
         onBlur={handleBlur}
         onChange={onChange}
+        onKeyPress={handleKeyPress}
         autoComplete="off"
       />
     </form>
   );
 };
 
-export default InputBox;
+export default AnswerInputBox;

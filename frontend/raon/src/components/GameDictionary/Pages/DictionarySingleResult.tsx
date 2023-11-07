@@ -1,15 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import SingleModeResult from '../Organisms/SingleModeResult';
 import TitleBox from '../../Common/Atoms/TitleBox';
-import InformationCategory from '../Organisms/InformationCategory.tsx';
+import ExitButton from '../../Common/Atoms/ExitButton';
 import gildong from '../../../assets/Images/gildong.png';
-
-const ImageContainer = styled.div`
-  overflow-x: hidden;
-  position: relative;
-  height: 100vh;
-  width: 100vw;
-`;
 
 const GildongImage = styled.img<{ shouldMove: boolean }>`
   width: 300px;
@@ -34,20 +28,24 @@ const GildongImageSecond = styled.img<{ shouldMove: boolean }>`
   bottom: 0;
   left: -400px;
 `;
-
-const Information = () => {
+const ContentDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`;
+function SummarizeResultPage() {
   const [shouldMoveRight, setShouldMoveRight] = useState(false);
   const [shouldMoveLeft, setShouldMoveLeft] = useState(false);
-
   useEffect(() => {
     // 오른쪽 이미지를 움직이게 하는 타이머
-    let timerRight = setTimeout(() => setShouldMoveRight(true), 1500);
+    const timerRight = setTimeout(() => setShouldMoveRight(true), 1500);
 
     // 왼쪽 이미지를 움직이게 하는 타이머
     let timerLeft: number | undefined;
 
     // 오른쪽 이미지가 돌아온 후 왼쪽 이미지를 움직이게 하는 인터벌
-    let interval = setInterval(() => {
+    const interval = setInterval(() => {
       setShouldMoveRight((prev) => {
         if (prev) {
           // 오른쪽 이미지가 움직였으면, 왼쪽 이미지 타이머를 설정
@@ -74,22 +72,19 @@ const Information = () => {
 
   return (
     <div>
-      <ImageContainer>
-        <GildongImage
-          src={gildong}
-          alt="gildong"
-          shouldMove={shouldMoveRight}
-        />
-        <GildongImageSecond
-          src={gildong}
-          alt="gildong"
-          shouldMove={shouldMoveLeft}
-        />
-        <TitleBox>정보 입력하기</TitleBox>
-        <InformationCategory />
-      </ImageContainer>
+      <GildongImage src={gildong} alt="gildong" shouldMove={shouldMoveRight} />
+      <GildongImageSecond
+        src={gildong}
+        alt="gildong"
+        shouldMove={shouldMoveLeft}
+      />
+      <TitleBox>국어사전 놀이</TitleBox>
+      <ContentDiv>
+        <SingleModeResult />
+        <ExitButton to="/main/" />
+      </ContentDiv>
     </div>
   );
-};
+}
 
-export default Information;
+export default SummarizeResultPage;

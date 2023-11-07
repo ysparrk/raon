@@ -3,9 +3,8 @@ import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import smile from '../../../assets/Images/smile.png';
 import Firework from '../../Common/Organisms/Firework.tsx';
-import StarOne from '../Atoms/StarOne.tsx';
-import StarTwo from '../Atoms/StarTwo.tsx';
-import StarThree from '../Atoms/StarThree.tsx';
+import cry from '../../../assets/Images/cry.png';
+import Tear from '../../Common/Organisms/Tear.tsx';
 
 const ModalOverlay = styled.div`
   position: fixed;
@@ -26,7 +25,7 @@ const ModalContainer = styled.div`
   background-repeat: no-repeat;
   background-position: center;
   width: 27.5rem;
-  height: 42.5rem;
+  height: 32.5rem;
   border-radius: 0.5rem;
   box-shadow: 0rem 0rem 0.9375rem rgba(0, 0, 0, 0.2);
   display: flex;
@@ -44,7 +43,7 @@ const TopSection = styled.div`
   width: 100%;
 `;
 
-const SmileImage = styled.img`
+const FaceImage = styled.img`
   max-height: 18.75rem; /* You can adjust based on your requirements */
 `;
 
@@ -73,33 +72,40 @@ const Button = styled.button`
 type Props = {
   onClose: () => void;
   answer: string;
-  difficulty: number;
+  isCorrect: boolean;
 };
 
-const SpellingRight: React.FC<Props> = ({ onClose, answer, difficulty }) => {
+const SingleModeAnswer: React.FC<Props> = ({ onClose, answer, isCorrect }) => {
   const navigate = useNavigate();
-
-  const renderStars = () => {
-    if (difficulty >= 70) {
-      return <StarOne />;
-    }
-    if (difficulty >= 50) {
-      return <StarTwo />;
-    }
-    return <StarThree />;
-  };
-
+  if (isCorrect) {
+    return (
+      <>
+        <Firework />
+        <ModalOverlay>
+          <ModalContainer>
+            <TopSection>
+              <div>맞았어요!</div>
+              <FaceImage src={smile} alt="Smile" />
+              <div>답 : {answer}</div>
+            </TopSection>
+            <ButtonGroup>
+              <Button onClick={onClose}>다음 문제</Button>
+              <Button onClick={() => navigate('/main')}>나가기</Button>
+            </ButtonGroup>
+          </ModalContainer>
+        </ModalOverlay>
+      </>
+    );
+  }
   return (
     <>
-      {' '}
-      <Firework />
+      <Tear />
       <ModalOverlay>
         <ModalContainer>
           <TopSection>
-            <div>맞았어요!</div>
-            <SmileImage src={smile} alt="Smile" />
-            <div>난이도</div>
-            {renderStars()}
+            <div>틀렸어요..</div>
+            <FaceImage src={cry} alt="Cry" />
+            <div>답 : {answer}</div>
           </TopSection>
           <ButtonGroup>
             <Button onClick={onClose}>다음 문제</Button>
@@ -111,4 +117,4 @@ const SpellingRight: React.FC<Props> = ({ onClose, answer, difficulty }) => {
   );
 };
 
-export default SpellingRight;
+export default SingleModeAnswer;
