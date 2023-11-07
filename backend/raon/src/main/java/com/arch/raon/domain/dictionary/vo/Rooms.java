@@ -13,7 +13,8 @@ import com.arch.raon.global.util.enums.GameState;
  * - 방의 삭제 추가를 관리한다.
  */
 public class Rooms {
-	private static ConcurrentMap<String, Room> rooms = new ConcurrentHashMap<>();
+	private static final int MAX_PLAYERS = 3;
+	private static final ConcurrentMap<String, Room> rooms = new ConcurrentHashMap<>();
 
 	/**
 	 * 해당 id를 가진 방이 존재하는지 확인
@@ -22,7 +23,7 @@ public class Rooms {
 	 * @return true  : 해당 id를 가진 방 존재
 	 *         false : 해당 id를 가진 방 존재 안함
 	 */
-	public static boolean isRoomAlreadyExist(String roomId){
+	public static boolean hasRoomThatIdIs(String roomId){
 		return rooms.containsKey(roomId);
 	}
 
@@ -33,7 +34,7 @@ public class Rooms {
 	 * @param roomId
 	 * @return Room that has roomId
 	 */
-	public static Room roomOf(String roomId){
+	private static Room roomOf(String roomId){
 		return rooms.get(roomId);
 	}
 
@@ -46,7 +47,7 @@ public class Rooms {
 	 *         false : 방 생성 실패
 	 */
 	public static boolean makeRoom(String roomId, String ownerNickname){
-		if(isRoomAlreadyExist(roomId)){
+		if(hasRoomThatIdIs(roomId)){
 			return false;
 		}
 		else {
@@ -64,8 +65,12 @@ public class Rooms {
 	 * 		   false : roomId를 가진 방이 존재하지 않거나 방이 존재하더라도 방에 그 유저가 없는 경우
 	 */
 	public static boolean leaveRoom(String roomId, String leaved){
-		if(isRoomAlreadyExist(roomId) && roomOf(roomId).isUserInRoom(leaved)){
+		if(hasRoomThatIdIs(roomId) && roomOf(roomId).hasUserNamed(leaved)){
 			rooms.get(roomId).leave(leaved);
+
+			if(rooms.get(roomId).getRoomSize() == 0){
+				rooms.remove(roomId);
+			}
 			return true;
 		}
 		return false;
@@ -80,13 +85,12 @@ public class Rooms {
 	 * 		-> 11/06 기준 이게 맞는 것 같다. 왜냐?
 	 * 		1번 기준 이 메소드에서 퀴즈 데이터를 받아서 보내야 하는데 여기는 boolean이다.
 	 *
-	 *
 	 * @param roomId
 	 * @param nickname
 	 * @return
 	 */
 	public static boolean gameStart(String roomId, String nickname){
-		if(isRoomAlreadyExist(roomId) && roomOf(roomId).getRoomOwner().equals(nickname)){
+		if(hasRoomThatIdIs(roomId) && roomOf(roomId).getRoomOwner().equals(nickname)){
 			roomOf(roomId).PLAY();
 
 
@@ -104,9 +108,41 @@ public class Rooms {
 	 * @return
 	 */
 	public static boolean addQuizesToRoom(String roomId, DictionaryQuizResDTO dictionaryQuizResDTO){
-		if(isRoomAlreadyExist(roomId) && roomOf(roomId).getCurrentState() == GameState.PLAY){
+		if(hasRoomThatIdIs(roomId) && roomOf(roomId).getState() == GameState.PLAY){
 			roomOf(roomId).setQuizes(dictionaryQuizResDTO);
 		}
 		return false;
+	}
+
+	/**
+	 * 해당 방에 유저가 입장한다.
+	 *
+	 * 반드시 roomId가 유효한지 체크하고 사용해야 한다.
+	 *
+	 * @param nickname
+	 * @param roomId
+	 */
+	public static void userEnterToRoom(String nickname, String roomId) {
+		roomOf(roomId).enter(nickname);
+	}
+
+	public static boolean isUserInRoom(String nickname, String roomId){
+		return roomOf(roomId).hasUserNamed(nickname);
+	}
+
+	public static boolean isRoomPlaying(String roomId){
+		return GameState.PLAY == roomOf(roomId).getState();
+	}
+
+	public static boolean isUserOwner(String roomId, String nickname){
+		return roomOf(roomId).getRoomOwner().equals(nickname);
+	}
+
+	public static String getOwnerOf(String roomId){
+		return roomOf(roomId).getRoomOwner();
+	}
+
+	public static boolean isThatRoomFull(String roomId){
+		return roomOf(roomId).isRoomFull(MAX_PLAYERS);
 	}
 }

@@ -23,7 +23,6 @@ import com.arch.raon.global.util.enums.GameState;
  */
 
 public class Room {
-	private final int MAX_PLAYER = 3;
 	private GameState state = GameState.WAITING;
 	private final ConcurrentMap<String, User> userInfo = new ConcurrentHashMap<>();
 	private ConcurrentMap<String, String> latestAnswer = new ConcurrentHashMap<>();
@@ -37,18 +36,14 @@ public class Room {
 
 
 	//========== WAITING일 때의 메소드들 =========================
-
-	public boolean isUserInRoom(String nickname){
+	public boolean hasUserNamed(String nickname){
 		return userInfo.containsKey(nickname);
 	}
 
-	public GameState getCurrentState(){
-		return state;
+	public boolean isRoomFull(int maxPlayer){
+		return userInfo.size() >= maxPlayer;
 	}
-
-	public boolean isFull(){
-		return userInfo.size() >= MAX_PLAYER;
-	}
+	public int getRoomSize(){return userInfo.size();}
 
 	public List<String> getUsers(){
 		List<String> users = new ArrayList<>();
