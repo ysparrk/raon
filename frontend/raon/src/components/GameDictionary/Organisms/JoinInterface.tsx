@@ -5,6 +5,8 @@ import JoinButton from '../Atoms/JoinButton';
 import JoinInputBox from '../Atoms/JoinInputBox';
 import { Client } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
+import { v4 as uuidv4 } from 'uuid';
+import { postRoomId } from '../../../api/GameRoomCreateApi';
 
 const InterfaceDiv = styled.div`
   display: flex;
@@ -67,10 +69,37 @@ const callbackJoinList: (message: any) => void = (message: any) => {
 };
 
 
+
 function JoinInterface() {
   const [isJoin, setIsJoin] = useState(false);
   const [inputBoxValue, setInputBoxValue] = useState('');
   const navigate = useNavigate();
+  
+  const handleJoinClick = async (nickname: string) => {
+    try {
+      const roomId = uuidv4();
+      console.log(nickname, roomId)
+      let response = await postRoomId(nickname, roomId)
+      console.log(nickname, roomId)
+      if(response){
+        console.log("handle 들어옴")
+        console.log(response.data.data.roomIdExist)
+        const roomIdExist = response.data.data.roomIdExist
+        
+        if (roomIdExist) {
+          alert("방 아이디 중복")
+        } else {
+          // 방 아이디 만들어지면 이동 및 세션에 roomId 저장
+          sessionStorage.setItem('roomId', roomId);
+          navigate('/game/dictionary-quiz')
+        }
+        
+      }
+  
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   const handleInputChange = (value: string) => {
     setInputBoxValue(value);
@@ -81,7 +110,13 @@ function JoinInterface() {
         <JoinButton
           optionText="방만들기"
           buttoncolor="gainsboro"
-          onClick={() => navigate('/game/dictionary-quiz')}
+          onClick={ () => 
+            // 1. uuid로 roomId를 만든다.
+            // 2. uuid, nickname -> post
+            // 3. uuid ㅇㅋ -> sessionStorage roomId저장
+            // 4. navigate
+            handleJoinClick('고재원')
+          }
         />
         <JoinButton
           optionText="참여하기"
