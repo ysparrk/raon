@@ -35,8 +35,10 @@ public class GrammarController {
 	}
 
 	@PostMapping("/result")
-	public ResponseEntity<ResponseDTO> saveResult(@RequestBody GrammarResultSaveReqDTO grammarResultSaveReqDTO){
-		grammarService.saveScoreResult(grammarResultSaveReqDTO); // 해당 판의 점수를 저장(0~10)
+	public ResponseEntity<ResponseDTO> saveResult(
+			@AuthenticationPrincipal UserAuthentication userAuth,
+			@RequestBody GrammarResultSaveReqDTO grammarResultSaveReqDTO){
+		grammarService.saveScoreResult(grammarResultSaveReqDTO, userAuth.getId()); // 해당 판의 점수를 저장(0~10)
 		grammarService.updateStatistics(grammarResultSaveReqDTO); // 문제의 정답률을 업데이트
 
 		return ResponseEntity.status(HttpStatus.OK)

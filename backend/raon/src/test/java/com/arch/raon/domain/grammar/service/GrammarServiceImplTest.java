@@ -253,48 +253,49 @@ class GrammarServiceImplTest {
 		assertThat(10).isEqualTo(expectQuizzes.size());
 	}
 
-//	@Test
-//	@Transactional
-//	void saveScoreResult() {
-//		// given -> 한 문제를 맞혔다고 가정
-//		List<GrammarResultDTO> grammarResultList = new ArrayList<>();
-//		GrammarResultDTO grammarResultDTO = GrammarResultDTO.builder()
-//				.id(1L)
-//				.hit(1).build();
-//		grammarResultList.add(grammarResultDTO);
-//		GrammarResultSaveReqDTO grammarResultSaveReqDTO = GrammarResultSaveReqDTO.builder()
-//				.grammarResultList(grammarResultList).build();
-//
-//		// when
-//		grammarService.saveScoreResult(grammarResultSaveReqDTO);
-//
-//		// then -> 맞힌 횟수가 증가 했는지
-//		Member member = memberRepository.findById(777L).get();
-//		GrammarScore scoreResult = grammarScoreRepository.findByMember(member);
-//		assertThat(scoreResult.getScore()).isEqualTo(1);
-//	}
+	@Test
+	@Transactional
+	void saveScoreResult() {
+		// given -> id가 1인 문제를 맞혔다고 가정 (1점)
+		List<GrammarResultDTO> grammarResultList = new ArrayList<>();
+		GrammarResultDTO grammarResultDTO = GrammarResultDTO.builder()
+				.id(1L)
+				.hit(1).build();
+		grammarResultList.add(grammarResultDTO);
+		GrammarResultSaveReqDTO grammarResultSaveReqDTO = GrammarResultSaveReqDTO.builder()
+				.grammarResultList(grammarResultList).build();
 
-//	@Test
-//	@Transactional
-//	void updateStatistics() {
-//		// given -> 1번 문제를 맞혔다고 가정
-//		List<GrammarResultDTO> grammarResultList = new ArrayList<>();
-//		GrammarResultDTO grammarResultDTO = GrammarResultDTO.builder()
-//				.id(1L)
-//				.hit(1).build();
-//		grammarResultList.add(grammarResultDTO);
-//		GrammarResultSaveReqDTO grammarResultSaveReqDTO = GrammarResultSaveReqDTO.builder()
-//				.grammarResultList(grammarResultList).build();
-//
-//		// when
-//		GrammarQuiz grammarQuiz = grammarQuizRepository.findById(1L).get();
-//		int originalHit = grammarQuiz.getHit();
-//		grammarService.updateStatistics(grammarResultSaveReqDTO);
-//		int updatedHit = grammarQuiz.getHit();
-//
-//		// then -> 맞힌 횟수가 증가 했는지
-//		assertThat(originalHit + 1).isEqualTo(updatedHit);
-//	}
+		Member member = memberRepository.findByNickname("하재우").get();
+
+		// when
+		Long scoreId = grammarService.saveScoreResult(grammarResultSaveReqDTO, member.getId());
+
+		// then -> 결과가 잘 저장 됐는지?
+		GrammarScore scoreResult = grammarScoreRepository.findById(scoreId).get();
+		assertThat(scoreResult.getScore()).isEqualTo(1);
+	}
+
+	@Test
+	@Transactional
+	void updateStatistics() {
+		// given -> 1번 문제를 맞혔다고 가정
+		List<GrammarResultDTO> grammarResultList = new ArrayList<>();
+		GrammarResultDTO grammarResultDTO = GrammarResultDTO.builder()
+				.id(1L)
+				.hit(1).build();
+		grammarResultList.add(grammarResultDTO);
+		GrammarResultSaveReqDTO grammarResultSaveReqDTO = GrammarResultSaveReqDTO.builder()
+				.grammarResultList(grammarResultList).build();
+
+		// when
+		GrammarQuiz grammarQuiz = grammarQuizRepository.findById(1L).get();
+		int originalHit = grammarQuiz.getHit();
+		grammarService.updateStatistics(grammarResultSaveReqDTO);
+		int updatedHit = grammarQuiz.getHit();
+
+		// then -> 맞힌 횟수가 증가 했는지
+		assertThat(originalHit + 1).isEqualTo(updatedHit);
+	}
 
 
 	@DisplayName("내가 중간 순위 일 때")
