@@ -17,4 +17,13 @@ public class SocketLeaveResDTO implements Serializable {
 		this.nextOwner = nextOwner;
 		this.message = message;
 	}
+
+	@Override
+	public String toString() {
+		return "SocketLeaveResDTO{" +
+			"leaved='" + leaved + '\'' +
+			", nextOwner='" + nextOwner + '\'' +
+			", message='" + message + '\'' +
+			'}';
+	}
 }
