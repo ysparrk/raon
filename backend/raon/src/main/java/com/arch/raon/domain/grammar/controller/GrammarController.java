@@ -49,10 +49,10 @@ public class GrammarController {
 
 	@GetMapping("/ranking/{grammarRanking}")
 	public ResponseEntity<ResponseDTO> getMyRank(
-			@AuthenticationPrincipal Long memberId,
+			@AuthenticationPrincipal UserAuthentication userAuth,
 			@PathVariable GrammarRanking grammarRanking
 			) {
-		GrammarMyRankingResDTO myRank = grammarService.getMyRank(memberId, grammarRanking);
+		GrammarMyRankingResDTO myRank = grammarService.getMyRank(userAuth.getId(), grammarRanking);
 
 		if (grammarRanking.equals(GrammarRanking.GRAMMAR_COUNTRY_MY)) {
 			return ResponseEntity.status(HttpStatus.OK)
