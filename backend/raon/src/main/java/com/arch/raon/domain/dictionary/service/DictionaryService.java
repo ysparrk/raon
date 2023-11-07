@@ -5,6 +5,6 @@ import com.arch.raon.domain.dictionary.dto.response.DictionaryQuizResDTO;
 
 public interface DictionaryService {
     DictionaryQuizResDTO getDictionaryQuizzes();
-    void saveDictionaryQuizResult(DictionaryScoreReqDTO dictionaryScoreReqDTO);
+    void saveDictionaryQuizResult(Long memberId, DictionaryScoreReqDTO dictionaryScoreReqDTO);
 
 }
