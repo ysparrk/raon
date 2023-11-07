@@ -9,6 +9,7 @@ public class SocketLeaveResDTO implements Serializable {
 	private String message;
 
 	public SocketLeaveResDTO() {
+		super();
 	}
 
 
@@ -25,5 +26,29 @@ public class SocketLeaveResDTO implements Serializable {
 			", nextOwner='" + nextOwner + '\'' +
 			", message='" + message + '\'' +
 			'}';
+	}
+
+	public String getLeaved() {
+		return leaved;
+	}
+
+	public void setLeaved(String leaved) {
+		this.leaved = leaved;
+	}
+
+	public String getNextOwner() {
+		return nextOwner;
+	}
+
+	public void setNextOwner(String nextOwner) {
+		this.nextOwner = nextOwner;
+	}
+
+	public String getMessage() {
+		return message;
+	}
+
+	public void setMessage(String message) {
+		this.message = message;
 	}
 }
