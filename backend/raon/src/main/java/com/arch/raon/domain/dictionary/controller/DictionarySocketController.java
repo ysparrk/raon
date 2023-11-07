@@ -6,6 +6,7 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import com.arch.raon.domain.dictionary.dto.request.SocketReqDTO;
 import com.arch.raon.domain.dictionary.dto.response.DictionaryQuizResDTO;
@@ -14,6 +15,7 @@ import com.arch.raon.domain.dictionary.dto.response.SocketLeaveResDTO;
 import com.arch.raon.domain.dictionary.dto.response.SocketResponseDTO;
 import com.arch.raon.domain.dictionary.service.DictionarySocketService;
 import com.arch.raon.domain.dictionary.vo.Rooms;
+
 import com.arch.raon.global.dto.ResponseDTO;
 import com.arch.raon.global.util.enums.RoomResult;
 
@@ -39,7 +41,7 @@ public class DictionarySocketController {
 	 * @param reqDTO
 	 * @return
 	 */
-	@GetMapping("/dictionary-quiz/check-room")
+	@PostMapping("/dictionary-quiz/check-room")
 	public ResponseEntity<ResponseDTO> ckeckRoomIdValid(SocketReqDTO reqDTO) {
 		DictionaryRoomResDTO roomResDTO = new DictionaryRoomResDTO(Rooms.hasRoomThatIdIs(reqDTO.getRoomId()));
 		return ResponseEntity.status(HttpStatus.OK)
@@ -98,7 +100,8 @@ public class DictionarySocketController {
 
 	@MessageMapping("/dictionary-quiz/game-start")
 	public void startGame(SocketReqDTO reqDTO){
-		System.out.println("==== 게임 시작 요청 : "+ reqDTO);
+		System.out.println("[GAME-START] 게임 시작 요청!!!! 요청자: " + reqDTO.getNickname() +" 방 아이디: "+ reqDTO.getRoomId());
+
 
 		RoomResult result = dictionarySocketService.startGame(reqDTO.getRoomId(), reqDTO.getNickname());
 
