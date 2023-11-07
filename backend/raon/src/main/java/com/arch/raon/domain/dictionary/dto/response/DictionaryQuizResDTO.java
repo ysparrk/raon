@@ -12,14 +12,17 @@ public class DictionaryQuizResDTO {
     private List<DictionaryInitialQuiz> initialQuizList;
     private List<DictionaryDirectionQuiz> directionQuizList;
 
+    private String message;
+
     public DictionaryQuizResDTO(){
         super();
     }
 
     @Builder
-    public DictionaryQuizResDTO(List<DictionaryInitialQuiz> initialQuizList, List<DictionaryDirectionQuiz> directionQuizList) {
+    public DictionaryQuizResDTO(List<DictionaryInitialQuiz> initialQuizList, List<DictionaryDirectionQuiz> directionQuizList, String message) {
         this.initialQuizList = initialQuizList;
         this.directionQuizList = directionQuizList;
+        this.message = message;
     }
 
     @Override

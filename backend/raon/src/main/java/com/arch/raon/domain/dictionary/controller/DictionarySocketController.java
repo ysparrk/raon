@@ -71,7 +71,7 @@ public class DictionarySocketController {
 
 		switch (result){
 			case CREATE_SUCCESS:
-				SocketResponseDTO message = new SocketResponseDTO(reqDTO.getNickname(), reqDTO.getRoomId(), "방 생성 성공", true);
+				SocketResponseDTO message = new SocketResponseDTO(reqDTO.getNickname(), reqDTO.getRoomId(), "enter", Rooms.isUserOwner(reqDTO.getRoomId(), reqDTO.getNickname()));
 				sendToRoom(reqDTO.getRoomId(), message);
 				break;
 
@@ -95,14 +95,12 @@ public class DictionarySocketController {
 		dictionarySocketService.leaveRoom(reqDTO.getNickname(), reqDTO.getRoomId());
 		String nextOwner = Rooms.getOwnerOf(reqDTO.getRoomId());
 
-		sendToRoom(reqDTO.getRoomId(), new SocketLeaveResDTO(reqDTO.getNickname(), nextOwner));
+		sendToRoom(reqDTO.getRoomId(), new SocketLeaveResDTO(reqDTO.getNickname(), nextOwner, "leave"));
 	}
 
 	@MessageMapping("/dictionary-quiz/game-start")
 	public void startGame(SocketReqDTO reqDTO){
 		System.out.println("[GAME-START] 게임 시작 요청!!!! 요청자: " + reqDTO.getNickname() +" 방 아이디: "+ reqDTO.getRoomId());
-
-
 		RoomResult result = dictionarySocketService.startGame(reqDTO.getRoomId(), reqDTO.getNickname());
 
 		switch(result){
@@ -123,18 +121,9 @@ public class DictionarySocketController {
 
 
 	// 특정 방에 있는 "모든 인원"에게 데이터를 보낼 때 (방 입장, 방 나가기, 문제 결과 전송 등)
-	private void sendToRoom(String roomId, Object message) {
-		System.out.println("==== 요청 성공 : "+ roomId +" 메세지(주소값만 뜰 수 있음) : " + message);
+	private void sendToRoom(String roomId, Object data) {
+		System.out.println("==== 요청 성공 : "+ roomId +" 메세지(주소값만 뜰 수 있음) : " + data);
 		// roomId를 포함한 토픽 주소로 메시지 전송
-		messagingTemplate.convertAndSend("/topic/dictionary-quiz/room/"+roomId, message);
+		messagingTemplate.convertAndSend("/topic/dictionary-quiz/room/"+roomId, data);
 	}
-
-	// 에러 전송용으로 사용 할 것.
-	private void sendResult(String nickname, Object message){
-		System.out.println("==== 방 입장 성공, 방에 있는 애들 : "+ nickname +" 메세지(주소값만 뜰 수 있음) : " + message);
-		messagingTemplate.convertAndSend("/topic/result/"+nickname, message);
-	}
-
-
-
 }

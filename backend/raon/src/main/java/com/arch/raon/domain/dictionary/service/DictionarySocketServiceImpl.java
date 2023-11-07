@@ -86,7 +86,7 @@ public class DictionarySocketServiceImpl implements DictionarySocketService{
 	public DictionaryQuizResDTO getQuizes() {
 		List<DictionaryDirectionQuiz> directionQuizes = dictionaryDirectionQuizRepository.random3();
 		List<DictionaryInitialQuiz> initialQuizes = dictionaryInitialQuizRepository.random7();
-		return new DictionaryQuizResDTO(initialQuizes, directionQuizes);
+		return new DictionaryQuizResDTO(initialQuizes, directionQuizes, "gameStart");
 	}
 
 	@Override
