@@ -8,18 +8,21 @@ import java.io.Serializable;
 @Getter
 public class CheckActiveResDTO implements Serializable {
     private Boolean active;
+    private String nickname;
 
     public CheckActiveResDTO() { super(); }
 
     @Builder
-    public CheckActiveResDTO(Boolean active) {
+    public CheckActiveResDTO(Boolean active, String nickname) {
         this.active = active;
+        this.nickname = nickname;
     }
 
     @Override
     public String toString() {
         return "CheckActiveResDTO{" +
-                "isActive=" + active +
+                "active=" + active +
+                ", nickname='" + nickname + '\'' +
                 '}';
     }
 }
