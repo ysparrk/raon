@@ -76,14 +76,13 @@ function WaitInterface() {
     onConnect: () => {
       // 구독 시작
       // 서버로 메시지 보내기
-      if (roomId === '0000') {
-        const roomId = '4444';  // 테스트용
+      if (roomId == '0000') {
+        alert("구독한 방 아이디가 없습니다.")
+      } else {
         stompClient.subscribe(`/topic/dictionary-quiz/room/${roomId}`, callback);
-        stompClient.publish({ destination: '/dictionary-quiz/create-room', body: JSON.stringify({nickname, roomId}) });
-        sessionStorage.setItem('roomId', roomId);  // 세션에 roomId 저장
+        stompClient.publish({ destination: '/dictionary-quiz/connect-room', body: JSON.stringify({nickname, roomId}) });
+        console.log('Connected to the WebSocket server');
       }
-      // stompClient.subscribe(`/topic/result/${nickname}`, callbackJoinList);
-      console.log('Connected to the WebSocket server');
       
     },
     reconnectDelay: 5000, //자동 재 연결
@@ -100,15 +99,6 @@ function WaitInterface() {
       console.log(body);
     }
   };
-
-
-  // const callbackJoinList: (message: any) => void = (message: any) => {
-  //   console.log("참여 리스트 받기")
-  //   if (message.body) {
-  //     const body: any = JSON.parse(message.body);
-  //     console.log(body);
-  //   }
-  // };
 
 
   // 방을 나가는 사용자 닉네임, roomId 보내기

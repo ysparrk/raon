@@ -74,7 +74,7 @@ function JoinInterface() {
   const [isJoin, setIsJoin] = useState(false);
   const [inputBoxValue, setInputBoxValue] = useState('');
   const navigate = useNavigate();
-  const roomId = '3333';
+  const roomId = '4444';
   // const roomId = uuidv4();
   
   const handleCreateClick = async (nickname: string, roomId: string) => {
