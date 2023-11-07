@@ -5,6 +5,5 @@ import com.arch.raon.domain.member.entity.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface GrammarScoreRepository extends JpaRepository<GrammarScore, Long>, CustomGrammarRepository{
-    GrammarScore findByMember(Member member);
 
 }
