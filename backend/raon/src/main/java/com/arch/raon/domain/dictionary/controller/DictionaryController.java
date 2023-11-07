@@ -3,10 +3,12 @@ package com.arch.raon.domain.dictionary.controller;
 import com.arch.raon.domain.dictionary.dto.request.DictionaryScoreReqDTO;
 import com.arch.raon.domain.dictionary.dto.response.DictionaryQuizResDTO;
 import com.arch.raon.domain.dictionary.service.DictionaryService;
+import com.arch.raon.global.auth.dto.UserAuthentication;
 import com.arch.raon.global.dto.ResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("/dictionary")
@@ -18,7 +20,6 @@ public class DictionaryController {
 
     @GetMapping("/quiz")
     public ResponseEntity<ResponseDTO> getQuizzes(
-//            @AuthenticationPrincipal Long memberId
     ){
         DictionaryQuizResDTO dictionaryQuizzes = dictionaryService.getDictionaryQuizzes();
 
@@ -31,9 +32,10 @@ public class DictionaryController {
 
     @PostMapping("/single-result")
     public ResponseEntity<ResponseDTO> saveResult(
+            @AuthenticationPrincipal UserAuthentication userAuth,
             @RequestBody DictionaryScoreReqDTO dictionaryScoreReqDTO
             ) {
-        dictionaryService.saveDictionaryQuizResult(dictionaryScoreReqDTO);
+        dictionaryService.saveDictionaryQuizResult(userAuth.getId(), dictionaryScoreReqDTO);
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ResponseDTO.builder()
