@@ -71,6 +71,7 @@ public class DictionarySocketController {
 		RoomResult result = dictionarySocketService.connectRoom(reqDTO.getNickname(), reqDTO.getRoomId());
 
 		switch (result){
+			case JOIN_SUCCESS:
 			case CREATE_SUCCESS:
 				SocketResponseDTO message = new SocketResponseDTO(reqDTO.getNickname(), reqDTO.getRoomId(), "enter", Rooms.isUserOwner(reqDTO.getRoomId(), reqDTO.getNickname()));
 				sendToRoom(reqDTO.getRoomId(), message);
