@@ -1,6 +1,7 @@
 package com.arch.raon.domain.member.service;
 
 import com.arch.raon.domain.member.dto.request.MemberSignupReqDTO;
+import com.arch.raon.domain.member.dto.response.CheckActiveResDTO;
 import com.arch.raon.domain.member.entity.Member;
 import com.arch.raon.domain.member.repository.MemberRepository;
 import com.arch.raon.global.auth.dto.AuthUserInfo;
@@ -14,6 +15,7 @@ import java.util.Arrays;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class MemberServiceImpl implements MemberService{
 
     private final MemberRepository memberRepository;
@@ -35,7 +37,7 @@ public class MemberServiceImpl implements MemberService{
                     .yearOfBirth(0)
                     .mileage(0)
                     .isDeleted(false)
-                    .isActive(false)
+                    .isActive(Boolean.FALSE)
                     .build();
             memberRepository.save(member);
         }
@@ -47,5 +49,14 @@ public class MemberServiceImpl implements MemberService{
     public void signup(Long id, MemberSignupReqDTO memberSignupReqDTO) {
         Member member = memberRepository.findById(id).orElseThrow();
         member.signup(memberSignupReqDTO);
+    }
+
+    @Override
+    public CheckActiveResDTO checkActive(Long id) {
+        Member member = memberRepository.findById(id).orElseThrow();
+
+        return CheckActiveResDTO.builder()
+                .active(member.getIsActive())
+                .build();
     }
 }

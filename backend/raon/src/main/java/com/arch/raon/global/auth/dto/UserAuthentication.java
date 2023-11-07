@@ -4,9 +4,9 @@ import lombok.Getter;
 
 @Getter
 public class UserAuthentication {
-    private String id;
+    private Long id;
 
-    public UserAuthentication(String id){
+    public UserAuthentication(Long id){
         this.id = id;
     }
 }
