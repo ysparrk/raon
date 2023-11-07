@@ -6,15 +6,15 @@ public class SocketLeaveResDTO implements Serializable {
 	private String leaved;
 	private String nextOwner = "none";
 
+	private String message;
+
 	public SocketLeaveResDTO() {
 	}
 
-	public SocketLeaveResDTO(String leaved) {
-		this.leaved = leaved;
-	}
 
-	public SocketLeaveResDTO(String leaved, String nextOwner) {
+	public SocketLeaveResDTO(String leaved, String nextOwner, String message) {
 		this.leaved = leaved;
 		this.nextOwner = nextOwner;
+		this.message = message;
 	}
 }
