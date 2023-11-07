@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import InputBox from '../../Common/Atoms/InputBox.tsx';
+import ComboBox from '../../Common/Atoms/ComboBox.tsx';
+import { postMemberSignup } from '../../../api/MemberApi.tsx';
 
 const Container = styled.div`
   display: flex;
@@ -49,13 +51,22 @@ const InformationCategory = () => {
   const [gender, setGender] = useState('');
   const [school, setSchool] = useState('');
 
-  // API 완성되면 console로 띄우는게 아니라 Post로 보내줄 것.
-  const handleSubmit = () => {
-    console.log('닉네임:', nickname);
-    console.log('생일:', birthday);
-    console.log('성별:', gender);
-    console.log('학교:', school);
-    navigate('/main');
+  const genderOptions = ['MALE', 'FEMALE'];
+
+  const handleSubmit = async () => {
+    const memberData = {
+      nickname: nickname,
+      school: school,
+      yearOfBirth: Number(birthday),
+      gender: gender,
+    };
+    try {
+      const response = await postMemberSignup(memberData);
+      console.log('회원가입 성공:', response);
+      navigate('/main');
+    } catch (error) {
+      console.error('회원가입 실패:', error);
+    }
   };
 
   return (
@@ -76,9 +87,10 @@ const InformationCategory = () => {
       </Content>
       <Content>
         <Label>성별 :</Label>
-        <InputBox
-          inputText={gender}
+        <ComboBox
+          selectedOption={gender}
           onChange={(e) => setGender(e.target.value)}
+          options={genderOptions}
         />
       </Content>
       <Content>
