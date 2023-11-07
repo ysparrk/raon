@@ -99,10 +99,17 @@ public class DictionarySocketController {
 	public void userLeaveRoom(SocketReqDTO reqDTO){
 		System.out.println("[LEAVE-ROOM] 방 나가기 요청!!!! 요청자: " + reqDTO.getNickname() +" 방 아이디: "+ reqDTO.getRoomId());
 
-		dictionarySocketService.leaveRoom(reqDTO.getNickname(), reqDTO.getRoomId());
-		String nextOwner = Rooms.getOwnerOf(reqDTO.getRoomId());
+		RoomResult result = dictionarySocketService.leaveRoom(reqDTO.getNickname(), reqDTO.getRoomId());
 
-		sendToRoom(reqDTO.getRoomId(), new SocketLeaveResDTO(reqDTO.getNickname(), nextOwner, "leave"));
+		switch(result) {
+			case LEAVE_SUCCESS:
+				String nextOwner = Rooms.getOwnerOf(reqDTO.getRoomId());
+				sendToRoom(reqDTO.getRoomId(), new SocketLeaveResDTO(reqDTO.getNickname(), nextOwner, "leave"));
+				break;
+			case LEAVE_FAIL_NONEXIST:
+				System.out.println("ERROR");
+				break;
+		}
 	}
 
 	@MessageMapping("/dictionary-quiz/game-start")
