@@ -128,8 +128,7 @@ function LandingPage() {
           <StyledCaption>'즐거운'이라는 순 우리말</StyledCaption>
           <StyledStart
             onClick={() => {
-              window.location.href =
-                'https://arch-raon.com/api/oauth2/authorization/kakao?redirect_uri=https://arch-raon.com/api/main';
+              window.location.href = `${process.env.REACT_APP_OAUTH_URL}`;
             }}
           >
             시작하기
