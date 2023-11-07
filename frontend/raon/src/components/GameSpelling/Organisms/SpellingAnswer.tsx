@@ -1,7 +1,12 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { useRecoilValue } from 'recoil';
-import { submitState, answerState } from '../../../recoil/Atoms.tsx';
+import { postSpellingResult } from '../../../api/GameSpellingApi.tsx';
+import {
+  submitState,
+  answerState,
+  spellingIdState,
+} from '../../../recoil/Atoms.tsx';
 import ExitButton from '../../Common/Atoms/ExitButton.tsx';
 
 const Container = styled.div`
@@ -49,6 +54,7 @@ const CorrectAnswer = styled.span`
 const SpellingAnswer = () => {
   const userAnswers = useRecoilValue(submitState);
   const correctAnswers = useRecoilValue(answerState);
+  const spellingId = useRecoilValue(spellingIdState);
 
   const leftAnswers = userAnswers.slice(0, 5);
   const rightAnswers = userAnswers.slice(5, 10);
@@ -56,6 +62,26 @@ const SpellingAnswer = () => {
   const score = userAnswers.reduce((acc, answer, index) => {
     return answer === correctAnswers[index] ? acc + 1 : acc;
   }, 0);
+
+  const resultsData = spellingId.map((id, index) => ({
+    id,
+    hit: userAnswers[index] === correctAnswers[index] ? 1 : 0,
+  }));
+
+  useEffect(() => {
+    const sendResults = async () => {
+      try {
+        const response = await postSpellingResult({
+          grammarResultList: resultsData,
+        });
+        console.log('결과를 성공적으로 보냈습니다.', response);
+      } catch (error) {
+        console.error('결과 전송에 실패했습니다.', error);
+      }
+    };
+
+    sendResults();
+  }, []);
 
   return (
     <Container>
