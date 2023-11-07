@@ -9,12 +9,19 @@ import java.util.List;
  *
  */
 public class SocketJoinResDTO implements Serializable {
+
+	private String message;
 	private String newComer; // 방금 들어온 녀석, 새로운 사람 입장 시 알림 용도로 넣음
 	private String owner; // 현재 방장
 	private List<String> users; // 방에 있는 사람들(방금 들어온 녀석 포함)
 
 	public SocketJoinResDTO(){
 		super();
+	}
+
+	public SocketJoinResDTO(String owner, List<String> users) {
+		this.owner = owner;
+		this.users = users;
 	}
 
 	public SocketJoinResDTO(String newComer, String owner, List<String> users) {
@@ -60,5 +67,13 @@ public class SocketJoinResDTO implements Serializable {
 
 	public void setUsers(List<String> users) {
 		this.users = users;
+	}
+
+	public String getMessage() {
+		return message;
+	}
+
+	public void setMessage(String message) {
+		this.message = message;
 	}
 }
