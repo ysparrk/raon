@@ -3,7 +3,11 @@ import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
 import { getSpellingList } from '../../../api/GameSpellingApi.tsx';
-import { submitState, answerState } from '../../../recoil/Atoms.tsx';
+import {
+  submitState,
+  answerState,
+  spellingIdState,
+} from '../../../recoil/Atoms.tsx';
 import SpellingRight from './SpellingRight.tsx';
 import SpellingWrong from './SpellingWrong.tsx';
 
@@ -49,6 +53,7 @@ type Quiz = {
   option_two: string;
   answer: string;
   answer_percent: number;
+  id: number;
 };
 
 const SpellingProblem = () => {
@@ -61,7 +66,7 @@ const SpellingProblem = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const setSubmitList = useSetRecoilState(submitState);
   const setAnswerList = useSetRecoilState(answerState);
-  const startTime = useRef(Date.now());
+  const setSpellingIdList = useSetRecoilState(spellingIdState);
 
   const handleOptionClick = (option: string) => {
     setSubmitList((prevList: string[]) => [...prevList, option]);
@@ -84,11 +89,12 @@ const SpellingProblem = () => {
     }
   };
 
+  console.log(quizList);
+
   useEffect(() => {
     const fetchQuizList = async () => {
       try {
         const response = await getSpellingList();
-        console.log(response.data.data);
         if (response && response.data && Array.isArray(response.data.data)) {
           setQuizList(response.data.data);
         }
@@ -97,13 +103,14 @@ const SpellingProblem = () => {
       }
     };
 
-    startTime.current = Date.now();
     fetchQuizList();
   }, []);
 
   useEffect(() => {
     const correctAnswers = quizList.map((quiz) => quiz.answer);
+    const spellingId = quizList.map((quiz) => quiz.id);
     setAnswerList(correctAnswers);
+    setSpellingIdList(spellingId);
     setSubmitList([]);
   }, [quizList]);
 

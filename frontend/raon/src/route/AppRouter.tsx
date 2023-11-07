@@ -8,6 +8,7 @@ import Main from '../components/Interface/Pages/Main.tsx';
 // // User
 // import Login from '../components/User/Pages/Login.tsx';
 import Information from '../components/User/Pages/Information.tsx';
+import SocialLogin from '../components/User/Pages/SocialLogin.tsx';
 
 // // GameSpelling
 import SpellingQuiz from '../components/GameSpelling/Pages/SpellingQuiz.tsx';
@@ -38,6 +39,7 @@ const AppRouter: React.FC = () => {
         <Route path="/" element={<Landing />} />
         <Route path="/main" element={<Main />} />
         <Route path="/information/submit" element={<Information />} />
+        <Route path="/social" element={<SocialLogin />} />
         <Route
           path="/game/summarize-category"
           element={<SummarizeCategory />}
@@ -51,7 +53,10 @@ const AppRouter: React.FC = () => {
         <Route path="/game/dictionary-join" element={<DictionaryJoin />} />
         <Route path="/game/dictionary-quiz" element={<DictionaryQuiz />} />
         <Route path="/game/dictionary-game" element={<DictionaryGame />} />
-        <Route path="/game/dictionary-game/waiting-room" element={<DictionaryWaitingRoom />} />
+        <Route
+          path="/game/dictionary-game/waiting-room"
+          element={<DictionaryWaitingRoom />}
+        />
         {/* <Route path="/user/" element={<Foundation />} /> */}
       </Routes>
     </BrowserRouter>
