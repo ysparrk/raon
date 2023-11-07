@@ -252,7 +252,7 @@ public class GrammarServiceImpl implements GrammarService {
 			}
 		});
 
-		
+		// TODO: 순위 리스트 조회 시 리스트의 크기가 6 미만일 경우 예외처리
 		if (grammarRanking.equals(GrammarRanking.GRAMMAR_COUNTRY_MY)) {
 
 			List<GrammarMyRankQueryDTO> allByCountry = grammarScoreRepository.findAllByCountry();

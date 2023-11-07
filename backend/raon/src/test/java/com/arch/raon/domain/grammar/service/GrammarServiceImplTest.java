@@ -1,11 +1,5 @@
 package com.arch.raon.domain.grammar.service;
 
-import static org.assertj.core.api.Assertions.*;
-
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-
 import com.arch.raon.domain.grammar.dto.query.GrammarMyRankQueryDTO;
 import com.arch.raon.domain.grammar.dto.request.GrammarResultDTO;
 import com.arch.raon.domain.grammar.dto.request.GrammarResultSaveReqDTO;
@@ -13,8 +7,12 @@ import com.arch.raon.domain.grammar.dto.response.GrammarMyRankingResDTO;
 import com.arch.raon.domain.grammar.dto.response.GrammarQuizResDTO;
 import com.arch.raon.domain.grammar.entity.GrammarQuiz;
 import com.arch.raon.domain.grammar.entity.GrammarScore;
+import com.arch.raon.domain.grammar.repository.GrammarQuizRepository;
+import com.arch.raon.domain.grammar.repository.GrammarScoreRepository;
 import com.arch.raon.domain.member.entity.Member;
 import com.arch.raon.domain.member.repository.MemberRepository;
+import com.arch.raon.global.exception.CustomException;
+import com.arch.raon.global.exception.ErrorCode;
 import com.arch.raon.global.util.enums.Gender;
 import com.arch.raon.global.util.enums.GrammarRanking;
 import com.arch.raon.global.util.enums.School;
@@ -23,10 +21,13 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import com.arch.raon.domain.grammar.repository.GrammarQuizRepository;
-import com.arch.raon.domain.grammar.repository.GrammarScoreRepository;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 class GrammarServiceImplTest {
@@ -188,7 +189,7 @@ class GrammarServiceImplTest {
 				.nickname("ko서영")
 				.profileUrl("https://")
 				.gender(Gender.FEMALE)
-				.school(School.YOUNGSEO)
+				.school(School.ARCH)
 				.yearOfBirth(2017)
 				.mileage(0)
 				.createdAt(LocalDateTime.now())
@@ -304,12 +305,13 @@ class GrammarServiceImplTest {
     void getMiddlePlaceRankResult() {
 		// given
 		List<GrammarMyRankQueryDTO> allByCountry = grammarScoreRepository.findAllByCountry();
+		String middlePlaceMemberNickname = allByCountry.get(6).getNickname();
 
 		// when
 		List<GrammarMyRankQueryDTO> expectResult = grammarService.getMiddlePlaceRankResult(6, allByCountry);
 
 		// then
-		assertThat("히진상").isEqualTo(expectResult.get(4).getNickname());
+		assertThat(middlePlaceMemberNickname).isEqualTo(expectResult.get(4).getNickname());
     }
 
 	@DisplayName("내가 상위 순위 일 때")
@@ -318,12 +320,13 @@ class GrammarServiceImplTest {
 	void getTopPlaceRankResult() {
 		// given
 		List<GrammarMyRankQueryDTO> allByCountry = grammarScoreRepository.findAllByCountry();
+		String topPlaceMemberNickname = allByCountry.get(3).getNickname();
 
 		// when
 		List<GrammarMyRankQueryDTO> expectResult = grammarService.getTopPlaceRankResult(allByCountry);
 
 		// then
-		assertThat("고재원고").isEqualTo(expectResult.get(3).getNickname());
+		assertThat(topPlaceMemberNickname).isEqualTo(expectResult.get(3).getNickname());
 	}
 
 	@DisplayName("내가 최하위 순위 일 때")
@@ -346,15 +349,39 @@ class GrammarServiceImplTest {
 	void getMyCountryRank() {
 		// given
 		List<GrammarMyRankQueryDTO> allByCountry = grammarScoreRepository.findAllByCountry();
+		String topPlaceMemberNickname = allByCountry.get(3).getNickname();
+		String middlePlaceMemberNickname = allByCountry.get(5).getNickname();
+		String lastPlaceMemberNickname = allByCountry.get(allByCountry.size() - 1).getNickname();
+
+		Member topPlaceMember = memberRepository.findByNickname(topPlaceMemberNickname).orElseThrow(() -> new CustomException(ErrorCode.NO_SUCH_MEMBER) {
+			@Override
+			public ErrorCode getErrorCode() {
+				return super.getErrorCode();
+			}
+		});
+
+		Member middlePlaceMember = memberRepository.findByNickname(middlePlaceMemberNickname).orElseThrow(() -> new CustomException(ErrorCode.NO_SUCH_MEMBER) {
+			@Override
+			public ErrorCode getErrorCode() {
+				return super.getErrorCode();
+			}
+		});
+
+		Member lastPlaceMember = memberRepository.findByNickname(lastPlaceMemberNickname).orElseThrow(() -> new CustomException(ErrorCode.NO_SUCH_MEMBER) {
+			@Override
+			public ErrorCode getErrorCode() {
+				return super.getErrorCode();
+			}
+		});
 
 		// when
-		GrammarMyRankingResDTO topPlaceRank = grammarService.getMyRank(MEMBER4.getId(), GrammarRanking.GRAMMAR_COUNTRY_MY);
-		GrammarMyRankingResDTO middlePlaceRank = grammarService.getMyRank(MEMBER6.getId(), GrammarRanking.GRAMMAR_COUNTRY_MY);
-		GrammarMyRankingResDTO lastPlaceRank = grammarService.getMyRank(MEMBER10.getId(), GrammarRanking.GRAMMAR_COUNTRY_MY);
+		GrammarMyRankingResDTO topPlaceRank = grammarService.getMyRank(topPlaceMember.getId(), GrammarRanking.GRAMMAR_COUNTRY_MY);
+		GrammarMyRankingResDTO middlePlaceRank = grammarService.getMyRank(middlePlaceMember.getId(), GrammarRanking.GRAMMAR_COUNTRY_MY);
+		GrammarMyRankingResDTO lastPlaceRank = grammarService.getMyRank(lastPlaceMember.getId(), GrammarRanking.GRAMMAR_COUNTRY_MY);
 
 		// then
-		assertThat(allByCountry.get(3).getNickname()).isEqualTo(topPlaceRank.getRankList().get(3).getNickname());
-		assertThat("young서").isEqualTo(middlePlaceRank.getRankList().get(4).getNickname());
+		assertThat(topPlaceMemberNickname).isEqualTo(topPlaceRank.getRankList().get(3).getNickname());
+		assertThat(middlePlaceMemberNickname).isEqualTo(middlePlaceRank.getRankList().get(4).getNickname());
 		assertThat(allByCountry.size()).isEqualTo(lastPlaceRank.getRankList().get(5).getRank());
 	}
 
@@ -364,15 +391,39 @@ class GrammarServiceImplTest {
 	void getMyRank() {
 		// given
 		List<GrammarMyRankQueryDTO> allBySchool = grammarScoreRepository.findAllBySchool(MEMBER6);
+		String topPlaceMemberNickname = allBySchool.get(3).getNickname();
+		String middlePlaceMemberNickname = allBySchool.get(5).getNickname();
+		String lastPlaceMemberNickname = allBySchool.get(allBySchool.size() - 1).getNickname();
+
+		Member topPlaceMember = memberRepository.findByNickname(topPlaceMemberNickname).orElseThrow(() -> new CustomException(ErrorCode.NO_SUCH_MEMBER) {
+			@Override
+			public ErrorCode getErrorCode() {
+				return super.getErrorCode();
+			}
+		});
+
+		Member middlePlaceMember = memberRepository.findByNickname(middlePlaceMemberNickname).orElseThrow(() -> new CustomException(ErrorCode.NO_SUCH_MEMBER) {
+			@Override
+			public ErrorCode getErrorCode() {
+				return super.getErrorCode();
+			}
+		});
+
+		Member lastPlaceMember = memberRepository.findByNickname(lastPlaceMemberNickname).orElseThrow(() -> new CustomException(ErrorCode.NO_SUCH_MEMBER) {
+			@Override
+			public ErrorCode getErrorCode() {
+				return super.getErrorCode();
+			}
+		});
 
 		// when
-		GrammarMyRankingResDTO topPlaceRank = grammarService.getMyRank(MEMBER2.getId(), GrammarRanking.GRAMMAR_SCHOOL_MY);
-		GrammarMyRankingResDTO middlePlaceRank = grammarService.getMyRank(MEMBER6.getId(), GrammarRanking.GRAMMAR_SCHOOL_MY);
-		GrammarMyRankingResDTO lastPlaceRank = grammarService.getMyRank(MEMBER10.getId(), GrammarRanking.GRAMMAR_SCHOOL_MY);
+		GrammarMyRankingResDTO topPlaceRank = grammarService.getMyRank(topPlaceMember.getId(), GrammarRanking.GRAMMAR_SCHOOL_MY);
+		GrammarMyRankingResDTO middlePlaceRank = grammarService.getMyRank(middlePlaceMember.getId(), GrammarRanking.GRAMMAR_SCHOOL_MY);
+		GrammarMyRankingResDTO lastPlaceRank = grammarService.getMyRank(lastPlaceMember.getId(), GrammarRanking.GRAMMAR_SCHOOL_MY);
 
 		// then
-		assertThat(allBySchool.get(3).getNickname()).isEqualTo(topPlaceRank.getRankList().get(3).getNickname());
-		assertThat("히진상").isEqualTo(middlePlaceRank.getRankList().get(4).getNickname());
+		assertThat(topPlaceMemberNickname).isEqualTo(topPlaceRank.getRankList().get(3).getNickname());
+		assertThat(middlePlaceMemberNickname).isEqualTo(middlePlaceRank.getRankList().get(4).getNickname());
 		assertThat(allBySchool.size()).isEqualTo(lastPlaceRank.getRankList().get(5).getRank());
 
 	}
