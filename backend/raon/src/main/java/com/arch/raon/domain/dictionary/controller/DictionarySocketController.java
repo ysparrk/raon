@@ -7,6 +7,9 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.arch.raon.domain.dictionary.dto.request.SocketReqDTO;
 import com.arch.raon.domain.dictionary.dto.response.DictionaryQuizResDTO;
@@ -42,7 +45,7 @@ public class DictionarySocketController {
 	 * @return
 	 */
 	@PostMapping("/dictionary-quiz/check-room")
-	public ResponseEntity<ResponseDTO> ckeckRoomIdValid(SocketReqDTO reqDTO) {
+	public ResponseEntity<ResponseDTO> ckeckRoomIdValid(@RequestBody SocketReqDTO reqDTO) {
 		System.out.println("[CHECK-ROOM] 방 확인 요청!!!! 요청자: " + reqDTO.getNickname() +" 방 아이디: "+ reqDTO.getRoomId());
 		DictionaryRoomResDTO roomResDTO = new DictionaryRoomResDTO(Rooms.hasRoomThatIdIs(reqDTO.getRoomId()));
 		return ResponseEntity.status(HttpStatus.OK)
