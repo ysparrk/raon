@@ -3,21 +3,21 @@ package com.arch.raon.domain.dictionary.dto.response;
 import java.io.Serializable;
 
 public class DictionaryRoomResDTO implements Serializable {
-	private boolean isRoomAvailable;
+	private boolean isRoomIdExist;
 
 	public DictionaryRoomResDTO() {
 		super();
 	}
 
 	public DictionaryRoomResDTO(boolean isRoomAvailable) {
-		this.isRoomAvailable = isRoomAvailable;
+		this.isRoomIdExist = isRoomAvailable;
 	}
 
-	public boolean isRoomAvailable() {
-		return isRoomAvailable;
+	public boolean isRoomIdExist() {
+		return isRoomIdExist;
 	}
 
-	public void setRoomAvailable(boolean roomAvailable) {
-		isRoomAvailable = roomAvailable;
+	public void setRoomIdExist(boolean roomIdExist) {
+		isRoomIdExist = roomIdExist;
 	}
 }
