@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import com.arch.raon.domain.dictionary.dto.request.SocketReqDTO;
 import com.arch.raon.domain.dictionary.dto.response.DictionaryQuizResDTO;
 import com.arch.raon.domain.dictionary.dto.response.DictionaryRoomResDTO;
+import com.arch.raon.domain.dictionary.dto.response.SocketJoinResDTO;
 import com.arch.raon.domain.dictionary.dto.response.SocketLeaveResDTO;
 import com.arch.raon.domain.dictionary.dto.response.SocketResponseDTO;
 import com.arch.raon.domain.dictionary.service.DictionarySocketService;
@@ -73,8 +74,12 @@ public class DictionarySocketController {
 		switch (result){
 			case JOIN_SUCCESS:
 			case CREATE_SUCCESS:
-				SocketResponseDTO message = new SocketResponseDTO(reqDTO.getNickname(), reqDTO.getRoomId(), "enter", Rooms.isUserOwner(reqDTO.getRoomId(), reqDTO.getNickname()));
-				sendToRoom(reqDTO.getRoomId(), message);
+				SocketJoinResDTO socketJoinResDTO = Rooms.getUsersOf(reqDTO.getRoomId());
+				socketJoinResDTO.setMessage("enter");
+				socketJoinResDTO.setNewComer(reqDTO.getNickname());
+
+
+				sendToRoom(reqDTO.getRoomId(), socketJoinResDTO);
 				break;
 
 			case FAIL_INVALID_USER:

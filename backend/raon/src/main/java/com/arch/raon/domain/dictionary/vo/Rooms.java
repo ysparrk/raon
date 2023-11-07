@@ -4,6 +4,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 import com.arch.raon.domain.dictionary.dto.response.DictionaryQuizResDTO;
+import com.arch.raon.domain.dictionary.dto.response.SocketJoinResDTO;
 import com.arch.raon.global.util.enums.GameState;
 
 /**
@@ -96,6 +97,10 @@ public class Rooms {
 
 		}
 		return false;
+	}
+
+	public static SocketJoinResDTO getUsersOf(String roomId){
+		return new SocketJoinResDTO(roomOf(roomId).getRoomOwner(), roomOf(roomId).getUsers());
 	}
 
 	/**
