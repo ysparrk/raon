@@ -74,10 +74,11 @@ function JoinInterface() {
   const [isJoin, setIsJoin] = useState(false);
   const [inputBoxValue, setInputBoxValue] = useState('');
   const navigate = useNavigate();
+  const roomId = '3333';
+  // const roomId = uuidv4();
   
-  const handleJoinClick = async (nickname: string) => {
+  const handleCreateClick = async (nickname: string, roomId: string) => {
     try {
-      const roomId = uuidv4();
       console.log(nickname, roomId)
       let response = await postRoomId(nickname, roomId)
       console.log(nickname, roomId)
@@ -88,6 +89,31 @@ function JoinInterface() {
         
         if (roomIdExist) {
           alert("방 아이디 중복")
+        } else {
+          // 방 아이디 만들어지면 이동 및 세션에 roomId 저장
+          sessionStorage.setItem('roomId', roomId);
+          navigate('/game/dictionary-quiz')
+        }
+        
+      }
+  
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const handleJoinClick = async (nickname: string, roomId: string) => {
+    try {
+      console.log(nickname, roomId)
+      let response = await postRoomId(nickname, roomId)
+      console.log(nickname, roomId)
+      if(response){
+        console.log("handle 들어옴")
+        console.log(response.data.data.roomIdExist)
+        const roomIdExist = response.data.data.roomIdExist
+        
+        if (!roomIdExist) {
+          alert("존재하지 않는 방")
         } else {
           // 방 아이디 만들어지면 이동 및 세션에 roomId 저장
           sessionStorage.setItem('roomId', roomId);
@@ -115,7 +141,7 @@ function JoinInterface() {
             // 2. uuid, nickname -> post
             // 3. uuid ㅇㅋ -> sessionStorage roomId저장
             // 4. navigate
-            handleJoinClick('고재원')
+            handleCreateClick('박영서', roomId)
           }
         />
         <JoinButton
@@ -132,11 +158,14 @@ function JoinInterface() {
       <JoinButton
         optionText="참여하기"
         buttoncolor="lightcoral"
-        onClick={async (async) => {
-          console.log(inputBoxValue);
-          const client = await connectToWebSocket("김태현", inputBoxValue);
-          navigate('/game/dictionary-quiz')
-        }}
+        onClick={ () => 
+          handleJoinClick('김태현', inputBoxValue)
+        }
+        // onClick={async (async) => {
+        //   console.log(inputBoxValue);
+        //   const client = await connectToWebSocket("김태현", inputBoxValue);
+        //   navigate('/game/dictionary-quiz')
+        // }}
       />
     </InterfaceDiv>
   );
