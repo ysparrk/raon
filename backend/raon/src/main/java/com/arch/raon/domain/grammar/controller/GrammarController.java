@@ -4,6 +4,7 @@ import com.arch.raon.domain.grammar.dto.request.GrammarResultSaveReqDTO;
 import com.arch.raon.domain.grammar.dto.response.GrammarMyRankingResDTO;
 import com.arch.raon.domain.grammar.dto.response.GrammarQuizResDTO;
 import com.arch.raon.domain.grammar.service.GrammarService;
+import com.arch.raon.global.auth.dto.UserAuthentication;
 import com.arch.raon.global.dto.ResponseDTO;
 import com.arch.raon.global.util.enums.GrammarRanking;
 import lombok.RequiredArgsConstructor;
@@ -46,10 +47,10 @@ public class GrammarController {
 
 	@GetMapping("/ranking/{grammarRanking}")
 	public ResponseEntity<ResponseDTO> getMyRank(
-			@AuthenticationPrincipal Long memberId,
+			@AuthenticationPrincipal UserAuthentication userAuth,
 			@PathVariable GrammarRanking grammarRanking
 			) {
-		GrammarMyRankingResDTO myRank = grammarService.getMyRank(memberId, grammarRanking);
+		GrammarMyRankingResDTO myRank = grammarService.getMyRank(userAuth.getId(), grammarRanking);
 
 		if (grammarRanking.equals(GrammarRanking.GRAMMAR_COUNTRY_MY)) {
 			return ResponseEntity.status(HttpStatus.OK)
