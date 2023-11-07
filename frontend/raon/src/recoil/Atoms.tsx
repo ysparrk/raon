@@ -10,9 +10,9 @@ export const answerState = atom<string[]>({
   default: [],
 });
 
-export const spellingCountState = atom<number>({
-  key: 'spellingCountState',
-  default: 0,
+export const spellingIdState = atom<number[]>({
+  key: 'spellingIdState',
+  default: [],
 });
 
 export const summarizeState = atom({
@@ -23,4 +23,9 @@ export const summarizeState = atom({
     content: '',
     summarize_content: '',
   },
+});
+
+export const dictScoreState = atom<number>({
+  key: 'dictScoreState',
+  default: 0,
 });

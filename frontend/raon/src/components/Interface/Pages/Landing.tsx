@@ -126,7 +126,13 @@ function LandingPage() {
             <StyledSquareBox>온</StyledSquareBox>
           </div>
           <StyledCaption>'즐거운'이라는 순 우리말</StyledCaption>
-          <StyledStart onClick={() => navigate('/main')}>시작하기</StyledStart>
+          <StyledStart
+            onClick={() => {
+              window.location.href = `${process.env.REACT_APP_OAUTH_URL}`;
+            }}
+          >
+            시작하기
+          </StyledStart>
         </BoxContainer>
       </ImageContainer>
     </div>

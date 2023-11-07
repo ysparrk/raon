@@ -6,7 +6,7 @@ import { getSpellingList } from '../../../api/GameSpellingApi.tsx';
 import {
   submitState,
   answerState,
-  spellingCountState,
+  spellingIdState,
 } from '../../../recoil/Atoms.tsx';
 import SpellingRight from './SpellingRight.tsx';
 import SpellingWrong from './SpellingWrong.tsx';
@@ -38,9 +38,9 @@ const Option = styled.button`
   cursor: pointer;
   transition: background-color 0.2s;
   background-color: #202fb2;
-  border: 3px solid black;
-  border-radius: 15px;
-  padding: 40px;
+  border: 0.1875rem solid black;
+  border-radius: 0.9375rem;
+  padding: 2.5rem;
 
   &:hover {
     background-color: rgba(0, 0, 0, 0.05);
@@ -52,6 +52,8 @@ type Quiz = {
   option_one: string;
   option_two: string;
   answer: string;
+  answer_percent: number;
+  id: number;
 };
 
 const SpellingProblem = () => {
@@ -64,8 +66,7 @@ const SpellingProblem = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const setSubmitList = useSetRecoilState(submitState);
   const setAnswerList = useSetRecoilState(answerState);
-  const setSpellingCountState = useSetRecoilState(spellingCountState);
-  const startTime = useRef(Date.now());
+  const setSpellingIdList = useSetRecoilState(spellingIdState);
 
   const handleOptionClick = (option: string) => {
     setSubmitList((prevList: string[]) => [...prevList, option]);
@@ -84,17 +85,16 @@ const SpellingProblem = () => {
     if (currentIndex < quizList.length - 1) {
       setCurrentIndex((prevIndex) => prevIndex + 1);
     } else {
-      const endTime = Date.now();
-      setSpellingCountState(endTime - startTime.current);
       navigate('/game/spelling-result');
     }
   };
+
+  console.log(quizList);
 
   useEffect(() => {
     const fetchQuizList = async () => {
       try {
         const response = await getSpellingList();
-        console.log(response.data.data);
         if (response && response.data && Array.isArray(response.data.data)) {
           setQuizList(response.data.data);
         }
@@ -103,13 +103,14 @@ const SpellingProblem = () => {
       }
     };
 
-    startTime.current = Date.now();
     fetchQuizList();
   }, []);
 
   useEffect(() => {
     const correctAnswers = quizList.map((quiz) => quiz.answer);
+    const spellingId = quizList.map((quiz) => quiz.id);
     setAnswerList(correctAnswers);
+    setSpellingIdList(spellingId);
     setSubmitList([]);
   }, [quizList]);
 
@@ -132,12 +133,14 @@ const SpellingProblem = () => {
       {isRightModalVisible && (
         <SpellingRight
           answer={quizList[currentIndex]?.answer}
+          difficulty={quizList[currentIndex]?.answer_percent}
           onClose={handleCloseModal}
         />
       )}
       {isWrongModalVisible && (
         <SpellingWrong
           answer={quizList[currentIndex]?.answer}
+          difficulty={quizList[currentIndex]?.answer_percent}
           onClose={handleCloseModal}
         />
       )}

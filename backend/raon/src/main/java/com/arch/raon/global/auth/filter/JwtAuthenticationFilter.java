@@ -78,10 +78,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private UserAuthentication parseUserSpecification(String token) {
 
-        String id = Optional.ofNullable(token)
+        Long id = Long.valueOf(Optional.ofNullable(token)
                 .filter(subject -> subject.length() >= 1)
                 .map(jwtService::getSubject)
-                .orElse("null");
+                .orElse("null"));
         return new UserAuthentication(id);
     }
 

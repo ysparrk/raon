@@ -4,8 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import cry from '../../../assets/Images/cry.png';
 import Tear from '../../Common/Organisms/Tear.tsx';
 import StarOne from '../Atoms/StarOne.tsx';
-// import StarTwo from '../Atoms/StarTwo.tsx';
-// import StarThree from '../Atoms/StarThree.tsx';
+import StarTwo from '../Atoms/StarTwo.tsx';
+import StarThree from '../Atoms/StarThree.tsx';
 
 const ModalOverlay = styled.div`
   position: fixed;
@@ -25,10 +25,10 @@ const ModalContainer = styled.div`
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
-  width: 440px;
-  height: 680px;
-  border-radius: 8px;
-  box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
+  width: 27.5rem;
+  height: 42.5rem;
+  border-radius: 0.5rem;
+  box-shadow: 0rem 0rem 0.9375rem rgba(0, 0, 0, 0.2);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -40,27 +40,27 @@ const TopSection = styled.div`
   flex-direction: column;
   align-items: center;
   font-family: 'CookieRun';
-  font-size: 48px;
+  font-size: 3rem;
   width: 100%;
 `;
 
 const CryImage = styled.img`
-  max-height: 300px; /* You can adjust based on your requirements */
+  max-height: 18.75rem; /* You can adjust based on your requirements */
 `;
 
 const ButtonGroup = styled.div`
   display: flex;
   justify-content: center;
-  gap: 20px; // 간격을 주기 위해 추가
+  gap: 1.25rem; // 간격을 주기 위해 추가
 `;
 
 const Button = styled.button`
-  margin: 20px;
-  padding: 20px 30px;
+  margin: 1.25rem;
+  padding: 1.25rem 1.875rem;
   border: none;
-  border-radius: 80px;
+  border-radius: 5rem;
   background-color: #ffcd4a;
-  font-size: 20px;
+  font-size: 1.25rem;
   font-family: 'CookieRun';
   color: white;
   cursor: pointer;
@@ -73,10 +73,21 @@ const Button = styled.button`
 type Props = {
   onClose: () => void;
   answer: string;
+  difficulty: number;
 };
 
-const SpellingWrong: React.FC<Props> = ({ onClose, answer }) => {
+const SpellingWrong: React.FC<Props> = ({ onClose, answer, difficulty }) => {
   const navigate = useNavigate();
+
+  const renderStars = () => {
+    if (difficulty >= 70) {
+      return <StarOne />;
+    }
+    if (difficulty >= 50) {
+      return <StarTwo />;
+    }
+    return <StarThree />;
+  };
 
   return (
     <>
@@ -88,7 +99,7 @@ const SpellingWrong: React.FC<Props> = ({ onClose, answer }) => {
             <div>틀렸어요...</div>
             <CryImage src={cry} alt="Cry" />
             <div>난이도</div>
-            <StarOne />
+            {renderStars()}
           </TopSection>
           <ButtonGroup>
             <Button onClick={onClose}>다음 문제</Button>

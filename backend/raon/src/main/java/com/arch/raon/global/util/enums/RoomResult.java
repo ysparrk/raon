@@ -4,6 +4,7 @@ public enum RoomResult {
 
 	FAIL_INVALID_USER("유효하지 않는 유저"),
 	FAIL_NONEXIST_ROOM("존재하지 않는 방에 대한 요청"),
+	FAIL_NOT_IN_ROOM("방에 존재하지 않는 유저에 대한 나가기 요청"),
 
 
 	CREATE_SUCCESS("방 생성 성공"),
@@ -15,9 +16,9 @@ public enum RoomResult {
 
 	LEAVE_SUCCESS("방 나가기 성공"),
 	LEAVE_FAIL_NONEXIST("존재하지 않는 방에 대한 나가기 요청"),
-
 	GAME_START_SUCCESS("게임 시작 성공"),
 	GAME_START_FAIL_NOT_A_OWNER("방장이 아닌데 게임 시작 요청"),
+	GAME_START_FAIL_ALREADY_PLAYING("이미 게임 실행 중"),
 	GAME_STAGE_DATA_SEND_COMPLETE("각 스테이지 데이터 수신 성공"),
 	GAME_STAGE_DATA_SEND_FAIL("각 스테이지 데이터 수신 실패");
 

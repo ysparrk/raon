@@ -66,6 +66,7 @@ function WaitInterface() {
   const roomId = sessionStorage.getItem('roomId') ?? "0000"; // 세션에서 roomId 가져오기, 기본값 0000
 
 
+
   // 웹 소켓 클라이언트 설정
   const socket = new SockJS(`${process.env.REACT_APP_API_URL}api/ws`, null, {
     transports: ['websocket', 'xhr-streaming', 'xhr-polling'],
@@ -83,22 +84,21 @@ function WaitInterface() {
         stompClient.publish({ destination: '/dictionary-quiz/connect-room', body: JSON.stringify({nickname, roomId}) });
         console.log('Connected to the WebSocket server');
       }
-      
+  
     },
-    reconnectDelay: 5000, //자동 재 연결
+    reconnectDelay: 5000, // 자동 재 연결
     heartbeatIncoming: 4000,
     heartbeatOutgoing: 4000,
   });
 
-
   // 콜백함수 => roomId 받기
   const callback: (message: any) => void = (message: any) => {
-    console.log("roomId 받기")
     if (message.body) {
       const body: any = JSON.parse(message.body);
       console.log(body);
     }
   };
+
 
 
   // 방을 나가는 사용자 닉네임, roomId 보내기

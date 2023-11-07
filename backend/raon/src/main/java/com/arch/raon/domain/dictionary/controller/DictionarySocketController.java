@@ -1,15 +1,23 @@
 package com.arch.raon.domain.dictionary.controller;
 
-import java.util.List;
-
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import com.arch.raon.domain.dictionary.dto.request.SocketReqDTO;
 import com.arch.raon.domain.dictionary.dto.response.DictionaryQuizResDTO;
+import com.arch.raon.domain.dictionary.dto.response.DictionaryRoomResDTO;
+import com.arch.raon.domain.dictionary.dto.response.SocketJoinResDTO;
+import com.arch.raon.domain.dictionary.dto.response.SocketLeaveResDTO;
 import com.arch.raon.domain.dictionary.dto.response.SocketResponseDTO;
 import com.arch.raon.domain.dictionary.service.DictionarySocketService;
+import com.arch.raon.domain.dictionary.vo.Rooms;
+
+import com.arch.raon.global.dto.ResponseDTO;
 import com.arch.raon.global.util.enums.RoomResult;
 
 import lombok.RequiredArgsConstructor;
@@ -22,67 +30,66 @@ public class DictionarySocketController {
 	private final DictionarySocketService dictionarySocketService;
 
 	/**
-	 * 방 생성 요청
+	 * roomId가 유효한지 체크하는 HTTP 요청에 대한 응답이다.
 	 *
-	 * 방을 생성하여 방 id를 리턴한다.
-	 * 방 생성을 요청한 사람은 방장이 된다.
+	 * 프론트에서
+	 * 	방 생성하기 -> 여기로 요청을 보내서 roomId가 올바른지 확인. 올바르면 다른 요청들과 겹치는걸 방지하기 위해
+	 * 				 미리 방을 만들어야 한다. 그 뒤 다른 페이지로 넘어가고, 거기서 소켓 연결(join)을 해야 한다.
+	 *
+	 * 	방 참가하기 -> 여기로 요청을 보내서 존재하는 방인지 확인, 이때는 방 생성하기랑 반대로 판단해야 한다. 마찬가지로
+	 * 				 방이 존재하면 넘어가서 join해야 한다.
 	 *
 	 * @param reqDTO
-	 * @return message(roomId)
+	 * @return
 	 */
-	@MessageMapping("/dictionary-quiz/create-room")
-	public void createRoom(SocketReqDTO reqDTO) {
-		RoomResult result = dictionarySocketService.createRoom(reqDTO.getNickname(), reqDTO.getRoomId());
+	@PostMapping("/dictionary-quiz/check-room")
+	public ResponseEntity<ResponseDTO> ckeckRoomIdExist(@RequestBody SocketReqDTO reqDTO) {
+		System.out.println("[CHECK-ROOM] 방 확인 요청!!!! 요청자: " + reqDTO.getNickname() +" 방 아이디: "+ reqDTO.getRoomId());
+		DictionaryRoomResDTO roomResDTO = new DictionaryRoomResDTO(Rooms.hasRoomThatIdIs(reqDTO.getRoomId()));
+		return ResponseEntity.status(HttpStatus.OK)
+			.body(ResponseDTO.builder()
+				.message("국어사전 퀴즈 방 존재 여부")
+				.data(roomResDTO)
+				.build()
+			);
+	}
+
+	/**
+	 * 방에 연결한다.
+	 *
+	 * 만약 Rooms에 해당 roomId가 없으면 방을 생성한다.
+	 *
+	 * 즉
+	 * roomId가 존재하면 -> 참가
+	 * roomId가 존재하지 않으면 -> 생성
+
+	 * @param reqDTO
+	 */
+	@MessageMapping("/dictionary-quiz/connect-room")
+	public void connectToRoom(SocketReqDTO reqDTO) {
+		System.out.println("[CONNECT-ROOM] 방 연결 요청!!!! 요청자: " + reqDTO.getNickname() +" 방 아이디: "+ reqDTO.getRoomId());
+
+		RoomResult result = dictionarySocketService.connectRoom(reqDTO.getNickname(), reqDTO.getRoomId());
 
 		switch (result){
+			case JOIN_SUCCESS:
 			case CREATE_SUCCESS:
-				SocketResponseDTO message = new SocketResponseDTO(reqDTO.getNickname(), reqDTO.getRoomId(), "방 생성 성공", true);
-				sendToRoom(reqDTO.getRoomId(), message);
+				SocketJoinResDTO socketJoinResDTO = Rooms.getUsersOf(reqDTO.getRoomId());
+				socketJoinResDTO.setMessage("enter");
+				socketJoinResDTO.setNewComer(reqDTO.getNickname());
+
+
+				sendToRoom(reqDTO.getRoomId(), socketJoinResDTO);
 				break;
 
 			case FAIL_INVALID_USER:
+				System.err.println("[CREATE-FAIL] 방 생성 실패 : 존재하지 않는 사용자");
+
 				// TODO: exception에 대한 처리가 더 필요
 				break;
 
 			case CREATE_FAIL_SAME_ROOMID:
-				// TODO: exception에 대한 처리가 더 필요
-				break;
-		}
-	}
-
-	/**
-	 * 사용자가 방에 입장한다.
-	 *
-	 * 입장에 성공하면 방에 있는 사람들에게 업데이트 된 방 인원의 정보를 전달한다.
-	 *
-	 * @param reqDTO
-	 */
-	@MessageMapping("/dictionary-quiz/join-room")
-	public void joinRoom(SocketReqDTO reqDTO) {
-		System.out.println("join요청: "+ reqDTO);
-
-		RoomResult result = dictionarySocketService.joinRoom(reqDTO.getNickname(), reqDTO.getRoomId());
-
-		switch (result){
-			case JOIN_SUCCESS:
-				// 방 입장 성공시 먼저 입장 한 사람에게 방에 있던 사람들의 정보를 보내준다.
-				List<SocketResponseDTO> userAndOwnerInfo = dictionarySocketService.getRoomInfo(reqDTO.getRoomId());
-				sendResult(reqDTO.getNickname(), userAndOwnerInfo);
-
-
-				// 그 뒤 방 전체 사람들에게 입장 한 사람의 정보를 보내준다.(방에 방금 들어온 사람도 자신의 정보를 이때 받는다.)
-				sendToRoom(reqDTO.getRoomId(), new SocketResponseDTO(reqDTO.getNickname(), reqDTO.getRoomId(), "나, 등장", false));
-				break;
-
-			case JOIN_FAIL_FULL:
-				// TODO: exception에 대한 처리가 더 필요
-				break;
-
-			case JOIN_FAIL_PLAYING:
-				// TODO: exception에 대한 처리가 더 필요
-				break;
-
-			case FAIL_NONEXIST_ROOM:
+				System.err.println("[CREATE-FAIL] 방 생성 실패 : 이미 존재하는 방 아이디");
 				// TODO: exception에 대한 처리가 더 필요
 				break;
 		}
@@ -90,19 +97,17 @@ public class DictionarySocketController {
 
 	@MessageMapping("/dictionary-quiz/leave")
 	public void userLeaveRoom(SocketReqDTO reqDTO){
-		// 일단 방 자료구조에서 제외
-		RoomResult result = dictionarySocketService.leaveRoom(reqDTO.getNickname(), reqDTO.getRoomId());
+		System.out.println("[LEAVE-ROOM] 방 나가기 요청!!!! 요청자: " + reqDTO.getNickname() +" 방 아이디: "+ reqDTO.getRoomId());
 
-		// 방 내의 사람들에게 나갔다는 것을 알림.
-		if(result == RoomResult.LEAVE_SUCCESS){
-			sendToRoom(reqDTO.getRoomId(), new SocketResponseDTO(reqDTO.getNickname(), "나갔다..", false));
-		}
+		dictionarySocketService.leaveRoom(reqDTO.getNickname(), reqDTO.getRoomId());
+		String nextOwner = Rooms.getOwnerOf(reqDTO.getRoomId());
+
+		sendToRoom(reqDTO.getRoomId(), new SocketLeaveResDTO(reqDTO.getNickname(), nextOwner, "leave"));
 	}
 
 	@MessageMapping("/dictionary-quiz/game-start")
 	public void startGame(SocketReqDTO reqDTO){
-		System.out.println("==== 게임 시작 요청 : "+ reqDTO);
-
+		System.out.println("[GAME-START] 게임 시작 요청!!!! 요청자: " + reqDTO.getNickname() +" 방 아이디: "+ reqDTO.getRoomId());
 		RoomResult result = dictionarySocketService.startGame(reqDTO.getRoomId(), reqDTO.getNickname());
 
 		switch(result){
@@ -123,16 +128,9 @@ public class DictionarySocketController {
 
 
 	// 특정 방에 있는 "모든 인원"에게 데이터를 보낼 때 (방 입장, 방 나가기, 문제 결과 전송 등)
-	private void sendToRoom(String roomId, Object message) {
+	private void sendToRoom(String roomId, Object data) {
+		System.out.println("==== 요청 성공 : "+ roomId +" 메세지(주소값만 뜰 수 있음) : " + data);
 		// roomId를 포함한 토픽 주소로 메시지 전송
-		messagingTemplate.convertAndSend("/topic/dictionary-quiz/room/"+roomId, message);
+		messagingTemplate.convertAndSend("/topic/dictionary-quiz/room/"+roomId, data);
 	}
-
-	// 요청을 보낸 "개인"에게 요청의 결과(성공, 에러 등)를 전송
-	private void sendResult(String nickname, Object message){
-		messagingTemplate.convertAndSend("/topic/result/"+nickname, message);
-	}
-
-
-
 }

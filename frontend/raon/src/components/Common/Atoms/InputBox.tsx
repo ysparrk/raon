@@ -29,7 +29,7 @@ const InputBox = ({ inputText, onChange }: InputBoxProps) => {
     height: '3.125rem',
     width: '31.25rem',
     padding: '0.625rem',
-    borderRadius: '16px',
+    borderRadius: '1rem',
     borderColor: isFocused ? '#a2d6ab' : '#c0c0c0',
     borderStyle: 'solid',
     outline: 'none',

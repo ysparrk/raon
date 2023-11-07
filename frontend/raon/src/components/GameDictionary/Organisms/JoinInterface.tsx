@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import JoinButton from '../Atoms/JoinButton';
-import JoinInputBox from '../Atoms/JoinInputBox';
 import { Client } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
 import { v4 as uuidv4 } from 'uuid';
 import { postRoomId } from '../../../api/GameRoomCreateApi';
+import JoinButton from '../Atoms/JoinButton';
+import JoinInputBox from '../Atoms/JoinInputBox';
 
 const InterfaceDiv = styled.div`
   display: flex;
@@ -17,9 +17,14 @@ const InterfaceDiv = styled.div`
   height: 60vh;
 `;
 
-const connectToWebSocket = (nickname: string, roomId: string): Promise<Client> => {
+const connectToWebSocket = (
+  nickname: string,
+  roomId: string,
+): Promise<Client> => {
   return new Promise((resolve, reject) => {
-    const socket = new SockJS(`${process.env.REACT_APP_API_URL}api/ws`, null, {transports: ["websocket", "xhr-streaming", "xhr-polling"]});
+    const socket = new SockJS(`${process.env.REACT_APP_API_URL}api/ws`, null, {
+      transports: ['websocket', 'xhr-streaming', 'xhr-polling'],
+    });
     const client = new Client({
       webSocketFactory: () => socket,
       onConnect: () => {
@@ -29,7 +34,7 @@ const connectToWebSocket = (nickname: string, roomId: string): Promise<Client> =
       onStompError: (error) => {
         reject(error);
       },
-      reconnectDelay: 5000, //자동 재 연결
+      reconnectDelay: 5000, // 자동 재 연결
       heartbeatIncoming: 4000,
       heartbeatOutgoing: 4000,
     });
@@ -43,14 +48,12 @@ const joinRoom = (client: Client, nickname: string, roomId: string): void => {
   // TODO: subname 소셜로그인 구현 후 입장하는 사용자의 닉네임으로 변경
   const subname = "김태현";
   client.subscribe(`/topic/dictionary-quiz/room/${roomId}`, callback);
-  client.subscribe(`/topic/result/${subname}`, callbackJoinList);
   client.publish({
     destination: `/dictionary-quiz/join-room`,
-    body: JSON.stringify({nickname, roomId}),
+    body: JSON.stringify({ nickname, roomId }),
   });
   sessionStorage.setItem('roomId', roomId);  // 세션에 roomId 저장
 };
-
 
 // 콜백함수 => roomId 받기
 const callback: (message: any) => void = (message: any) => {
@@ -59,16 +62,6 @@ const callback: (message: any) => void = (message: any) => {
     console.log(body);
   }
 };
-
-const callbackJoinList: (message: any) => void = (message: any) => {
-  console.log("참여 리스트 받기")
-  if (message.body) {
-    const body: any = JSON.parse(message.body);
-    console.log(body);
-  }
-};
-
-
 
 function JoinInterface() {
   const [isJoin, setIsJoin] = useState(false);
@@ -166,6 +159,7 @@ function JoinInterface() {
         //   const client = await connectToWebSocket("김태현", inputBoxValue);
         //   navigate('/game/dictionary-quiz')
         // }}
+
       />
     </InterfaceDiv>
   );
