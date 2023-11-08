@@ -24,7 +24,7 @@ class MemberServiceImplTest {
     @Transactional
     void signup() {
         // given
-        Long testMemberId = 777L;
+        Long testMemberId = 7420L;
         MemberSignupReqDTO memberSignupReqDTO = MemberSignupReqDTO.builder()
                 .nickname("새로운닉네임")
                 .school(School.ARCH)

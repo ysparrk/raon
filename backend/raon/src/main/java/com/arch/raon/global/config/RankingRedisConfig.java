@@ -23,7 +23,6 @@ public class RankingRedisConfig {
 	@Value("${spring.redis2.password}")
 	private String REDIS2_PW;
 
-	@Primary
 	@Bean(name = "RankingRedisFactory")
 	public RedisConnectionFactory rankingRedisFactory() {
 		LettuceConnectionFactory connectionFactory = new LettuceConnectionFactory();
