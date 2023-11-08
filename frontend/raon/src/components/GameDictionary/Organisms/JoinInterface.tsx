@@ -17,6 +17,8 @@ const InterfaceDiv = styled.div`
   height: 60vh;
 `;
 
+const nickname = localStorage.getItem('nickname') ?? "미사용자";
+
 const connectToWebSocket = (
   nickname: string,
   roomId: string,
@@ -45,8 +47,6 @@ const connectToWebSocket = (
 
 // 입장하는 사용자 닉네임, roomId 보내기
 const joinRoom = (client: Client, nickname: string, roomId: string): void => {
-  // TODO: subname 소셜로그인 구현 후 입장하는 사용자의 닉네임으로 변경
-  const subname = "김태현";
   client.subscribe(`/topic/dictionary-quiz/room/${roomId}`, callback);
   client.publish({
     destination: `/dictionary-quiz/join-room`,
@@ -67,8 +67,7 @@ function JoinInterface() {
   const [isJoin, setIsJoin] = useState(false);
   const [inputBoxValue, setInputBoxValue] = useState('');
   const navigate = useNavigate();
-  const roomId = '5555';
-  // const roomId = uuidv4();
+  const roomId = uuidv4();
   
   const handleCreateClick = async (nickname: string, roomId: string) => {
     try {
@@ -130,11 +129,7 @@ function JoinInterface() {
           optionText="방만들기"
           buttoncolor="gainsboro"
           onClick={ () => 
-            // 1. uuid로 roomId를 만든다.
-            // 2. uuid, nickname -> post
-            // 3. uuid ㅇㅋ -> sessionStorage roomId저장
-            // 4. navigate
-            handleCreateClick('박영서', roomId)
+            handleCreateClick(nickname, roomId)
           }
         />
         <JoinButton
@@ -152,13 +147,8 @@ function JoinInterface() {
         optionText="참여하기"
         buttoncolor="lightcoral"
         onClick={ () => 
-          handleJoinClick('김태현', inputBoxValue)
+          handleJoinClick(nickname, inputBoxValue)
         }
-        // onClick={async (async) => {
-        //   console.log(inputBoxValue);
-        //   const client = await connectToWebSocket("김태현", inputBoxValue);
-        //   navigate('/game/dictionary-quiz')
-        // }}
 
       />
     </InterfaceDiv>

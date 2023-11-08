@@ -60,11 +60,8 @@ function WaitInterface() {
   const [participants, setParticipants] = useState([]);
   const navigate = useNavigate();
 
-  // TODO: nickname 접속한 사용자 닉네임으로 바꾸기
-  const nickname = '박영서';
-  const subname = '김태현';
+  const nickname = localStorage.getItem('nickname') ?? "미사용자";
   const roomId = sessionStorage.getItem('roomId') ?? "0000"; // 세션에서 roomId 가져오기, 기본값 0000
-
 
 
   // 웹 소켓 클라이언트 설정
@@ -106,7 +103,7 @@ function WaitInterface() {
     console.log("방나가기 요청 보내기")
     client.publish({
       destination: `/dictionary-quiz/leave`,
-      body: JSON.stringify({"nickname": subname, roomId}),
+      body: JSON.stringify({nickname, roomId}),
     });
   };
 
@@ -128,7 +125,7 @@ function WaitInterface() {
       <InterfaceDiv>
         <RoomCurrentDiv>
           <RoomHeadText>방 코드</RoomHeadText>
-          <RoomCodeText>AAAA-BBBB-CCCC-DDDD</RoomCodeText>
+          <RoomCodeText>{roomId}</RoomCodeText>
           <RoomParticipantsText>참가자</RoomParticipantsText>
           <RoomParticipantsText>참가자</RoomParticipantsText>
           <RoomParticipantsText>참가자</RoomParticipantsText>
