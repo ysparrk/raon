@@ -27,6 +27,7 @@ import DictionarySingleGame from '../components/GameDictionary/Pages/DictionaryS
 import DictionaryInit from '../components/GameDictionary/Pages/DictionaryInit.tsx';
 import DictionaryWaitingRoom from '../components/GameDictionary/Pages/DictionaryWaitingRoom.tsx';
 import DictionarySingleResult from '../components/GameDictionary/Pages/DictionarySingleResult.tsx';
+import DictionaryMultiGame from '../components/GameDictionary/Pages/DictionaryMultiGame.tsx';
 // import DictionaryResult from '../components/GameDictionary/Pages/DictionaryResult.tsx';
 
 // // Ranking
@@ -57,6 +58,10 @@ const AppRouter: React.FC = () => {
         <Route
           path="/game/dictionary-single-game"
           element={<DictionarySingleGame />}
+        />
+        <Route
+          path="/game/dictionary-multi-game"
+          element={<DictionaryMultiGame />}
         />
         <Route
           path="/game/dictionary-game/waiting-room"
