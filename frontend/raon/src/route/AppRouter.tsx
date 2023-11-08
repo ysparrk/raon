@@ -31,7 +31,7 @@ import DictionaryMultiGame from '../components/GameDictionary/Pages/DictionaryMu
 // import DictionaryResult from '../components/GameDictionary/Pages/DictionaryResult.tsx';
 
 // // Ranking
-// import Ranking from '../components/Ranking/Pages/Ranking.tsx';
+import Ranking from '../components/Ranking/Pages/Ranking.tsx';
 
 const AppRouter: React.FC = () => {
   return (
@@ -71,7 +71,7 @@ const AppRouter: React.FC = () => {
           path="/game/dictionary-single-result"
           element={<DictionarySingleResult />}
         />
-        {/* <Route path="/user/" element={<Foundation />} /> */}
+        <Route path="/ranking" element={<Ranking />} />
       </Routes>
     </BrowserRouter>
     // </div>

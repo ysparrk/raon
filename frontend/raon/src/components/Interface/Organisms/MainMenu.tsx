@@ -42,7 +42,7 @@ const MainMenu = () => {
         <SelectOption
           imgSrc={main4}
           optionText="순위"
-          //   onClick={() => handleOptionClick('Option 4')}
+          onClick={() => navigate('/ranking')}
         />
       </MenuContainer>
       <ProfileButton />
