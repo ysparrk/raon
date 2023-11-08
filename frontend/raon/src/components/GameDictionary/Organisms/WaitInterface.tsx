@@ -60,9 +60,8 @@ function WaitInterface() {
   const [participants, setParticipants] = useState([]);
   const navigate = useNavigate();
 
-  const nickname = localStorage.getItem('nickname') ?? "미사용자";
-  const roomId = sessionStorage.getItem('roomId') ?? "0000"; // 세션에서 roomId 가져오기, 기본값 0000
-
+  const nickname = localStorage.getItem('nickname') ?? '미사용자';
+  const roomId = sessionStorage.getItem('roomId') ?? '0000'; // 세션에서 roomId 가져오기, 기본값 0000
 
   // 웹 소켓 클라이언트 설정
   const socket = new SockJS(`${process.env.REACT_APP_API_URL}api/ws`, null, {
@@ -74,14 +73,19 @@ function WaitInterface() {
     onConnect: () => {
       // 구독 시작
       // 서버로 메시지 보내기
-      if (roomId == '0000') {
-        alert("구독한 방 아이디가 없습니다.")
+      if (roomId === '0000') {
+        alert('구독한 방 아이디가 없습니다.');
       } else {
-        stompClient.subscribe(`/topic/dictionary-quiz/room/${roomId}`, callback);
-        stompClient.publish({ destination: '/dictionary-quiz/connect-room', body: JSON.stringify({nickname, roomId}) });
+        stompClient.subscribe(
+          `/topic/dictionary-quiz/room/${roomId}`,
+          callback,
+        );
+        stompClient.publish({
+          destination: '/dictionary-quiz/connect-room',
+          body: JSON.stringify({ nickname, roomId }),
+        });
         console.log('Connected to the WebSocket server');
       }
-  
     },
     reconnectDelay: 5000, // 자동 재 연결
     heartbeatIncoming: 4000,
@@ -96,21 +100,23 @@ function WaitInterface() {
     }
   };
 
-
-
   // 방을 나가는 사용자 닉네임, roomId 보내기
-  const leaveRoom = (client: Client, nickname: string, roomId: string): void => {
-    console.log("방나가기 요청 보내기")
+  const leaveRoom = (
+    client: Client,
+    nicknameInput: string,
+    roomIdInput: string,
+  ): void => {
+    console.log('방나가기 요청 보내기');
     client.publish({
       destination: `/dictionary-quiz/leave`,
-      body: JSON.stringify({nickname, roomId}),
+      body: JSON.stringify({ nicknameInput, roomIdInput }),
     });
   };
 
   // 웹소켓 연결 종료
   const disconnectWebSocket = (client: Client): void => {
     if (client && client.connected) {
-      console.log("소켓종료")
+      console.log('소켓종료');
       client.deactivate();
     }
   };
@@ -141,14 +147,16 @@ function WaitInterface() {
       </InterfaceDiv>
       <ButtonDiv>
         <StartButton onClick={() => navigate('/game/dictionary-game')} />
-        <RoomExitButton onClick={() => {
-          if (stompClient) {
-            leaveRoom(stompClient, nickname, roomId);
-            disconnectWebSocket(stompClient);
-            sessionStorage.removeItem('roomId');
-          }
-        navigate('/main')}} />
-        
+        <RoomExitButton
+          onClick={() => {
+            if (stompClient) {
+              leaveRoom(stompClient, nickname, roomId);
+              disconnectWebSocket(stompClient);
+              sessionStorage.removeItem('roomId');
+            }
+            navigate('/main');
+          }}
+        />
       </ButtonDiv>
     </>
   );

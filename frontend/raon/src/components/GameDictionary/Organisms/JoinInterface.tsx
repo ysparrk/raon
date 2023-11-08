@@ -17,10 +17,10 @@ const InterfaceDiv = styled.div`
   height: 60vh;
 `;
 
-const nickname = localStorage.getItem('nickname') ?? "미사용자";
+const nickname = localStorage.getItem('nickname') ?? '미사용자';
 
 const connectToWebSocket = (
-  nickname: string,
+  nicknameInput: string,
   roomId: string,
 ): Promise<Client> => {
   return new Promise((resolve, reject) => {
@@ -30,7 +30,7 @@ const connectToWebSocket = (
     const client = new Client({
       webSocketFactory: () => socket,
       onConnect: () => {
-        joinRoom(client, nickname, roomId);
+        joinRoom(client, nicknameInput, roomId);
         resolve(client);
       },
       onStompError: (error) => {
@@ -46,13 +46,17 @@ const connectToWebSocket = (
 };
 
 // 입장하는 사용자 닉네임, roomId 보내기
-const joinRoom = (client: Client, nickname: string, roomId: string): void => {
+const joinRoom = (
+  client: Client,
+  nicknameInput: string,
+  roomId: string,
+): void => {
   client.subscribe(`/topic/dictionary-quiz/room/${roomId}`, callback);
   client.publish({
     destination: `/dictionary-quiz/join-room`,
-    body: JSON.stringify({ nickname, roomId }),
+    body: JSON.stringify({ nicknameInput, roomId }),
   });
-  sessionStorage.setItem('roomId', roomId);  // 세션에 roomId 저장
+  sessionStorage.setItem('roomId', roomId); // 세션에 roomId 저장
 };
 
 // 콜백함수 => roomId 받기
@@ -68,56 +72,54 @@ function JoinInterface() {
   const [inputBoxValue, setInputBoxValue] = useState('');
   const navigate = useNavigate();
   const roomId = uuidv4();
-  
-  const handleCreateClick = async (nickname: string, roomId: string) => {
-    try {
-      console.log(nickname, roomId)
-      let response = await postRoomId(nickname, roomId)
-      console.log(nickname, roomId)
-      if(response){
-        console.log("handle 들어옴")
-        console.log(response.data.data.roomIdExist)
-        const roomIdExist = response.data.data.roomIdExist
-        
-        if (roomIdExist) {
-          alert("방 아이디 중복")
-        } else {
-          // 방 아이디 만들어지면 이동 및 세션에 roomId 저장
-          sessionStorage.setItem('roomId', roomId);
-          navigate('/game/dictionary-quiz')
-        }
-        
-      }
-  
-    } catch (error) {
-      console.log(error)
-    }
-  }
 
-  const handleJoinClick = async (nickname: string, roomId: string) => {
+  const handleCreateClick = async (
+    nicknameInput: string,
+    roomIdInput: string,
+  ) => {
     try {
-      console.log(nickname, roomId)
-      let response = await postRoomId(nickname, roomId)
-      console.log(nickname, roomId)
-      if(response){
-        console.log("handle 들어옴")
-        console.log(response.data.data.roomIdExist)
-        const roomIdExist = response.data.data.roomIdExist
-        
-        if (!roomIdExist) {
-          alert("존재하지 않는 방")
+      const response = await postRoomId(nicknameInput, roomIdInput);
+      if (response) {
+        console.log('handle 들어옴');
+        console.log(response.data.data.roomIdExist);
+        const { roomIdExist } = response.data.data;
+
+        if (roomIdExist) {
+          alert('방 아이디 중복');
         } else {
           // 방 아이디 만들어지면 이동 및 세션에 roomId 저장
-          sessionStorage.setItem('roomId', roomId);
-          navigate('/game/dictionary-quiz')
+          sessionStorage.setItem('roomId', roomIdInput);
+          navigate('/game/dictionary-quiz');
         }
-        
       }
-  
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
+  };
+
+  const handleJoinClick = async (
+    nicknameInput: string,
+    roomIdInput: string,
+  ) => {
+    try {
+      const response = await postRoomId(nicknameInput, roomIdInput);
+      if (response) {
+        console.log('handle 들어옴');
+        console.log(response.data.data.roomIdExist);
+        const { roomIdExist } = response.data.data;
+
+        if (!roomIdExist) {
+          alert('존재하지 않는 방');
+        } else {
+          // 방 아이디 만들어지면 이동 및 세션에 roomId 저장
+          sessionStorage.setItem('roomId', roomIdInput);
+          navigate('/game/dictionary-quiz');
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const handleInputChange = (value: string) => {
     setInputBoxValue(value);
@@ -128,9 +130,7 @@ function JoinInterface() {
         <JoinButton
           optionText="방만들기"
           buttoncolor="gainsboro"
-          onClick={ () => 
-            handleCreateClick(nickname, roomId)
-          }
+          onClick={() => handleCreateClick(nickname, roomId)}
         />
         <JoinButton
           optionText="참여하기"
@@ -146,10 +146,7 @@ function JoinInterface() {
       <JoinButton
         optionText="참여하기"
         buttoncolor="lightcoral"
-        onClick={ () => 
-          handleJoinClick(nickname, inputBoxValue)
-        }
-
+        onClick={() => handleJoinClick(nickname, inputBoxValue)}
       />
     </InterfaceDiv>
   );

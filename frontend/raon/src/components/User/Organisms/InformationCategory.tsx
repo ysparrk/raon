@@ -55,10 +55,10 @@ const InformationCategory = () => {
 
   const handleSubmit = async () => {
     const memberData = {
-      nickname: nickname,
-      school: school,
+      nickname,
+      school,
       yearOfBirth: Number(birthday),
-      gender: gender,
+      gender,
     };
     try {
       const response = await postMemberSignup(memberData);
