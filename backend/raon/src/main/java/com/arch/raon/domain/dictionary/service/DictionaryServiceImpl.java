@@ -43,11 +43,9 @@ public class DictionaryServiceImpl implements DictionaryService {
 
     @Override
     @Transactional
-    public void saveDictionaryQuizResult(DictionaryScoreReqDTO dictionaryScoreReqDTO) {
-        // TODO: security 적용 후 member에 대한 검증
-        final long TEST_MEMBER_ID = 6;
+    public void saveDictionaryQuizResult(Long memberId, DictionaryScoreReqDTO dictionaryScoreReqDTO) {
 
-        Member member = memberRepository.findById(TEST_MEMBER_ID).orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND) {
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND) {
             @Override
             public ErrorCode getErrorCode() {
                 return super.getErrorCode();

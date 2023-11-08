@@ -1,5 +1,6 @@
 package com.arch.raon.domain.dictionary.service;
 
+import com.arch.raon.domain.dictionary.dto.request.DictionaryScoreReqDTO;
 import com.arch.raon.domain.dictionary.dto.response.DictionaryQuizResDTO;
 import com.arch.raon.domain.dictionary.repository.DictionaryDirectionQuizRepository;
 import com.arch.raon.domain.dictionary.repository.DictionaryInitialQuizRepository;
@@ -70,19 +71,19 @@ class DictionaryServiceImplTest {
     }
 
 
-    // TODO: 회원가입 로직 생성 후 활성화
-//    @DisplayName("국어사전 퀴즈 점수 저장")
-//    @Test
-//    void saveDictionaryQuizResult() {
-//        // given
-//        DictionaryScoreReqDTO dictionaryScoreReqDTO = DictionaryScoreReqDTO.builder()
-//                .score(70)
-//                .build();
-//
-//        // when
-//        dictionaryService.saveDictionaryQuizResult(dictionaryScoreReqDto);
-//
-//        // then
-//        assertThat(70).isEqualTo(dictionaryScoreRepository.findByMemberId(MEMBER1.getId()).get().getScore());
-//    }
+    @DisplayName("국어사전 퀴즈 점수 저장")
+    @Test
+    @Transactional
+    void saveDictionaryQuizResult() {
+        // given
+        DictionaryScoreReqDTO dictionaryScoreReqDTO = DictionaryScoreReqDTO.builder()
+                .score(70)
+                .build();
+
+        // when
+        dictionaryService.saveDictionaryQuizResult(MEMBER1.getId(), dictionaryScoreReqDTO);
+
+        // then
+        assertThat(70).isEqualTo(dictionaryScoreRepository.findByMemberId(MEMBER1.getId()).get().getScore());
+    }
 }

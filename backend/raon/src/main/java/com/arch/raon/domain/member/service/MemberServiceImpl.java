@@ -57,6 +57,7 @@ public class MemberServiceImpl implements MemberService{
 
         return CheckActiveResDTO.builder()
                 .active(member.getIsActive())
+                .nickname(member.getNickname())
                 .build();
     }
 }
