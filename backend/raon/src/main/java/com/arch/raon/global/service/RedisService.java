@@ -1,5 +1,6 @@
 package com.arch.raon.global.service;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -31,22 +32,19 @@ public class RedisService {
     }
 
     /** 여기에 리프레쉬 관련 로직 넣으면 좋아용 **/
-    /*
-    public void setRefreshToken(String userId, String refreshToken){
-        // key : refresh, value : userId
-        securityRedis.opsForValue().set(userId,refreshToken);
+    public void setRefreshToken(String accessToken, String refreshToken){
+        // key : accessToken, value : refreshToken
+        securityRedis.opsForValue().set(accessToken, refreshToken);
         //30일
-        securityRedis.expire(userId,30L, TimeUnit.DAYS);
+        securityRedis.expire(accessToken,30L, TimeUnit.DAYS);
     }
 
-    public String getRefreshToken(String userId){
-        return securityRedis.opsForValue().get(userId);
+    public String getRefreshToken(String accessToken){
+        return securityRedis.opsForValue().get(accessToken);
     }
 
-    public boolean deleteRefreshToken(String userId){
-        return securityRedis.delete(userId);
+    public boolean deleteRefreshToken(String accessToken){
+        return securityRedis.delete(accessToken);
     }
-
-     */
 
 }
