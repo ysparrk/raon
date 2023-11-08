@@ -118,15 +118,15 @@ function WaitInterface() {
     }
   };
 
-  // 게임 시작하기
+  // 방장이 게임 시작 요청 보내기
   const gameStart = (client: Client, nickname: string, roomId: string): void => {
-    console.log("게임시작하기")
+    console.log("게임 시작 요청")
     client.publish({
       destination: `/dictionary-quiz/game-start`,
       body: JSON.stringify({nickname, roomId}),
     });
   };
-  
+
 
   // 컴포넌트 마운트 시 웹 소켓 연결 시작
   useEffect(() => {
@@ -156,9 +156,12 @@ function WaitInterface() {
         content='시작하기'
         onClick={() => {
           if (stompClient) {
+            console.log("게임 시작 버튼")
             gameStart(stompClient, nickname, roomId)
           }
-        navigate('/game/dictionary-game')}} />
+        }}
+         />
+        {/* navigate('/game/dictionary-multi-game') */}
         <RoomExitButton onClick={() => {
           if (stompClient) {
             leaveRoom(stompClient, nickname, roomId);
