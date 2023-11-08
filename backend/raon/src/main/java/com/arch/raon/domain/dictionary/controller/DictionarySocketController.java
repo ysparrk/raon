@@ -120,6 +120,9 @@ public class DictionarySocketController {
 		switch(result){
 			case GAME_START_SUCCESS:
 				DictionaryQuizResDTO quizes = dictionarySocketService.getQuizes();
+
+				System.out.println("[GAME_START] 퀴즈 목록 : " + quizes.toString());
+
 				// 퀴즈의 정답을 room에 넣어야 한다 재원아
 				dictionarySocketService.addQuizToRoom(quizes, reqDTO.getRoomId());
 
@@ -128,6 +131,8 @@ public class DictionarySocketController {
 			case GAME_START_FAIL_NOT_A_OWNER:
 				// TODO: 예외 처리 할 것
 				break;
+
+
 		}
 	}
 
