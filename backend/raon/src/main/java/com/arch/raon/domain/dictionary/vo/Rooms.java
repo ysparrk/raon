@@ -93,8 +93,6 @@ public class Rooms {
 	public static boolean gameStart(String roomId, String nickname){
 		if(hasRoomThatIdIs(roomId) && roomOf(roomId).getRoomOwner().equals(nickname)){
 			roomOf(roomId).PLAY();
-
-
 		}
 		return false;
 	}

@@ -63,7 +63,7 @@ public class DictionarySocketServiceImpl implements DictionarySocketService{
 			return RoomResult.FAIL_NOT_IN_ROOM;
 		if(!Rooms.isUserOwner(roomId, nickname)) // 방장이 아닐 때
 			return RoomResult.GAME_START_FAIL_NOT_A_OWNER;
-		if(!Rooms.isRoomPlaying(roomId)) // 이미 게임 중일 때
+		if(Rooms.isRoomPlaying(roomId)) // 이미 게임 중일 때
 			return RoomResult.GAME_START_FAIL_ALREADY_PLAYING;
 
 		Rooms.gameStart(roomId, nickname);
