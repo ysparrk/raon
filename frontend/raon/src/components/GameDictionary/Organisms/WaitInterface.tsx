@@ -92,11 +92,11 @@ function WaitInterface() {
   const callback: (message: any) => void = (message: any) => {
     if (message.body) {
       const body: any = JSON.parse(message.body);
-      const { users } = body;
-      const gameParticipants = users.map((user: any) => user);
-      setParticipants(gameParticipants);
+      // const { users } = body;
+      // const gameParticipants = users.map((user: any) => user);
+      // setParticipants(gameParticipants);
       console.log(body);
-      console.log(gameParticipants);
+      // console.log(gameParticipants);
     }
   };
 
@@ -139,9 +139,9 @@ function WaitInterface() {
         <RoomCurrentDiv>
           <RoomHeadText>방 코드</RoomHeadText>
           <RoomCodeText>{roomId}</RoomCodeText>
-          {participants.reverse().map((participant, index) => (
+          {/* {participants.reverse().map((participant, index) => (
           <RoomParticipantsText key={index}>{participant}</RoomParticipantsText>
-        ))}
+        ))} */}
         </RoomCurrentDiv>
         <JoinButton
           optionText="초대하기"
@@ -159,9 +159,9 @@ function WaitInterface() {
             console.log("게임 시작 버튼")
             gameStart(stompClient, nickname, roomId)
           }
+          navigate('/game/dictionary-multi-game')
         }}
          />
-        {/* navigate('/game/dictionary-multi-game') */}
         <RoomExitButton onClick={() => {
           if (stompClient) {
             leaveRoom(stompClient, nickname, roomId);
