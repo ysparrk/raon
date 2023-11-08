@@ -116,7 +116,7 @@ public class DictionarySocketController {
 	public void startGame(SocketReqDTO reqDTO){
 		System.out.println("[GAME-START] 게임 시작 요청!!!! 요청자: " + reqDTO.getNickname() +" 방 아이디: "+ reqDTO.getRoomId());
 		RoomResult result = dictionarySocketService.startGame(reqDTO.getRoomId(), reqDTO.getNickname());
-
+		System.out.println("result : " + result);
 		switch(result){
 			case GAME_START_SUCCESS:
 				DictionaryQuizResDTO quizes = dictionarySocketService.getQuizes();
