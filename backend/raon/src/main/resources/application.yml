@@ -2,8 +2,6 @@ spring:
   profiles:
     active: secret
   jackson:
-    # dto를 camel case에서 snake_case로 변경
-    property-naming-strategy: SNAKE_CASE
     serialization:
       fail-on-empty-beans: false
   jpa:

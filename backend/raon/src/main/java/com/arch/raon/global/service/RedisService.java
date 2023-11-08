@@ -1,6 +1,5 @@
 package com.arch.raon.global.service;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -12,13 +11,13 @@ import java.util.concurrent.TimeUnit;
 @Service
 public class RedisService {
 
-    private final RedisTemplate<String, Object> quizRedis;
+    private final RedisTemplate<String, String> rankingRedis;
     private final RedisTemplate<String, String> securityRedis;
 
     @Autowired
-    public RedisService(@Qualifier("QuizRedis") RedisTemplate<String, Object> quizRedis,
+    public RedisService(@Qualifier("RankingRedis") RedisTemplate<String, String> rankingRedis,
                         @Qualifier("SecurityRedis") RedisTemplate<String, String> securityRedis) {
-        this.quizRedis = quizRedis;
+        this.rankingRedis = rankingRedis;
         this.securityRedis = securityRedis;
     }
 
