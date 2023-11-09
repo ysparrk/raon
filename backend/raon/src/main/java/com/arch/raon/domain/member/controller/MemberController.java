@@ -1,5 +1,6 @@
 package com.arch.raon.domain.member.controller;
 
+import com.arch.raon.domain.member.dto.request.MemberCheckNicknameReqDTO;
 import com.arch.raon.domain.member.dto.request.MemberSignupReqDTO;
 import com.arch.raon.domain.member.dto.response.CheckActiveResDTO;
 import com.arch.raon.domain.member.service.MemberService;
@@ -55,6 +56,23 @@ public class MemberController {
         String str = redisService.getTestData("arch");
         System.out.println(userAuth.getId());
         return str;
+    }
+
+    @PostMapping("/check/nickname")
+    public ResponseEntity<ResponseDTO> checkNickname(
+            @AuthenticationPrincipal UserAuthentication userAuth,
+            @RequestBody MemberCheckNicknameReqDTO memberCheckNicknameReqDTO) {
+        boolean isAble = memberService.checkNickname(memberCheckNicknameReqDTO.getNickname());
+        if(!isAble){
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(ResponseDTO.builder()
+                            .message("중복된 닉네임 입니다.")
+                            .build());
+        }
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ResponseDTO.builder()
+                        .message("사용 가능한 닉네임 입니다.")
+                        .build());
     }
 
 }

@@ -9,4 +9,5 @@ public interface MemberService {
     public AuthUserInfo getOrRegisterUser(OAuthUserInfo oauthUserInfo);
     public void signup(Long id, MemberSignupReqDTO memberSignupReqDTO);
     public CheckActiveResDTO checkActive(Long id);
+    boolean checkNickname(String nickname);
 }
