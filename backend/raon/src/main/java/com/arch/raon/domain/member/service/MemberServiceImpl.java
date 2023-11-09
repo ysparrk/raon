@@ -6,12 +6,15 @@ import com.arch.raon.domain.member.entity.Member;
 import com.arch.raon.domain.member.repository.MemberRepository;
 import com.arch.raon.global.auth.dto.AuthUserInfo;
 import com.arch.raon.global.auth.dto.OAuthUserInfo;
+import com.arch.raon.global.exception.CustomException;
+import com.arch.raon.global.exception.ErrorCode;
 import com.arch.raon.global.util.enums.School;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -59,5 +62,13 @@ public class MemberServiceImpl implements MemberService{
                 .active(member.getIsActive())
                 .nickname(member.getNickname())
                 .build();
+    }
+    @Override
+    public boolean checkNickname(String nickname){
+        Optional<Member> byNickname = memberRepository.findByNickname(nickname);
+        if(byNickname.isPresent()){
+            return false;
+        }
+        return true;
     }
 }
