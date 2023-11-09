@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import styled, { createGlobalStyle, keyframes } from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import gildong from '../../../assets/Images/gildong.png';
-import { useBGM } from '../../../sound/SoundContext';
 
 const rollAndRotateFromLeft = keyframes`
   0% {
@@ -105,18 +104,7 @@ const GildongImage = styled.img<{ shouldMove: boolean }>`
 function LandingPage() {
   const [shouldMove, setShouldMove] = useState(false);
   const navigate = useNavigate();
-  const { startBGM } = useBGM();
 
-  const StyledCaptionText = "'즐거운'이라는 순 우리말";
-  // useEffect(() => {
-  //   const startAudioContext = async () => {
-  //     const audioContext = new AudioContext();
-  //     await audioContext.resume(); // 오디오 컨텍스트 시작
-  //     startBGM('correct'); // 오디오 시작
-  //   };
-
-  //   startAudioContext();
-  // }, []);
   useEffect(() => {
     const timer = setTimeout(() => {
       setShouldMove(true);
@@ -126,7 +114,7 @@ function LandingPage() {
       clearTimeout(timer);
     };
   }, []);
-
+  const StyledCaptionText = "'즐거운'이라는 순 우리말";
   return (
     <div>
       <ImageContainer>
@@ -140,7 +128,6 @@ function LandingPage() {
           <StyledCaption>{StyledCaptionText}</StyledCaption>
           <StyledStart
             onClick={() => {
-              startBGM('correct');
               window.location.href = `${process.env.REACT_APP_OAUTH_URL}`;
             }}
           >
