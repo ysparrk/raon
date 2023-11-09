@@ -12,16 +12,7 @@ const getQuiz = async (): Promise<AxiosResponse> => {
 };
 const postSingleResult = async (score: number): Promise<AxiosResponse> => {
   try {
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    };
-    const response = await api.post(
-      `api/dictionary/single-result`,
-      score,
-      config,
-    );
+    const response = await api.post(`api/dictionary/single-result`, { score });
     return response;
   } catch (error) {
     console.log('점수 저장 실패', error);

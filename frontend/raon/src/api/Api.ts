@@ -9,7 +9,7 @@ const api = axios.create({
   headers: {
     'Access-Control-Allow-Credentials': 'true',
     'Access-Control-Allow-origin': 'true',
-    'Content-Type': 'application/json'
+    'Content-Type': 'application/json',
   },
 });
 

@@ -114,7 +114,7 @@ function LandingPage() {
       clearTimeout(timer);
     };
   }, []);
-
+  const StyledCaptionText = "'즐거운'이라는 순 우리말";
   return (
     <div>
       <ImageContainer>
@@ -125,7 +125,7 @@ function LandingPage() {
             <StyledSquareBox>라</StyledSquareBox>
             <StyledSquareBox>온</StyledSquareBox>
           </div>
-          <StyledCaption>'즐거운'이라는 순 우리말</StyledCaption>
+          <StyledCaption>{StyledCaptionText}</StyledCaption>
           <StyledStart
             onClick={() => {
               window.location.href = `${process.env.REACT_APP_OAUTH_URL}`;

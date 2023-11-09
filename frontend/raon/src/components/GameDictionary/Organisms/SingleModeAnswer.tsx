@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import smile from '../../../assets/Images/smile.png';
 import Firework from '../../Common/Organisms/Firework.tsx';
 import cry from '../../../assets/Images/cry.png';
 import Tear from '../../Common/Organisms/Tear.tsx';
+import { useBGM } from '../../../sound/SoundContext.tsx';
 
 const ModalOverlay = styled.div`
   position: fixed;
@@ -77,6 +78,17 @@ type Props = {
 
 const SingleModeAnswer: React.FC<Props> = ({ onClose, answer, isCorrect }) => {
   const navigate = useNavigate();
+  const { startBGM, isMuted } = useBGM();
+
+  useEffect(() => {
+    if (!isMuted) {
+      if (isCorrect) {
+        startBGM('correct');
+      } else {
+        startBGM('incorrect');
+      }
+    }
+  });
   if (isCorrect) {
     return (
       <>

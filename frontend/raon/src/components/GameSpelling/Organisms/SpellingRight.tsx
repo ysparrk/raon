@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import smile from '../../../assets/Images/smile.png';
@@ -6,6 +6,7 @@ import Firework from '../../Common/Organisms/Firework.tsx';
 import StarOne from '../Atoms/StarOne.tsx';
 import StarTwo from '../Atoms/StarTwo.tsx';
 import StarThree from '../Atoms/StarThree.tsx';
+import { useBGM } from '../../../sound/SoundContext.tsx';
 
 const ModalOverlay = styled.div`
   position: fixed;
@@ -78,7 +79,13 @@ type Props = {
 
 const SpellingRight: React.FC<Props> = ({ onClose, answer, difficulty }) => {
   const navigate = useNavigate();
+  const { startBGM, isMuted } = useBGM();
 
+  useEffect(() => {
+    if (!isMuted) {
+      startBGM('correct');
+    }
+  });
   const renderStars = () => {
     if (difficulty >= 70) {
       return <StarOne />;
