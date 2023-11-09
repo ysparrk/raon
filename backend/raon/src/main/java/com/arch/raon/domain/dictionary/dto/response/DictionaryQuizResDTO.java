@@ -1,5 +1,6 @@
 package com.arch.raon.domain.dictionary.dto.response;
 
+import com.arch.raon.domain.dictionary.dto.response.socket.SocketQuizDTO;
 import com.arch.raon.domain.dictionary.entity.DictionaryDirectionQuiz;
 import com.arch.raon.domain.dictionary.entity.DictionaryInitialQuiz;
 import com.arch.raon.global.util.enums.SocketResponse;
@@ -35,4 +36,5 @@ public class DictionaryQuizResDTO {
             ", message=" + message +
             '}';
     }
+
 }

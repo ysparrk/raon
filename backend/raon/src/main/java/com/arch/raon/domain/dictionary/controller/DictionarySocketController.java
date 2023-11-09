@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import com.arch.raon.domain.dictionary.dto.request.SocketReqDTO;
 import com.arch.raon.domain.dictionary.dto.response.DictionaryQuizResDTO;
 import com.arch.raon.domain.dictionary.dto.response.DictionaryRoomResDTO;
-import com.arch.raon.domain.dictionary.dto.response.SocketJoinResDTO;
-import com.arch.raon.domain.dictionary.dto.response.SocketLeaveResDTO;
-import com.arch.raon.domain.dictionary.dto.response.SocketStageStartResDTO;
+import com.arch.raon.domain.dictionary.dto.response.socket.SocketJoinResDTO;
+import com.arch.raon.domain.dictionary.dto.response.socket.SocketLeaveResDTO;
+import com.arch.raon.domain.dictionary.dto.response.socket.SocketSignalResDTO;
 import com.arch.raon.domain.dictionary.service.DictionarySocketService;
 import com.arch.raon.domain.dictionary.vo.Rooms;
 
@@ -133,7 +133,7 @@ public class DictionarySocketController {
 				sendToRoom(reqDTO.getRoomId(), quizes); // 1. 퀴즈 리스트를 보낸다.
 				Thread.sleep(5000); 				// 2. 5초를 쉰다.
 				sendToRoom(reqDTO.getRoomId()
-					, new SocketStageStartResDTO(SocketResponse.STAGE_START)
+					, new SocketSignalResDTO(SocketResponse.STAGE_START)
 				);										// 3. 게임을 시작하라는 메세지를 보낸다.
 				break;
 			case GAME_START_FAIL_NOT_A_OWNER:
@@ -152,28 +152,25 @@ public class DictionarySocketController {
 
 		switch(result){
 			case GAME_START_SUCCESS:
+				/**
+				 * - 게임 시작 시, room에 퀴즈를 저장한다. 이때 순서를 저장해야 한다.
+				 * - 저장 완료시 game_ready를 보낸다.
+				 * - 5초 뒤, 스테이지1을 시작한다.
+				 */
 				DictionaryQuizResDTO quizes = dictionarySocketService.getQuizes();
-
 				System.out.println("[GAME_START] 퀴즈 목록 : " + quizes.toString());
-
 				// 퀴즈의 정답을 room에 넣어야 한다 재원아
 				dictionarySocketService.addQuizToRoom(quizes, reqDTO.getRoomId());
 
-				/**
-				 * - 10문제를 프론트로 보낸다.(답은 가지고 있지 않다.)
-				 * -
-				 */
 				sendToRoom(reqDTO.getRoomId(), quizes); // 1. 퀴즈 리스트를 보낸다.
 				Thread.sleep(5000); 				// 2. 5초를 쉰다.
 				sendToRoom(reqDTO.getRoomId()
-					, new SocketStageStartResDTO(SocketResponse.STAGE_START)
+					, new SocketSignalResDTO(SocketResponse.STAGE_START)
 				);										// 3. 게임을 시작하라는 메세지를 보낸다.
 				break;
 			case GAME_START_FAIL_NOT_A_OWNER:
 				// TODO: 예외 처리 할 것
 				break;
-
-
 		}
 	}
 

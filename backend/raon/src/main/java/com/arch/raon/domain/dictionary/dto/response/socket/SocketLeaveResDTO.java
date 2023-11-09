@@ -1,4 +1,4 @@
-package com.arch.raon.domain.dictionary.dto.response;
+package com.arch.raon.domain.dictionary.dto.response.socket;
 
 import java.io.Serializable;
 

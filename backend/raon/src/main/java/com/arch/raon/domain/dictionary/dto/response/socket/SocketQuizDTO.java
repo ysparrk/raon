@@ -4,10 +4,11 @@ import java.io.Serializable;
 
 import com.arch.raon.domain.dictionary.entity.DictionaryDirectionQuiz;
 import com.arch.raon.domain.dictionary.entity.DictionaryInitialQuiz;
+import com.arch.raon.global.util.enums.QuizType;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 public class SocketQuizDTO implements Serializable {
-	private String quizType;
+	private QuizType quizType;
 
 	/**
 	 * 퀴즈는 초성 퀴즈 or 동서남북 퀴즈 중 하나 이므로
@@ -25,21 +26,21 @@ public class SocketQuizDTO implements Serializable {
 		super();
 	}
 
-	public SocketQuizDTO(String quizType, DictionaryInitialQuiz dictionaryInitialQuiz) {
+	public SocketQuizDTO(QuizType quizType, DictionaryInitialQuiz dictionaryInitialQuiz) {
 		this.quizType = quizType;
 		this.dictionaryInitialQuiz = dictionaryInitialQuiz;
 	}
 
-	public SocketQuizDTO(String quizType, DictionaryDirectionQuiz dictionaryDirectionQuiz) {
+	public SocketQuizDTO(QuizType quizType, DictionaryDirectionQuiz dictionaryDirectionQuiz) {
 		this.quizType = quizType;
 		this.dictionaryDirectionQuiz = dictionaryDirectionQuiz;
 	}
 
-	public String getQuizType() {
+	public QuizType getQuizType() {
 		return quizType;
 	}
 
-	public void setQuizType(String quizType) {
+	public void setQuizType(QuizType quizType) {
 		this.quizType = quizType;
 	}
 
@@ -58,6 +59,12 @@ public class SocketQuizDTO implements Serializable {
 	public void setDictionaryDirectionQuiz(
 		DictionaryDirectionQuiz dictionaryDirectionQuiz) {
 		this.dictionaryDirectionQuiz = dictionaryDirectionQuiz;
+	}
+
+	public String getAnswer(){
+		return dictionaryDirectionQuiz == null
+			 ? dictionaryInitialQuiz.getWord()
+			 : dictionaryDirectionQuiz.getAnswer();
 	}
 
 	@Override
