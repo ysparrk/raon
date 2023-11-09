@@ -15,6 +15,7 @@ import com.arch.raon.domain.member.repository.MemberRepository;
 import com.arch.raon.global.exception.CustomException;
 import com.arch.raon.global.exception.ErrorCode;
 import com.arch.raon.global.util.enums.RoomResult;
+import com.arch.raon.global.util.enums.SocketResponse;
 
 import lombok.RequiredArgsConstructor;
 
@@ -59,7 +60,7 @@ public class DictionarySocketServiceImpl implements DictionarySocketService{
 	public RoomResult startGame(String roomId, String nickname) {
 		if(!Rooms.hasRoomThatIdIs(roomId)) // 방이 존재하지 않으면
 			return RoomResult.FAIL_NONEXIST_ROOM;
-		if(!Rooms.isUserInRoom(nickname, roomId)) // 방에 유저가 존재하지 않으면
+		if(!Rooms.isUserInRoom(nickname, roomId)) // 요청을 보낸 유저가 방에 존재하지 않을 때
 			return RoomResult.FAIL_NOT_IN_ROOM;
 		if(!Rooms.isUserOwner(roomId, nickname)) // 방장이 아닐 때
 			return RoomResult.GAME_START_FAIL_NOT_A_OWNER;
@@ -86,7 +87,7 @@ public class DictionarySocketServiceImpl implements DictionarySocketService{
 	public DictionaryQuizResDTO getQuizes() {
 		List<DictionaryDirectionQuiz> directionQuizes = dictionaryDirectionQuizRepository.random3();
 		List<DictionaryInitialQuiz> initialQuizes = dictionaryInitialQuizRepository.random7();
-		return new DictionaryQuizResDTO(initialQuizes, directionQuizes, "gameStart");
+		return new DictionaryQuizResDTO(initialQuizes, directionQuizes, SocketResponse.GAME_READY);
 	}
 
 	@Override

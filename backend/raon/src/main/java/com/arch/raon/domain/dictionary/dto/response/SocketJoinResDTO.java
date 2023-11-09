@@ -3,6 +3,8 @@ package com.arch.raon.domain.dictionary.dto.response;
 import java.io.Serializable;
 import java.util.List;
 
+import com.arch.raon.global.util.enums.SocketResponse;
+
 /**
  * 방에 입장 성공했을 때 방에 있는 사람들의 정보를 저장한 DTO
  * (방금 입장 한 사람 포함)
@@ -10,7 +12,7 @@ import java.util.List;
  */
 public class SocketJoinResDTO implements Serializable {
 
-	private String message;
+	private SocketResponse message;
 	private String newComer; // 방금 들어온 녀석, 새로운 사람 입장 시 알림 용도로 넣음
 	private String owner; // 현재 방장
 	private List<String> users; // 방에 있는 사람들(방금 들어온 녀석 포함)
@@ -69,11 +71,11 @@ public class SocketJoinResDTO implements Serializable {
 		this.users = users;
 	}
 
-	public String getMessage() {
+	public SocketResponse getMessage() {
 		return message;
 	}
 
-	public void setMessage(String message) {
+	public void setMessage(SocketResponse message) {
 		this.message = message;
 	}
 }

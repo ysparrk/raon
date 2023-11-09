@@ -13,12 +13,13 @@ import com.arch.raon.domain.dictionary.dto.response.DictionaryQuizResDTO;
 import com.arch.raon.domain.dictionary.dto.response.DictionaryRoomResDTO;
 import com.arch.raon.domain.dictionary.dto.response.SocketJoinResDTO;
 import com.arch.raon.domain.dictionary.dto.response.SocketLeaveResDTO;
-import com.arch.raon.domain.dictionary.dto.response.SocketResponseDTO;
+import com.arch.raon.domain.dictionary.dto.response.SocketStageStartResDTO;
 import com.arch.raon.domain.dictionary.service.DictionarySocketService;
 import com.arch.raon.domain.dictionary.vo.Rooms;
 
 import com.arch.raon.global.dto.ResponseDTO;
 import com.arch.raon.global.util.enums.RoomResult;
+import com.arch.raon.global.util.enums.SocketResponse;
 
 import lombok.RequiredArgsConstructor;
 
@@ -62,7 +63,6 @@ public class DictionarySocketController {
 	 * 즉
 	 * roomId가 존재하면 -> 참가
 	 * roomId가 존재하지 않으면 -> 생성
-
 	 * @param reqDTO
 	 */
 	@MessageMapping("/dictionary-quiz/connect-room")
@@ -75,9 +75,8 @@ public class DictionarySocketController {
 			case JOIN_SUCCESS:
 			case CREATE_SUCCESS:
 				SocketJoinResDTO socketJoinResDTO = Rooms.getUsersOf(reqDTO.getRoomId());
-				socketJoinResDTO.setMessage("enter");
+				socketJoinResDTO.setMessage(SocketResponse.ENTER);
 				socketJoinResDTO.setNewComer(reqDTO.getNickname());
-
 
 				sendToRoom(reqDTO.getRoomId(), socketJoinResDTO);
 				break;
@@ -104,7 +103,7 @@ public class DictionarySocketController {
 		switch(result) {
 			case LEAVE_SUCCESS:
 				String nextOwner = Rooms.getOwnerOf(reqDTO.getRoomId());
-				sendToRoom(reqDTO.getRoomId(), new SocketLeaveResDTO(reqDTO.getNickname(), nextOwner, "leave"));
+				sendToRoom(reqDTO.getRoomId(), new SocketLeaveResDTO(reqDTO.getNickname(), nextOwner, SocketResponse.LEAVE));
 				break;
 			case LEAVE_FAIL_NONEXIST:
 				System.out.println("ERROR");
@@ -113,10 +112,11 @@ public class DictionarySocketController {
 	}
 
 	@MessageMapping("/dictionary-quiz/game-start")
-	public void startGame(SocketReqDTO reqDTO){
+	public void startGame(SocketReqDTO reqDTO) throws InterruptedException {
 		System.out.println("[GAME-START] 게임 시작 요청!!!! 요청자: " + reqDTO.getNickname() +" 방 아이디: "+ reqDTO.getRoomId());
 		RoomResult result = dictionarySocketService.startGame(reqDTO.getRoomId(), reqDTO.getNickname());
 		System.out.println("result : " + result);
+
 		switch(result){
 			case GAME_START_SUCCESS:
 				DictionaryQuizResDTO quizes = dictionarySocketService.getQuizes();
@@ -126,7 +126,15 @@ public class DictionarySocketController {
 				// 퀴즈의 정답을 room에 넣어야 한다 재원아
 				dictionarySocketService.addQuizToRoom(quizes, reqDTO.getRoomId());
 
-				sendToRoom(reqDTO.getRoomId(), quizes);
+				/**
+				 * - 10문제를 프론트로 보낸다.(답은 가지고 있지 않다.)
+				 * -
+				 */
+				sendToRoom(reqDTO.getRoomId(), quizes); // 1. 퀴즈 리스트를 보낸다.
+				Thread.sleep(5000); 				// 2. 5초를 쉰다.
+				sendToRoom(reqDTO.getRoomId()
+					, new SocketStageStartResDTO(SocketResponse.STAGE_START)
+				);										// 3. 게임을 시작하라는 메세지를 보낸다.
 				break;
 			case GAME_START_FAIL_NOT_A_OWNER:
 				// TODO: 예외 처리 할 것
@@ -136,7 +144,38 @@ public class DictionarySocketController {
 		}
 	}
 
+	@MessageMapping("/dictionary-quiz/stage")
+	public void stageStart(SocketReqDTO reqDTO) throws InterruptedException {
+		System.out.println("[GAME-START] 게임 시작 요청!!!! 요청자: " + reqDTO.getNickname() +" 방 아이디: "+ reqDTO.getRoomId());
+		RoomResult result = dictionarySocketService.startGame(reqDTO.getRoomId(), reqDTO.getNickname());
+		System.out.println("result : " + result);
 
+		switch(result){
+			case GAME_START_SUCCESS:
+				DictionaryQuizResDTO quizes = dictionarySocketService.getQuizes();
+
+				System.out.println("[GAME_START] 퀴즈 목록 : " + quizes.toString());
+
+				// 퀴즈의 정답을 room에 넣어야 한다 재원아
+				dictionarySocketService.addQuizToRoom(quizes, reqDTO.getRoomId());
+
+				/**
+				 * - 10문제를 프론트로 보낸다.(답은 가지고 있지 않다.)
+				 * -
+				 */
+				sendToRoom(reqDTO.getRoomId(), quizes); // 1. 퀴즈 리스트를 보낸다.
+				Thread.sleep(5000); 				// 2. 5초를 쉰다.
+				sendToRoom(reqDTO.getRoomId()
+					, new SocketStageStartResDTO(SocketResponse.STAGE_START)
+				);										// 3. 게임을 시작하라는 메세지를 보낸다.
+				break;
+			case GAME_START_FAIL_NOT_A_OWNER:
+				// TODO: 예외 처리 할 것
+				break;
+
+
+		}
+	}
 
 
 	// 특정 방에 있는 "모든 인원"에게 데이터를 보낼 때 (방 입장, 방 나가기, 문제 결과 전송 등)

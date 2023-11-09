@@ -2,6 +2,8 @@ package com.arch.raon.domain.dictionary.dto.response;
 
 import com.arch.raon.domain.dictionary.entity.DictionaryDirectionQuiz;
 import com.arch.raon.domain.dictionary.entity.DictionaryInitialQuiz;
+import com.arch.raon.global.util.enums.SocketResponse;
+
 import lombok.Builder;
 import lombok.Getter;
 
@@ -12,14 +14,14 @@ public class DictionaryQuizResDTO {
     private List<DictionaryInitialQuiz> initialQuizList;
     private List<DictionaryDirectionQuiz> directionQuizList;
 
-    private String message;
+    private SocketResponse message;
 
     public DictionaryQuizResDTO(){
         super();
     }
 
     @Builder
-    public DictionaryQuizResDTO(List<DictionaryInitialQuiz> initialQuizList, List<DictionaryDirectionQuiz> directionQuizList, String message) {
+    public DictionaryQuizResDTO(List<DictionaryInitialQuiz> initialQuizList, List<DictionaryDirectionQuiz> directionQuizList, SocketResponse message) {
         this.initialQuizList = initialQuizList;
         this.directionQuizList = directionQuizList;
         this.message = message;
@@ -27,9 +29,10 @@ public class DictionaryQuizResDTO {
 
     @Override
     public String toString() {
-        return "DictionaryQuizResponseDto{" +
-                "initialQuizList=" + initialQuizList +
-                ", directionQuizList=" + directionQuizList +
-                '}';
+        return "DictionaryQuizResDTO{" +
+            "initialQuizList=" + initialQuizList +
+            ", directionQuizList=" + directionQuizList +
+            ", message=" + message +
+            '}';
     }
 }

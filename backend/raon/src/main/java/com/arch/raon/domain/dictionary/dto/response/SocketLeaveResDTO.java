@@ -2,18 +2,20 @@ package com.arch.raon.domain.dictionary.dto.response;
 
 import java.io.Serializable;
 
+import com.arch.raon.global.util.enums.SocketResponse;
+
 public class SocketLeaveResDTO implements Serializable {
 	private String leaved;
 	private String nextOwner = "none";
 
-	private String message;
+	private SocketResponse message;
 
 	public SocketLeaveResDTO() {
 		super();
 	}
 
 
-	public SocketLeaveResDTO(String leaved, String nextOwner, String message) {
+	public SocketLeaveResDTO(String leaved, String nextOwner, SocketResponse message) {
 		this.leaved = leaved;
 		this.nextOwner = nextOwner;
 		this.message = message;
@@ -44,11 +46,11 @@ public class SocketLeaveResDTO implements Serializable {
 		this.nextOwner = nextOwner;
 	}
 
-	public String getMessage() {
+	public SocketResponse getMessage() {
 		return message;
 	}
 
-	public void setMessage(String message) {
+	public void setMessage(SocketResponse message) {
 		this.message = message;
 	}
 }
