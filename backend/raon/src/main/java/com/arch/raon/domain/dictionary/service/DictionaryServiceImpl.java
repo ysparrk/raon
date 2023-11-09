@@ -1,10 +1,11 @@
 package com.arch.raon.domain.dictionary.service;
 
+import com.arch.raon.domain.dictionary.dto.query.DictionaryMyRankQueryDTO;
 import com.arch.raon.domain.dictionary.dto.request.DictionaryScoreReqDTO;
+import com.arch.raon.domain.dictionary.dto.response.DictionaryMyRankResDTO;
 import com.arch.raon.domain.dictionary.dto.response.DictionaryQuizResDTO;
 import com.arch.raon.domain.dictionary.entity.DictionaryDirectionQuiz;
 import com.arch.raon.domain.dictionary.entity.DictionaryInitialQuiz;
-import com.arch.raon.domain.dictionary.entity.DictionaryScore;
 import com.arch.raon.domain.dictionary.repository.DictionaryDirectionQuizRepository;
 import com.arch.raon.domain.dictionary.repository.DictionaryInitialQuizRepository;
 import com.arch.raon.domain.dictionary.repository.DictionaryScoreRepository;
@@ -12,11 +13,13 @@ import com.arch.raon.domain.member.entity.Member;
 import com.arch.raon.domain.member.repository.MemberRepository;
 import com.arch.raon.global.exception.CustomException;
 import com.arch.raon.global.exception.ErrorCode;
+import com.arch.raon.global.service.RedisService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -25,7 +28,7 @@ public class DictionaryServiceImpl implements DictionaryService {
     private final MemberRepository memberRepository;
     private final DictionaryInitialQuizRepository dictionaryInitialQuizRepository;
     private final DictionaryDirectionQuizRepository dictionaryDirectionQuizRepository;
-    private final DictionaryScoreRepository dictionaryScoreRepository;
+    private final RedisService redisService;
 
     @Override
     public DictionaryQuizResDTO getDictionaryQuizzes() {
@@ -42,7 +45,6 @@ public class DictionaryServiceImpl implements DictionaryService {
     }
 
     @Override
-    @Transactional
     public void saveDictionaryQuizResult(Long memberId, DictionaryScoreReqDTO dictionaryScoreReqDTO) {
 
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND) {
@@ -52,11 +54,32 @@ public class DictionaryServiceImpl implements DictionaryService {
             }
         });
 
-        DictionaryScore dictionaryScore = DictionaryScore.builder()
-                .member(member)
-                .score(dictionaryScoreReqDTO.getScore())
+        redisService.setCountryDictionaryPoint(member.getNickname(),dictionaryScoreReqDTO.getScore());
+    }
+
+    @Override
+    public DictionaryMyRankResDTO getMyRank(Long memberId){
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND) {
+            @Override
+            public ErrorCode getErrorCode() {
+                return super.getErrorCode();
+            }
+        });
+        double myScore = redisService.getCountryDictionaryPoint(member.getNickname());
+        long myRank = redisService.getCountryDictionaryMyRank(member.getNickname());
+        myRank++;
+
+        List<DictionaryMyRankQueryDTO> myRankList = redisService.getCountryDictionaryRank(myRank);
+        List<DictionaryMyRankQueryDTO> topRankList = redisService.getCountryDictionaryRank(0);
+
+        DictionaryMyRankResDTO dictionaryMyRankResDTO = DictionaryMyRankResDTO.builder()
+                .myRank(myRank)
+                .myScore(myScore)
+                .myRankList(myRankList)
+                .topRankList(topRankList)
                 .build();
 
-        dictionaryScoreRepository.save(dictionaryScore);
+        return dictionaryMyRankResDTO;
     }
+
 }

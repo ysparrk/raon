@@ -1,6 +1,7 @@
 package com.arch.raon.domain.dictionary.controller;
 
 import com.arch.raon.domain.dictionary.dto.request.DictionaryScoreReqDTO;
+import com.arch.raon.domain.dictionary.dto.response.DictionaryMyRankResDTO;
 import com.arch.raon.domain.dictionary.dto.response.DictionaryQuizResDTO;
 import com.arch.raon.domain.dictionary.service.DictionaryService;
 import com.arch.raon.global.auth.dto.UserAuthentication;
@@ -40,6 +41,20 @@ public class DictionaryController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ResponseDTO.builder()
                         .message("국어사전 퀴즈 결과 저장 성공")
+                        .build());
+    }
+
+    @GetMapping("/ranking/DICTIONARY-COUNTRY-MY")
+    public ResponseEntity<ResponseDTO> getMyRanking(
+            @AuthenticationPrincipal UserAuthentication userAuth
+    ) {
+
+        DictionaryMyRankResDTO dictionaryMyRankResDTO = dictionaryService.getMyRank(userAuth.getId());
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ResponseDTO.builder()
+                        .data(dictionaryMyRankResDTO)
+                        .message("내 랭킹 조회 성공")
                         .build());
     }
 }
