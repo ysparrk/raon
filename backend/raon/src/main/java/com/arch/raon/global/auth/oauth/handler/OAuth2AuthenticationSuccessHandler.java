@@ -42,7 +42,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
         // RefreshToken 쿠키, Redis에 저장
         setRefreshTokenInCookie(response, refreshToken);
-        redisService.setRefreshToken(accessToken, refreshToken);
+        redisService.setRefreshToken(oAuth2User.getUserInfo().getId(), refreshToken);
 
         String redirect_uri = CookieService.getCookie(request, REDIRECT_URI_PARAM_COOKIE_NAME)
                 .map(cookie -> cookie.getValue())
