@@ -96,7 +96,11 @@ function WaitInterface() {
   const callback: (message: any) => void = (message: any) => {
     if (message.body) {
       const body: any = JSON.parse(message.body);
+      // const { users } = body;
+      // const gameParticipants = users.map((user: any) => user);
+      // setParticipants(gameParticipants);
       console.log(body);
+      // console.log(gameParticipants);
     }
   };
 
@@ -121,6 +125,19 @@ function WaitInterface() {
     }
   };
 
+  // 방장이 게임 시작 요청 보내기
+  const gameStart = (
+    client: Client,
+    nickname: string,
+    roomId: string,
+  ): void => {
+    console.log('게임 시작 요청');
+    client.publish({
+      destination: `/dictionary-quiz/game-start`,
+      body: JSON.stringify({ nickname, roomId }),
+    });
+  };
+
   // 컴포넌트 마운트 시 웹 소켓 연결 시작
   useEffect(() => {
     stompClient.activate();
@@ -132,10 +149,9 @@ function WaitInterface() {
         <RoomCurrentDiv>
           <RoomHeadText>방 코드</RoomHeadText>
           <RoomCodeText>{roomId}</RoomCodeText>
-          <RoomParticipantsText>참가자</RoomParticipantsText>
-          <RoomParticipantsText>참가자</RoomParticipantsText>
-          <RoomParticipantsText>참가자</RoomParticipantsText>
-          <RoomParticipantsText>참가자</RoomParticipantsText>
+          {/* {participants.reverse().map((participant, index) => (
+          <RoomParticipantsText key={index}>{participant}</RoomParticipantsText>
+        ))} */}
         </RoomCurrentDiv>
         <JoinButton
           optionText="초대하기"
@@ -146,7 +162,16 @@ function WaitInterface() {
         />
       </InterfaceDiv>
       <ButtonDiv>
-        <StartButton onClick={() => navigate('/game/dictionary-game')} />
+        <StartButton
+          content="시작하기"
+          onClick={() => {
+            if (stompClient) {
+              console.log('게임 시작 버튼');
+              gameStart(stompClient, nickname, roomId);
+            }
+            navigate('/game/dictionary-multi-game');
+          }}
+        />
         <RoomExitButton
           onClick={() => {
             if (stompClient) {

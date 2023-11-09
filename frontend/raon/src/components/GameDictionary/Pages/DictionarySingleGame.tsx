@@ -62,11 +62,10 @@ const DictionaryGame = () => {
           response.data.data.directionQuizList,
           10,
         );
-        console.log(combinedQuiz);
 
         setQuizList(combinedQuiz);
       } catch (error) {
-        console.log('catcherror 발생');
+        console.log(error);
       }
     };
     if (quizList.length === 0) {
