@@ -4,13 +4,13 @@ import java.io.Serializable;
 
 import com.arch.raon.global.util.enums.SocketResponse;
 
-public class SocketStageStartResDTO implements Serializable {
+public class SocketSignalResDTO implements Serializable {
 	private SocketResponse message;
 
-	public SocketStageStartResDTO() {
+	public SocketSignalResDTO() {
 		super();
 	}
-	public SocketStageStartResDTO(SocketResponse message) {
+	public SocketSignalResDTO(SocketResponse message) {
 		this.message = message;
 	}
 
@@ -20,5 +20,12 @@ public class SocketStageStartResDTO implements Serializable {
 
 	public void setMessage(SocketResponse message) {
 		this.message = message;
+	}
+
+	@Override
+	public String toString() {
+		return "SocketSignalResDTO{" +
+			"message=" + message +
+			'}';
 	}
 }
