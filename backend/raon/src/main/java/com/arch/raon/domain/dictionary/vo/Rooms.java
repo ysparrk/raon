@@ -4,7 +4,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 import com.arch.raon.domain.dictionary.dto.response.DictionaryQuizResDTO;
-import com.arch.raon.domain.dictionary.dto.response.SocketJoinResDTO;
+import com.arch.raon.domain.dictionary.dto.response.socket.SocketJoinResDTO;
 import com.arch.raon.global.util.enums.GameState;
 
 /**
@@ -93,6 +93,7 @@ public class Rooms {
 	public static boolean gameStart(String roomId, String nickname){
 		if(hasRoomThatIdIs(roomId) && roomOf(roomId).getRoomOwner().equals(nickname)){
 			roomOf(roomId).PLAY();
+			return true;
 		}
 		return false;
 	}
@@ -101,10 +102,13 @@ public class Rooms {
 		return new SocketJoinResDTO(roomOf(roomId).getRoomOwner(), roomOf(roomId).getUsers());
 	}
 
+
 	/**
 	 * 랜덤으로 생성한 퀴즈를 Room에 저장한다.
 	 *
 	 * 일단 각 방에서 퀴즈를 가지고 있어야 하므로 setter를 이용하여 저장한다.
+	 * 퀴즈를 넣을 때 알아서 순서를 만들어서 넣어야 한다.
+	 *
 	 *
 	 * @param roomId
 	 * @param dictionaryQuizResDTO
