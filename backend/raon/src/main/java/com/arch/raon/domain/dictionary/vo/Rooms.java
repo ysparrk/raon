@@ -5,6 +5,7 @@ import java.util.concurrent.ConcurrentMap;
 
 import com.arch.raon.domain.dictionary.dto.response.DictionaryQuizResDTO;
 import com.arch.raon.domain.dictionary.dto.response.socket.SocketJoinResDTO;
+import com.arch.raon.domain.dictionary.dto.response.socket.SocketQuizDTO;
 import com.arch.raon.global.util.enums.GameState;
 
 /**
@@ -56,6 +57,11 @@ public class Rooms {
 			return true;
 		}
 	}
+
+	public static SocketQuizDTO getNextQuizFrom(String roomId){
+		return roomOf(roomId).getNextQuiz();
+	}
+
 
 	/**
 	 * 유저가 방을 나간다.
@@ -116,7 +122,7 @@ public class Rooms {
 	 */
 	public static boolean addQuizesToRoom(String roomId, DictionaryQuizResDTO dictionaryQuizResDTO){
 		if(hasRoomThatIdIs(roomId) && roomOf(roomId).getState() == GameState.PLAY){
-			roomOf(roomId).setQuizes(dictionaryQuizResDTO);
+			roomOf(roomId).shuffleAndSetQuizes(dictionaryQuizResDTO);
 		}
 		return false;
 	}

@@ -142,7 +142,7 @@ public class Room {
 		}
 
 		if(quizList.get(currentStage).getAnswer().equals(userAnswer)){
-			int point = 100 * timeSpend; // TODO: 늦게 풀 수록 점수를 낮게 주고 싶은데 방법이 없나?
+			int point = 100 * (10000 - timeSpend); // TODO: 늦게 풀 수록 점수를 낮게 주고 싶은데 방법이 없나?
 			userInfo.get(nickname).addPoint(point);
 		}
 

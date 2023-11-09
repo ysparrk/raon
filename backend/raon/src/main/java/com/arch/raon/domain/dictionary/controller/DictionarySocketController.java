@@ -8,11 +8,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import com.arch.raon.domain.dictionary.dto.request.SocketQuizReqDTO;
 import com.arch.raon.domain.dictionary.dto.request.SocketReqDTO;
 import com.arch.raon.domain.dictionary.dto.response.DictionaryQuizResDTO;
 import com.arch.raon.domain.dictionary.dto.response.DictionaryRoomResDTO;
 import com.arch.raon.domain.dictionary.dto.response.socket.SocketJoinResDTO;
 import com.arch.raon.domain.dictionary.dto.response.socket.SocketLeaveResDTO;
+import com.arch.raon.domain.dictionary.dto.response.socket.SocketQuizDTO;
 import com.arch.raon.domain.dictionary.dto.response.socket.SocketSignalResDTO;
 import com.arch.raon.domain.dictionary.service.DictionarySocketService;
 import com.arch.raon.domain.dictionary.vo.Rooms;
@@ -119,22 +121,19 @@ public class DictionarySocketController {
 
 		switch(result){
 			case GAME_START_SUCCESS:
+				// 1. 퀴즈를 뽑아 방에 넣는다. 넣을 때 방 객체가 알아서 섞어준다.
 				DictionaryQuizResDTO quizes = dictionarySocketService.getQuizes();
-
-				System.out.println("[GAME_START] 퀴즈 목록 : " + quizes.toString());
-
-				// 퀴즈의 정답을 room에 넣어야 한다 재원아
 				dictionarySocketService.addQuizToRoom(quizes, reqDTO.getRoomId());
 
-				/**
-				 * - 10문제를 프론트로 보낸다.(답은 가지고 있지 않다.)
-				 * -
-				 */
-				sendToRoom(reqDTO.getRoomId(), quizes); // 1. 퀴즈 리스트를 보낸다.
-				Thread.sleep(5000); 				// 2. 5초를 쉰다.
 				sendToRoom(reqDTO.getRoomId()
 					, new SocketSignalResDTO(SocketResponse.STAGE_START)
-				);										// 3. 게임을 시작하라는 메세지를 보낸다.
+				);										// 2. 게임을 준비하라는 메세지를 보낸다.
+
+				Thread.sleep(3000); 				// 3. 3초를 쉰다.
+
+				SocketQuizDTO firstQuiz = dictionarySocketService.getNextQuizFrom(reqDTO.getRoomId());
+				sendToRoom(reqDTO.getRoomId(), firstQuiz); // 4. 해당 방의 첫 번째 퀴즈를 리턴한다.
+
 				break;
 			case GAME_START_FAIL_NOT_A_OWNER:
 				// TODO: 예외 처리 할 것
@@ -144,9 +143,22 @@ public class DictionarySocketController {
 		}
 	}
 
-	@MessageMapping("/dictionary-quiz/stage")
-	public void stageStart(SocketReqDTO reqDTO) throws InterruptedException {
-		System.out.println("[GAME-START] 게임 시작 요청!!!! 요청자: " + reqDTO.getNickname() +" 방 아이디: "+ reqDTO.getRoomId());
+	/**
+	 * 유저가 게임을 하면서 보낸 답을 체크한다.
+	 * 프론트에서 방의 모든 유저가 답을 보내면 통계를 내보내고,
+	 * 약 7초 뒤에 다음 문제를 보낸다.
+	 */
+	@MessageMapping("/dictionary-quiz/on-stage")
+	public void onStage(SocketQuizReqDTO reqDTO) throws InterruptedException {
+		/**
+		 *
+		 *
+		 *   TODO : 여기를 10일에 고쳐~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		 *
+		 *
+		 */
+
+		System.out.println("[ON-STAGE] 정답 보냄!!!! 요청자: " + reqDTO.getNickname() +" 방 아이디: "+ reqDTO.getRoomId());
 		RoomResult result = dictionarySocketService.startGame(reqDTO.getRoomId(), reqDTO.getNickname());
 		System.out.println("result : " + result);
 
@@ -162,7 +174,9 @@ public class DictionarySocketController {
 				// 퀴즈의 정답을 room에 넣어야 한다 재원아
 				dictionarySocketService.addQuizToRoom(quizes, reqDTO.getRoomId());
 
-				sendToRoom(reqDTO.getRoomId(), quizes); // 1. 퀴즈 리스트를 보낸다.
+				sendToRoom(reqDTO.getRoomId()
+					, new SocketSignalResDTO(SocketResponse.GAME_READY)
+				); 										// 1.
 				Thread.sleep(5000); 				// 2. 5초를 쉰다.
 				sendToRoom(reqDTO.getRoomId()
 					, new SocketSignalResDTO(SocketResponse.STAGE_START)

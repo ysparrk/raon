@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.arch.raon.domain.dictionary.dto.response.DictionaryQuizResDTO;
+import com.arch.raon.domain.dictionary.dto.response.socket.SocketQuizDTO;
 import com.arch.raon.domain.dictionary.entity.DictionaryDirectionQuiz;
 import com.arch.raon.domain.dictionary.entity.DictionaryInitialQuiz;
 import com.arch.raon.domain.dictionary.repository.DictionaryDirectionQuizRepository;
@@ -82,7 +83,6 @@ public class DictionarySocketServiceImpl implements DictionarySocketService{
 		return member != null;
 	}
 
-
 	@Override
 	public DictionaryQuizResDTO getQuizes() {
 		List<DictionaryDirectionQuiz> directionQuizes = dictionaryDirectionQuizRepository.random3();
@@ -95,5 +95,9 @@ public class DictionarySocketServiceImpl implements DictionarySocketService{
 		Rooms.addQuizesToRoom(roomId, quizes);
 	}
 
+	@Override
+	public SocketQuizDTO getNextQuizFrom(String roomId) {
+		return Rooms.getNextQuizFrom(roomId);
+	}
 
 }
