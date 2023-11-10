@@ -43,4 +43,12 @@ public class User implements Serializable, Comparable<User> {
 	public int compareTo(User o) {
 		return Integer.compare(o.current_point, this.current_point);
 	}
+
+	@Override
+	public String toString() {
+		return "User{" +
+			"nickname='" + nickname + '\'' +
+			", current_point=" + current_point +
+			'}';
+	}
 }

@@ -1,21 +1,23 @@
-package com.arch.raon.domain.dictionary.dto.response;
+package com.arch.raon.domain.dictionary.dto.response.socket;
 
 import java.io.Serializable;
+
+import com.arch.raon.global.util.enums.SocketResponse;
 
 public class SocketResponseDTO implements Serializable {
 	private String nickname;
 	private String roomId;
 	private boolean isOwner;
-	private String message;
+	private SocketResponse message;
 
-	public SocketResponseDTO(String nickname, String roomId, String message, boolean isOwner) {
+	public SocketResponseDTO(String nickname, String roomId, SocketResponse message, boolean isOwner) {
 		this.nickname = nickname;
 		this.roomId = roomId;
 		this.message = message;
 		this.isOwner = isOwner;
 	}
 
-	public SocketResponseDTO(String nickname, String message, boolean isOwner) {
+	public SocketResponseDTO(String nickname, SocketResponse message, boolean isOwner) {
 		this.nickname = nickname;
 		this.isOwner = isOwner;
 		this.message = message;
@@ -41,11 +43,11 @@ public class SocketResponseDTO implements Serializable {
 		this.roomId = roomId;
 	}
 
-	public void setMessage(String message) {
+	public void setMessage(SocketResponse message) {
 		this.message = message;
 	}
 
-	public String getMessage() {
+	public SocketResponse getMessage() {
 		return message;
 	}
 
