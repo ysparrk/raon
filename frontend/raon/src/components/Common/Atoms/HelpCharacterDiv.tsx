@@ -25,6 +25,7 @@ const HelpCharacterDiv = styled.div`
   display: flex;
   bottom: -2%;
   left: 0%;
+  z-index: 10;
   animation: ${CharaterfloatAnimation} 2s infinite alternate;
 `;
 
