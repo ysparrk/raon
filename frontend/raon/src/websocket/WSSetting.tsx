@@ -116,6 +116,16 @@ const useWebSocket = () => {
       });
     };
 
+
+    const sendQuizResult = (userAnswer: string, timeSpend: number, stage: number): void => {
+      console.log('퀴즈 정답 보내기');
+      client.publish({
+        destination: `/dictionary-quiz/on-stage`,
+        body: JSON.stringify({ nickname, roomId, userAnswer, timeSpend, stage }),
+      });
+    };
+
+
     const createRoom = () => {
       client.activate();
     };
@@ -135,6 +145,7 @@ const useWebSocket = () => {
       leaveRoom,
       gameStart,
       createRoom,
+      sendQuizResult,
     };
   };
 

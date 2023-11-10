@@ -4,6 +4,7 @@ import { useSetRecoilState } from 'recoil';
 import { dictScoreState } from '../../../recoil/Atoms';
 import AnswerInputBox from '../Atoms/AnswerInputBox';
 import SingleModeAnswer from './SingleModeAnswer';
+import useWebSocket from '../../../websocket/WSSetting';
 
 interface QuizCrossWordProps {
   word: string;
@@ -111,20 +112,31 @@ function MultiQuizCrossWord({
   const [inputValue, setInputValue] = useState('');
   const [isSolved, setIsSolved] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
+  // const [startTime, setStartTime] = useState(Date.now());
+  const { initializeWebSocket } = useWebSocket();
+  const { sendQuizResult } = initializeWebSocket();
+
 
   const setDictScore = useSetRecoilState(dictScoreState);
-  const handleClick = (value: string) => {
+  const handleClick = (value: string, stage: number) => {
+    // const timeSpend = Date.now() - startTime; 
+
     if (value === word) {
-      setIsCorrect(true);
-      setIsSolved(true);
-      setInputValue('');
-      setDictScore((prevValue) => prevValue + 10);
+      const timeSpend = 123;
+      console.log(value, timeSpend, stage)
+      sendQuizResult(value, timeSpend, stage)
+      // setIsCorrect(true);
+      // setIsSolved(true);
+      // setInputValue('');
+      // setDictScore((prevValue) => prevValue + 10);
     } else {
-      setIsCorrect(false);
-      setIsSolved(true);
-      setInputValue('');
+      // setIsCorrect(false);
+      // setIsSolved(true);
+      // setInputValue('');
     }
   };
+
+
   return (
     <QuizDiv>
       {isSolved && (
@@ -157,13 +169,15 @@ function MultiQuizCrossWord({
           }}
           onEnter={() => {
             if (!isSolved) {
-              handleClick(inputValue);
+              const stage = 0;
+              handleClick(inputValue, stage);
             }
           }}
         />
         <QuizEnterBtn
           onClick={() => {
-            handleClick(inputValue);
+            const stage = 0;
+            handleClick(inputValue, stage);
           }}
         >
           제출
