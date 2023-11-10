@@ -149,7 +149,7 @@ public class DictionarySocketController {
 	 * 약 7초 뒤에 다음 문제를 보낸다.
 	 */
 	@MessageMapping("/dictionary-quiz/on-stage")
-	public void onStage(SocketQuizReqDTO reqDTO) throws InterruptedException {
+	public void onStage(SocketQuizReqDTO reqDTO){
 		System.out.println("[ON-STAGE] 정답 보냄!!!! 요청자: " + reqDTO.getNickname() +" 방 아이디: "+ reqDTO.getRoomId());
 		RoomResult result = dictionarySocketService.addAnswerToRoom(reqDTO);
 

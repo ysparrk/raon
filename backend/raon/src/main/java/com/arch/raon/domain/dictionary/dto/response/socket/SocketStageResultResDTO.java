@@ -44,7 +44,6 @@ public class SocketStageResultResDTO implements Serializable {
 		}
 
 		return "SocketStageResultResDTO{" +
-			"stage=" + stage +
 			", users=" + usersToString +
 			", message=" + message +
 			'}';
