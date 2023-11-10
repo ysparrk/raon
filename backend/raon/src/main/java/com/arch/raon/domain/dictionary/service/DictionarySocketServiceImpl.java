@@ -4,8 +4,10 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.arch.raon.domain.dictionary.dto.request.SocketQuizReqDTO;
 import com.arch.raon.domain.dictionary.dto.response.DictionaryQuizResDTO;
 import com.arch.raon.domain.dictionary.dto.response.socket.SocketQuizDTO;
+import com.arch.raon.domain.dictionary.dto.response.socket.SocketStageResultResDTO;
 import com.arch.raon.domain.dictionary.entity.DictionaryDirectionQuiz;
 import com.arch.raon.domain.dictionary.entity.DictionaryInitialQuiz;
 import com.arch.raon.domain.dictionary.repository.DictionaryDirectionQuizRepository;
@@ -98,6 +100,31 @@ public class DictionarySocketServiceImpl implements DictionarySocketService{
 	@Override
 	public SocketQuizDTO getNextQuizFrom(String roomId) {
 		return Rooms.getNextQuizFrom(roomId);
+	}
+
+	@Override
+	public RoomResult addAnswerToRoom(SocketQuizReqDTO reqDTO) {
+		if(!Rooms.hasRoomThatIdIs(reqDTO.getRoomId()))
+			return RoomResult.FAIL_NONEXIST_ROOM;
+		if(!Rooms.isUserInRoom(reqDTO.getNickname(), reqDTO.getRoomId()))
+			return RoomResult.FAIL_NOT_IN_ROOM;
+
+		Rooms.addUserAnswer(reqDTO.getRoomId()
+			, reqDTO.getNickname()
+			, reqDTO.getUserAnswer()
+			, reqDTO.getTimeSpend()
+			, reqDTO.getTimeSpend()
+		);
+
+		if(Rooms.isAllSubmit(reqDTO.getRoomId())){
+			return RoomResult.STAGE_END;
+		}
+		return RoomResult.GAME_STAGE_DATA_SEND_COMPLETE;
+	}
+
+	@Override
+	public SocketStageResultResDTO getStageResultOf(String roomId) {
+		return Rooms.getStageResult(roomId);
 	}
 
 }

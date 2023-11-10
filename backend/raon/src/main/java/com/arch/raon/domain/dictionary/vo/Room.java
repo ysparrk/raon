@@ -30,6 +30,7 @@ public class Room {
 	private ConcurrentMap<String, String> latestAnswer = new ConcurrentHashMap<>();
 	private List<SocketQuizDTO> quizList = new ArrayList<>();
 	private int currentStage = 0;
+	private int submitted = 0;
 	private String owner;
 
 	public Room(String nickname){
@@ -83,19 +84,20 @@ public class Room {
 	 * 퀴즈의 내용과 답을 room에서 가지고 있어야 하므로 List로 퀴즈를 저장한다.
 	 */
 	public void shuffleAndSetQuizes(DictionaryQuizResDTO pureQuizes) {
-		SocketQuizDTO nextQuiz = new SocketQuizDTO();
 		int index = 0;
 
 		while (!pureQuizes.getDirectionQuizList().isEmpty() && !pureQuizes.getInitialQuizList().isEmpty()) {
 			boolean isGreaterThan50 = Math.random() * 100 > 50.0;
+			SocketQuizDTO nextQuiz = new SocketQuizDTO();
+
 			if (isGreaterThan50) {
 				index = pureQuizes.getDirectionQuizList().size()-1;
-				nextQuiz.setQuizType(QuizType.DIRECTION_QUIZ);
+				nextQuiz.setMessage(QuizType.DIRECTION_QUIZ);
 				nextQuiz.setDictionaryDirectionQuiz(pureQuizes.getDirectionQuizList().remove(index));
 			}
 			else {
 				index = pureQuizes.getInitialQuizList().size()-1;
-				nextQuiz.setQuizType(QuizType.INITIAL_QUIZ);
+				nextQuiz.setMessage(QuizType.INITIAL_QUIZ);
 				nextQuiz.setDictionaryInitialQuiz(pureQuizes.getInitialQuizList().remove(index));
 			}
 			quizList.add(nextQuiz);
@@ -147,15 +149,16 @@ public class Room {
 		}
 
 		addAnswerToMap(nickname,userAnswer);
+		submitted += 1;
 		return true;
 	}
 
 	// 현재 방에 있는 사람들의 순위를 구한다. 점수가 높은 순서대로 정렬된 리스트 리턴
-	public List<String> getRank(){
-		List<String> rank = new ArrayList<>();
+	public List<User> getRank(){
+		List<User> rank = new ArrayList<>();
 
 		for(Map.Entry<String,User> entry : userInfo.entrySet()){
-			rank.add(entry.getKey());
+			rank.add(new User(entry.getKey(), entry.getValue().getCurrent_point()));
 		}
 
 		Collections.sort(rank);
@@ -212,6 +215,14 @@ public class Room {
 	}
 	public void setState(GameState state) {
 		this.state = state;
+	}
+
+	public boolean isAllSubmit() {
+		return submitted == latestAnswer.size();
+	}
+
+	public void clearAnswer(){
+		submitted = 0;
 	}
 
 }
