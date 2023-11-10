@@ -7,6 +7,7 @@ import { v4 as uuidv4 } from 'uuid';
 import JoinButton from '../Atoms/JoinButton';
 import StartButton from '../../Common/Atoms/StartButton';
 import RoomExitButton from '../../Common/Atoms/ExitButtonInRoom';
+import constructWithOptions from 'styled-components/dist/constructors/constructWithOptions';
 
 const InterfaceDiv = styled.div`
   display: flex;
@@ -92,11 +93,43 @@ function WaitInterface() {
   const callback: (message: any) => void = (message: any) => {
     if (message.body) {
       const body: any = JSON.parse(message.body);
-      // const { users } = body;
-      // const gameParticipants = users.map((user: any) => user);
-      // setParticipants(gameParticipants);
-      console.log(body);
-      // console.log(gameParticipants);
+      const { message: msg } = JSON.parse(message.body);
+      console.log(msg)
+      
+
+      switch (msg) {
+        case 'ENTER':
+          console.log("방 사람 리스트");
+          const { users } = body;
+          // const gameParticipants = users.map((user: any) => user);
+          // setParticipants(gameParticipants);
+          console.log(users)
+          console.log(body)
+          break
+        
+        case 'STAGE_START':
+          console.log("퀴즈 들어옴")
+          console.log(body)
+          break
+        
+
+        case 'DIRECTION_QUIZ':
+          console.log('동서남북 퀴즈')
+          console.log(body)        
+          break
+        
+        case 'INITIAL_QUIZ':
+          console.log('초성퀴즈')
+          console.log(body)
+          break
+
+        default:
+          console.log(body)
+          break
+
+      }
+
+
     }
   };
 
