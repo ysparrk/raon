@@ -149,7 +149,7 @@ public class DictionarySocketController {
 	 * 약 7초 뒤에 다음 문제를 보낸다.
 	 */
 	@MessageMapping("/dictionary-quiz/on-stage")
-	public void onStage(SocketQuizReqDTO reqDTO){
+	public void onStage(SocketQuizReqDTO reqDTO) throws InterruptedException {
 		System.out.println("[ON-STAGE] 정답 보냄!!!! 요청자: " + reqDTO.getNickname() +" 방 아이디: "+ reqDTO.getRoomId());
 		RoomResult result = dictionarySocketService.addAnswerToRoom(reqDTO);
 
@@ -157,7 +157,11 @@ public class DictionarySocketController {
 			case STAGE_END:
 				SocketStageResultResDTO ranking = dictionarySocketService.getStageResultOf(reqDTO.getRoomId());
 				sendToRoom(reqDTO.getRoomId(), ranking);
+				Thread.sleep(10000);
 
+				SocketQuizDTO nextQuiz = dictionarySocketService.getNextQuizFrom(reqDTO.getRoomId());
+				sendToRoom(reqDTO.getRoomId(), nextQuiz);
+				
 			case GAME_STAGE_DATA_SEND_COMPLETE:
 				break;
 		}

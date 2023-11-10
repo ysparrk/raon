@@ -11,6 +11,7 @@ import com.arch.raon.domain.dictionary.dto.response.DictionaryQuizResDTO;
 import com.arch.raon.domain.dictionary.dto.response.socket.SocketQuizDTO;
 import com.arch.raon.global.util.enums.GameState;
 import com.arch.raon.global.util.enums.QuizType;
+import com.arch.raon.global.util.enums.SocketResponse;
 
 /**
  * Room은 국어사전 퀴즈를 플레이하기 위한 사람들이 모인 곳이다.
@@ -92,24 +93,24 @@ public class Room {
 
 			if (isGreaterThan50) {
 				index = pureQuizes.getDirectionQuizList().size()-1;
-				nextQuiz.setMessage(QuizType.DIRECTION_QUIZ);
+				nextQuiz.setMessage(SocketResponse.DIRECTION_QUIZ);
 				nextQuiz.setDictionaryDirectionQuiz(pureQuizes.getDirectionQuizList().remove(index));
 			}
 			else {
 				index = pureQuizes.getInitialQuizList().size()-1;
-				nextQuiz.setMessage(QuizType.INITIAL_QUIZ);
+				nextQuiz.setMessage(SocketResponse.INITIAL_QUIZ);
 				nextQuiz.setDictionaryInitialQuiz(pureQuizes.getInitialQuizList().remove(index));
 			}
 			quizList.add(nextQuiz);
 		}
 		if(pureQuizes.getDirectionQuizList().isEmpty()){
 			while(!pureQuizes.getInitialQuizList().isEmpty()){
-				quizList.add(new SocketQuizDTO(QuizType.INITIAL_QUIZ, pureQuizes.getInitialQuizList().remove(0)));
+				quizList.add(new SocketQuizDTO(SocketResponse.INITIAL_QUIZ, pureQuizes.getInitialQuizList().remove(0)));
 			}
 		}
 		else{
 			while(!pureQuizes.getDirectionQuizList().isEmpty()){
-				quizList.add(new SocketQuizDTO(QuizType.DIRECTION_QUIZ, pureQuizes.getDirectionQuizList().remove(0)));
+				quizList.add(new SocketQuizDTO(SocketResponse.DIRECTION_QUIZ, pureQuizes.getDirectionQuizList().remove(0)));
 			}
 		}
 	}

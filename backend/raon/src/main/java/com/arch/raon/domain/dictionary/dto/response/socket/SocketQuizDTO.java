@@ -5,10 +5,11 @@ import java.io.Serializable;
 import com.arch.raon.domain.dictionary.entity.DictionaryDirectionQuiz;
 import com.arch.raon.domain.dictionary.entity.DictionaryInitialQuiz;
 import com.arch.raon.global.util.enums.QuizType;
+import com.arch.raon.global.util.enums.SocketResponse;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 public class SocketQuizDTO implements Serializable {
-	private QuizType message;
+	private SocketResponse message;
 
 
 
@@ -28,21 +29,21 @@ public class SocketQuizDTO implements Serializable {
 		super();
 	}
 
-	public SocketQuizDTO(QuizType message, DictionaryInitialQuiz dictionaryInitialQuiz) {
+	public SocketQuizDTO(SocketResponse message, DictionaryInitialQuiz dictionaryInitialQuiz) {
 		this.message = message;
 		this.dictionaryInitialQuiz = dictionaryInitialQuiz;
 	}
 
-	public SocketQuizDTO(QuizType message, DictionaryDirectionQuiz dictionaryDirectionQuiz) {
+	public SocketQuizDTO(SocketResponse message, DictionaryDirectionQuiz dictionaryDirectionQuiz) {
 		this.message = message;
 		this.dictionaryDirectionQuiz = dictionaryDirectionQuiz;
 	}
 
-	public QuizType getMessage() {
+	public SocketResponse getMessage() {
 		return message;
 	}
 
-	public void setMessage(QuizType message) {
+	public void setMessage(SocketResponse message) {
 		this.message = message;
 	}
 
