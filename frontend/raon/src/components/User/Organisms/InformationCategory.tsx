@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import InputBox from '../../Common/Atoms/InputBox.tsx';
 import ComboBox from '../../Common/Atoms/ComboBox.tsx';
+import DuplicationCheckButton from '../Atoms/DuplicateCheckButton.tsx';
 import { postMemberSignup } from '../../../api/MemberApi.tsx';
 
 const Container = styled.div`
@@ -78,6 +79,7 @@ const InformationCategory = () => {
           inputText={nickname}
           onChange={(e) => setNickname(e.target.value)}
         />
+        <DuplicationCheckButton />
       </Content>
       <Content>
         <Label>출생년도 :</Label>

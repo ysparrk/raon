@@ -33,6 +33,9 @@ const InputBox = ({ inputText, onChange }: InputBoxProps) => {
     borderColor: isFocused ? '#a2d6ab' : '#c0c0c0',
     borderStyle: 'solid',
     outline: 'none',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
   };
 
   return (
