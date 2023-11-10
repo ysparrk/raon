@@ -3,7 +3,6 @@ package com.arch.raon.domain.member.service;
 import com.arch.raon.domain.member.dto.request.MemberSignupReqDTO;
 import com.arch.raon.domain.member.repository.MemberRepository;
 import com.arch.raon.global.util.enums.Gender;
-import com.arch.raon.global.util.enums.School;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -27,7 +26,7 @@ class MemberServiceImplTest {
         Long testMemberId = 7420L;
         MemberSignupReqDTO memberSignupReqDTO = MemberSignupReqDTO.builder()
                 .nickname("새로운닉네임")
-                .school(School.ARCH)
+                .school("ARCH")
                 .gender(Gender.MALE)
                 .yearOfBirth(2020).build();
 

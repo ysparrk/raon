@@ -27,6 +27,7 @@ public enum OAuthProvider {
             log.info(account.toString());
             return OAuthUserInfo.builder()
                     .provider(KAKAO.name)
+                    .profileUrl(String.valueOf(properties.get("profile_image")))
                     .email(String.valueOf(account.get("email")))
                     .nickname(String.valueOf(properties.get("nickname")))
                     .oauthId(String.valueOf(attributes.get("id")))
