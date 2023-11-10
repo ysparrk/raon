@@ -226,4 +226,7 @@ public class Room {
 		submitted = 0;
 	}
 
+	public int getStage() {
+		return currentStage;
+	}
 }

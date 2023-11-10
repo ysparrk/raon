@@ -12,6 +12,7 @@ import com.arch.raon.domain.dictionary.entity.DictionaryDirectionQuiz;
 import com.arch.raon.domain.dictionary.entity.DictionaryInitialQuiz;
 import com.arch.raon.domain.dictionary.repository.DictionaryDirectionQuizRepository;
 import com.arch.raon.domain.dictionary.repository.DictionaryInitialQuizRepository;
+import com.arch.raon.domain.dictionary.vo.Room;
 import com.arch.raon.domain.dictionary.vo.Rooms;
 import com.arch.raon.domain.member.entity.Member;
 import com.arch.raon.domain.member.repository.MemberRepository;
@@ -117,7 +118,9 @@ public class DictionarySocketServiceImpl implements DictionarySocketService{
 		);
 
 		if(Rooms.isAllSubmit(reqDTO.getRoomId())){
-			return RoomResult.STAGE_END;
+			return Rooms.isLastStage(reqDTO.getRoomId())
+				 ? RoomResult.GAME_END
+				 : RoomResult.STAGE_END;
 		}
 		return RoomResult.GAME_STAGE_DATA_SEND_COMPLETE;
 	}

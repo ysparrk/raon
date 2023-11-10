@@ -172,4 +172,8 @@ public class Rooms {
 	public static SocketStageResultResDTO getStageResult(String roomId) {
 		return new SocketStageResultResDTO(roomOf(roomId).getRank(), SocketResponse.STAGE_RESULT);
 	}
+
+	public static boolean isLastStage(String roomId) {
+		return roomOf(roomId).getStage() == 9;
+	}
 }
