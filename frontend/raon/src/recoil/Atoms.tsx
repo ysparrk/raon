@@ -29,3 +29,19 @@ export const dictScoreState = atom<number>({
   key: 'dictScoreState',
   default: 0,
 });
+
+export const multiDictState = atom({
+  key: 'multiDictState',
+  default: {
+    type: '',
+    id: '',
+    word: '',
+    initial: '',
+    meaning: '',
+    west_word: '',
+    north_word: '',
+    east_word: '',
+    south_word: '',
+    answer: ''
+  }
+})
