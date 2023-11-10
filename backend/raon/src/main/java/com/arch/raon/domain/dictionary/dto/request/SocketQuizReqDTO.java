@@ -4,19 +4,21 @@ import java.io.Serializable;
 
 public class SocketQuizReqDTO implements Serializable {
 	private String nickname;
-
 	private String roomId;
-
 	private String userAnswer;
+	private int timeSpend;
+	private int stage;
 
 	public SocketQuizReqDTO() {
 		super();
 	}
 
-	public SocketQuizReqDTO(String nickname, String roomId, String userAnswer) {
+	public SocketQuizReqDTO(String nickname, String roomId, String userAnswer, int timeSpend, int stage) {
 		this.nickname = nickname;
 		this.roomId = roomId;
 		this.userAnswer = userAnswer;
+		this.timeSpend = timeSpend;
+		this.stage = stage;
 	}
 
 	public String getRoomId() {
@@ -41,5 +43,21 @@ public class SocketQuizReqDTO implements Serializable {
 
 	public void setUserAnswer(String userAnswer) {
 		this.userAnswer = userAnswer;
+	}
+
+	public int getTimeSpend() {
+		return timeSpend;
+	}
+
+	public void setTimeSpend(int timeSpend) {
+		this.timeSpend = timeSpend;
+	}
+
+	public int getStage() {
+		return stage;
+	}
+
+	public void setStage(int stage) {
+		this.stage = stage;
 	}
 }

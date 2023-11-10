@@ -8,26 +8,16 @@ import com.arch.raon.domain.dictionary.vo.User;
 import com.arch.raon.global.util.enums.SocketResponse;
 
 public class SocketStageResultResDTO implements Serializable {
-	private int stage;
 	private List<User> users;
 	private SocketResponse message;
 
 	public SocketStageResultResDTO() {
 		super();
 	}
-	public SocketStageResultResDTO(int stage, List<User> users, SocketResponse message) {
-		this.stage = stage;
+	public SocketStageResultResDTO(List<User> users, SocketResponse message) {
 		this.users = users;
 		this.message = message;
 		Collections.sort(this.users);
-	}
-
-	public int getStage() {
-		return stage;
-	}
-
-	public void setStage(int stage) {
-		this.stage = stage;
 	}
 
 	public List<User> getUsers() {
@@ -54,7 +44,6 @@ public class SocketStageResultResDTO implements Serializable {
 		}
 
 		return "SocketStageResultResDTO{" +
-			"stage=" + stage +
 			", users=" + usersToString +
 			", message=" + message +
 			'}';
