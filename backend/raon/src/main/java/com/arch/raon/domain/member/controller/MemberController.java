@@ -3,6 +3,7 @@ package com.arch.raon.domain.member.controller;
 import com.arch.raon.domain.member.dto.request.MemberCheckNicknameReqDTO;
 import com.arch.raon.domain.member.dto.request.MemberSignupReqDTO;
 import com.arch.raon.domain.member.dto.response.CheckActiveResDTO;
+import com.arch.raon.domain.member.dto.response.MemberDetailResDTO;
 import com.arch.raon.domain.member.service.MemberService;
 import com.arch.raon.global.auth.dto.UserAuthentication;
 import com.arch.raon.global.dto.ResponseDTO;
@@ -72,6 +73,33 @@ public class MemberController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ResponseDTO.builder()
                         .message("사용 가능한 닉네임 입니다.")
+                        .build());
+    }
+
+    @PostMapping("/modify")
+    public ResponseEntity<ResponseDTO> modifyMember(
+            @AuthenticationPrincipal UserAuthentication userAuth,
+            @RequestBody MemberSignupReqDTO memberSignupReqDTO) {
+
+        memberService.modifyMember(userAuth.getId(),memberSignupReqDTO);
+
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ResponseDTO.builder()
+                        .message("회원정보 수정 완료")
+                        .build());
+    }
+
+    @PostMapping("/detail")
+    public ResponseEntity<ResponseDTO> detailMember(
+            @AuthenticationPrincipal UserAuthentication userAuth) {
+
+        MemberDetailResDTO memberDetailResDTO = memberService.detailMember(userAuth.getId());
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ResponseDTO.builder()
+                        .message("회원정보 조회")
+                        .data(memberDetailResDTO)
                         .build());
     }
 

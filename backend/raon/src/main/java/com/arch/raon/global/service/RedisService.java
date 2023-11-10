@@ -65,17 +65,17 @@ public class RedisService {
         return rank;
     }
 
-    public void setCountryDictionaryPoint(String nickName, int point){
-        rankingRedis.opsForZSet().incrementScore("countryDictionary",nickName, point);
+    public void setCountryDictionaryPoint(Long id, int point){
+        rankingRedis.opsForZSet().incrementScore("countryDictionary", String.valueOf(id), point);
     }
 
-    public double getCountryDictionaryPoint(String nickName){
-        double score = rankingRedis.opsForZSet().score("countryDictionary",nickName);
+    public double getCountryDictionaryPoint(Long id){
+        double score = rankingRedis.opsForZSet().score("countryDictionary",String.valueOf(id));
         return score;
     }
 
-    public long getCountryDictionaryMyRank(String nickName){
-        long rank = rankingRedis.opsForZSet().reverseRank("countryDictionary", nickName);
+    public long getCountryDictionaryMyRank(Long id){
+        long rank = rankingRedis.opsForZSet().reverseRank("countryDictionary", String.valueOf(id));
         return rank;
     }
 

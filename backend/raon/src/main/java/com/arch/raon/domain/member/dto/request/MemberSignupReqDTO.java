@@ -1,14 +1,13 @@
 package com.arch.raon.domain.member.dto.request;
 
 import com.arch.raon.global.util.enums.Gender;
-import com.arch.raon.global.util.enums.School;
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
 public class MemberSignupReqDTO {
     private String nickname;
-    private School school;
+    private String school;
     private Integer yearOfBirth;
     private Gender gender;
 
@@ -17,7 +16,7 @@ public class MemberSignupReqDTO {
     }
 
     @Builder
-    public MemberSignupReqDTO(String nickname, School school, Integer yearOfBirth, Gender gender) {
+    public MemberSignupReqDTO(String nickname, String school, Integer yearOfBirth, Gender gender) {
         this.nickname = nickname;
         this.school = school;
         this.yearOfBirth = yearOfBirth;

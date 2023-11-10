@@ -2,13 +2,14 @@ package com.arch.raon.domain.member.service;
 
 import com.arch.raon.domain.member.dto.request.MemberSignupReqDTO;
 import com.arch.raon.domain.member.dto.response.CheckActiveResDTO;
+import com.arch.raon.domain.member.dto.response.MemberDetailResDTO;
 import com.arch.raon.domain.member.entity.Member;
 import com.arch.raon.domain.member.repository.MemberRepository;
 import com.arch.raon.global.auth.dto.AuthUserInfo;
 import com.arch.raon.global.auth.dto.OAuthUserInfo;
 import com.arch.raon.global.exception.CustomException;
 import com.arch.raon.global.exception.ErrorCode;
-import com.arch.raon.global.util.enums.School;
+import com.arch.raon.global.util.enums.Gender;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,13 +36,14 @@ public class MemberServiceImpl implements MemberService{
             member = Member.builder()
                     .nickname(oauthUserInfo.getNickname())
                     .email(oauthUserInfo.getEmail())
-                    .profileUrl("coming soon...")
-                    .school(School.ARCH)
+                    .profileUrl(oauthUserInfo.getProfileUrl())
+                    .school("not Select")
                     .yearOfBirth(0)
                     .mileage(0)
                     .isDeleted(false)
                     .isActive(Boolean.FALSE)
                     .build();
+            System.out.println("oauthUserInfo.getProfileUrl() = " + oauthUserInfo.getProfileUrl());
             memberRepository.save(member);
         }
         return new AuthUserInfo(member.getId(), member.getEmail(), Arrays.asList("USER"));
@@ -70,5 +72,36 @@ public class MemberServiceImpl implements MemberService{
             return false;
         }
         return true;
+    }
+
+    @Override
+    @Transactional
+    public void modifyMember(Long id, MemberSignupReqDTO memberSignupReqDTO){
+        Member member = memberRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND) {
+            @Override
+            public ErrorCode getErrorCode() {
+                return super.getErrorCode();
+            }
+        });
+
+        member.signup(memberSignupReqDTO);
+    }
+
+    @Override
+    public MemberDetailResDTO detailMember(Long id){
+        Member member = memberRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND) {
+            @Override
+            public ErrorCode getErrorCode() {
+                return super.getErrorCode();
+            }
+        });
+
+        return MemberDetailResDTO.builder()
+                .profileUrl(member.getProfileUrl())
+                .nickname(member.getNickname())
+                .school(member.getSchool())
+                .yearOfBirth(member.getYearOfBirth())
+                .gender(member.getGender())
+                .build();
     }
 }

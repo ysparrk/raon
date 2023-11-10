@@ -6,21 +6,21 @@ import org.springframework.data.redis.core.ZSetOperations;
 
 @Getter
 public class DictionaryMyRankQueryDTO {
-    private String nickName;
+    private Long id;
     private int score;
 
     public DictionaryMyRankQueryDTO() {
     }
 
     @Builder
-    public DictionaryMyRankQueryDTO(String nickName, double score) {
-        this.nickName = nickName;
+    public DictionaryMyRankQueryDTO(Long id, double score) {
+        this.id = id;
         this.score = (int) score;
     }
 
     public static DictionaryMyRankQueryDTO convertToDictionaryMyRankQueryDTO(ZSetOperations.TypedTuple typedTuple){
         DictionaryMyRankQueryDTO dictionaryMyRankQueryDTO=new DictionaryMyRankQueryDTO();
-        dictionaryMyRankQueryDTO.nickName=typedTuple.getValue().toString();
+        dictionaryMyRankQueryDTO.id= Long.valueOf(typedTuple.getValue().toString());
         dictionaryMyRankQueryDTO.score=typedTuple.getScore().intValue();
         return dictionaryMyRankQueryDTO;
     }

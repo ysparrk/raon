@@ -2,7 +2,6 @@ package com.arch.raon.domain.member.entity;
 
 import com.arch.raon.domain.member.dto.request.MemberSignupReqDTO;
 import com.arch.raon.global.util.enums.Gender;
-import com.arch.raon.global.util.enums.School;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -41,8 +40,7 @@ public class Member {
     private Gender gender;
 
     @Column(name = "school")
-    @Enumerated(EnumType.STRING)
-    private School school;
+    private String school;
 
     @Column(name = "year_of_birth")
     private Integer yearOfBirth;
@@ -70,7 +68,7 @@ public class Member {
     private Boolean isActive=false; // 기본 정보 입력 후 회원 가입 확정
 
     @Builder
-    public Member(Long id, String email, String nickname, String profileUrl, Gender gender, School school,
+    public Member(Long id, String email, String nickname, String profileUrl, Gender gender, String school,
                   Integer yearOfBirth, Integer mileage, LocalDateTime createdAt, LocalDateTime modifiedAt,
                   Boolean isDeleted, LocalDateTime deletedAt, Boolean isActive) {
         this.id = id;
