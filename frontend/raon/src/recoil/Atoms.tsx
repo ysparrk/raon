@@ -38,10 +38,10 @@ export const multiDictState = atom({
     word: '',
     initial: '',
     meaning: '',
-    west_word: '',
-    north_word: '',
-    east_word: '',
-    south_word: '',
-    answer: ''
-  }
-})
+    westWord: '',
+    northWord: '',
+    eastWord: '',
+    southWord: '',
+    answer: '',
+  },
+});

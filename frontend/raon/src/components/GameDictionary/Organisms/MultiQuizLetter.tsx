@@ -59,7 +59,12 @@ const QuizEnterBtn = styled.div`
   font-size: 2.5rem;
 `;
 
-function MultiQuizLetter({ word, initial, meaning, nextClick }: QuizLetterProps) {
+function MultiQuizLetter({
+  word,
+  initial,
+  meaning,
+  nextClick,
+}: QuizLetterProps) {
   const [inputValue, setInputValue] = useState('');
   const [isSolved, setIsSolved] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
