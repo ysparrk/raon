@@ -8,6 +8,8 @@ import JoinButton from '../Atoms/JoinButton';
 import StartButton from '../../Common/Atoms/StartButton';
 import RoomExitButton from '../../Common/Atoms/ExitButtonInRoom';
 import constructWithOptions from 'styled-components/dist/constructors/constructWithOptions';
+import { useSetRecoilState } from 'recoil';
+import { multiDictState } from '../../../recoil/Atoms';
 
 const InterfaceDiv = styled.div`
   display: flex;
@@ -60,6 +62,7 @@ const ButtonDiv = styled.div`
 function WaitInterface() {
   const [participants, setParticipants] = useState([]);
   const navigate = useNavigate();
+  const setMultiState = useSetRecoilState(multiDictState)
 
   const nickname = localStorage.getItem('nickname') ?? "미사용자";
   const roomId = sessionStorage.getItem('roomId') ?? "0000"; // 세션에서 roomId 가져오기, 기본값 0000
@@ -115,12 +118,31 @@ function WaitInterface() {
 
         case 'DIRECTION_QUIZ':
           console.log('동서남북 퀴즈')
-          console.log(body)        
+          console.log(body)
+          setMultiState((prev) => ({
+            ...prev,
+            type: 'D',
+            id: body.dictionaryDirectionQuiz.id,
+            westWord: body.dictionaryDirectionQuiz.westWord,
+            northWord: body.dictionaryDirectionQuiz.northWord,
+            eastWord: body.dictionaryDirectionQuiz.eastWord,
+            southWord: body.dictionaryDirectionQuiz.southWord,
+            answer: body.dictionaryDirectionQuiz.answer,   
+          }));       
           break
         
         case 'INITIAL_QUIZ':
           console.log('초성퀴즈')
           console.log(body)
+          setMultiState((prev) => ({
+            ...prev,
+            type: 'I',
+            id: body.dictionaryInitialQuiz.id,
+            initial: body.dictionaryInitialQuiz.initial,
+            meaning: body.dictionaryInitialQuiz.meaning,
+            word: body.dictionaryInitialQuiz.word,
+            
+          }));  
           break
 
         default:
