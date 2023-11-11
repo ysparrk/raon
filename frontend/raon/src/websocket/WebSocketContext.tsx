@@ -1,16 +1,36 @@
-// wsSetting.tsx
-
-import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Client } from '@stomp/stompjs';
+// WebSocketContext.tsx
+import React, { createContext, useContext, useEffect } from 'react';
+import { Client, IMessage } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
 import { useSetRecoilState } from 'recoil';
 import { multiDictState } from '../recoil/Atoms';
 
-const useWebSocket = () => {
-  //   const [stompClient, setStompClient] = useState<Client | null>(null);
-  const navigate = useNavigate();
+interface WebSocketContextProps {
+  leaveRoom: () => void;
+  gameStart: () => void;
+  createRoom: () => void;
+  sendQuizResult: (
+    userAnswer: string,
+    timeSpend: number,
+    stage: number,
+  ) => void;
+}
+
+const WebSocketContext = createContext<WebSocketContextProps | undefined>(
+  undefined,
+);
+
+export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
   const setMultiState = useSetRecoilState(multiDictState);
+
+  useEffect(() => {
+    // Initialize WebSocket connection here if needed
+    return () => {
+      // Clean up WebSocket connection when the component unmounts
+    };
+  }, []);
 
   const initializeWebSocket = () => {
     const nickname = localStorage.getItem('nickname') ?? '미사용자';
@@ -22,7 +42,6 @@ const useWebSocket = () => {
 
     const client = new Client({
       webSocketFactory: () => socket,
-
       onConnect: () => {
         if (roomId === '0000') {
           alert('구독한 방 아이디가 없습니다.');
@@ -40,7 +59,7 @@ const useWebSocket = () => {
       heartbeatOutgoing: 4000,
     });
 
-    const callback: (message: any) => void = (message: any) => {
+    const callback = (message: IMessage) => {
       if (message.body) {
         const body: any = JSON.parse(message.body);
         const { message: msg } = JSON.parse(message.body);
@@ -116,30 +135,28 @@ const useWebSocket = () => {
       });
     };
 
-
-    const sendQuizResult = (userAnswer: string, timeSpend: number, stage: number): void => {
+    const sendQuizResult = (
+      userAnswer: string,
+      timeSpend: number,
+      stage: number,
+    ): void => {
       console.log('퀴즈 정답 보내기');
       client.publish({
         destination: `/dictionary-quiz/on-stage`,
-        body: JSON.stringify({ nickname, roomId, userAnswer, timeSpend, stage }),
+        body: JSON.stringify({
+          nickname,
+          roomId,
+          userAnswer,
+          timeSpend,
+          stage,
+        }),
       });
     };
 
-
     const createRoom = () => {
+      console.log('만들어');
       client.activate();
     };
-
-    // useEffect(() => {
-    //   if (!stompClient) {
-    //     setStompClient(client);
-    //     client.activate();
-    //   }
-
-    //   return () => {
-    //     disconnectWebSocket();
-    //   };
-    // }, [stompClient]);
 
     return {
       leaveRoom,
@@ -149,7 +166,17 @@ const useWebSocket = () => {
     };
   };
 
-  return { initializeWebSocket };
+  return (
+    <WebSocketContext.Provider value={initializeWebSocket()}>
+      {children}
+    </WebSocketContext.Provider>
+  );
 };
 
-export default useWebSocket;
+export const useWebSocket = () => {
+  const context = useContext(WebSocketContext);
+  if (!context) {
+    throw new Error('useWebSocket must be used within a WebSocketProvider');
+  }
+  return context;
+};
