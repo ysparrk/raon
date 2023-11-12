@@ -120,9 +120,9 @@ public class DictionarySocketServiceImpl implements DictionarySocketService{
 
 		if(Rooms.isAllSubmit(reqDTO.getRoomId())){
 			if(Rooms.isLastStage(reqDTO.getRoomId())){
-				Rooms.updateNextQuiz(reqDTO.getRoomId());
 				return RoomResult.GAME_END;
 			}
+			Rooms.updateNextQuiz(reqDTO.getRoomId());
 			return RoomResult.STAGE_END;
 		}
 		return RoomResult.GAME_STAGE_DATA_SEND_COMPLETE;
