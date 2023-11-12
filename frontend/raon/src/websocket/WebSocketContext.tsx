@@ -4,6 +4,7 @@ import { Client, IMessage } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
 import { useSetRecoilState } from 'recoil';
 import { multiDictState } from '../recoil/Atoms';
+import { useNavigate } from 'react-router-dom';
 
 interface WebSocketContextProps {
   joinRoom: (
@@ -29,7 +30,8 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const setMultiState = useSetRecoilState(multiDictState);
-  
+  const navigate = useNavigate();
+
   useEffect(() => {
     // Initialize WebSocket connection here if needed
     return () => {
@@ -86,6 +88,13 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({
           case 'ENTER':
             console.log('방 사람 리스트');
             console.log(body);
+            break;
+          
+
+          case 'STAGE_START':
+            console.log('방장이 게임 시작')
+            console.log(body)
+            navigate('/game/dictionary-multi-game');
             break;
 
 
@@ -152,7 +161,6 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({
       sessionStorage.setItem('roomId', roomId); // 세션에 roomId 저장
     };
 
-
     const leaveRoom = (): void => {
       console.log('방나가기 요청 보내기');
       client.publish({
@@ -176,6 +184,13 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({
         body: JSON.stringify({ nickname, roomId }),
       });
     };
+
+
+    const gameStartByOwner = (): void => {
+      console.log('방장이 시작 버튼 누름')
+
+    };
+
 
     const sendQuizResult = (
       userAnswer: string,
