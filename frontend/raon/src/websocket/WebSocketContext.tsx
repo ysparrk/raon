@@ -7,10 +7,6 @@ import { multiDictState } from '../recoil/Atoms';
 import { gameStartState } from '../recoil/Atoms';
 
 interface WebSocketContextProps {
-  joinRoom: (
-    nickname: string,
-    roomId: string
-  ) => void;
   leaveRoom: () => void;
   gameStart: () => void;
   createRoom: () => void;
@@ -129,37 +125,12 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({
             }));
             break;
 
-          case 'STAGE_RESULT':
-            console.log('스테이지 결과')
-            console.log(body)
-            // setMultiState((prev) => ({
-            //   ...prev,
-            //   type: 'R',
-            //   id: body.dictionaryInitialQuiz.id,
-            //   initial: body.dictionaryInitialQuiz.initial,
-            //   meaning: body.dictionaryInitialQuiz.meaning,
-            //   word: body.dictionaryInitialQuiz.word,
-            // }));
-            break;
           
           default:
             console.log(body);
             break;
         }
       }
-    };
-
-
-    const joinRoom = (
-      nickname: string,
-      roomId: string,
-      ): void => {
-      client.subscribe(`/topic/dictionary-quiz/room/${roomId}`, callback);
-      client.publish({
-        destination: `/dictionary-quiz/join-room`,
-        body: JSON.stringify({ nickname, roomId }),
-      });
-      sessionStorage.setItem('roomId', roomId); // 세션에 roomId 저장
     };
 
     const leaveRoom = (): void => {
@@ -185,13 +156,6 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({
         body: JSON.stringify({ nickname, roomId }),
       });
     };
-
-
-    const gameStartByOwner = (): void => {
-      console.log('방장이 시작 버튼 누름')
-
-    };
-
 
     const sendQuizResult = (
       userAnswer: string,
@@ -220,7 +184,6 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({
     };
 
     return {
-      joinRoom,
       leaveRoom,
       gameStart,
       createRoom,

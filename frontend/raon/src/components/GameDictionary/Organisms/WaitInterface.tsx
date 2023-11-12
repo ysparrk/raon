@@ -204,7 +204,7 @@ function WaitInterface() {
 
   useEffect(() => {
     if (gameStart) {
-      window.location.href = '/game/dictionary-multi-game'; // gameStart 상태값이 true일 경우 페이지 이동
+      navigate('/game/dictionary-multi-game');
     }
   }, [gameStart]);
 

@@ -117,10 +117,10 @@ function JoinInterface() {
         if (!roomIdExist) {
           alert('존재하지 않는 방');
         } else {
+          console.log('세션에 roomId 저장')
           // 방 아이디 만들어지면 이동 및 세션에 roomId 저장
           sessionStorage.setItem('roomId', roomIdInput);
           navigate('/game/dictionary-quiz');
-          Stomp.joinRoom(nicknameInput, roomIdInput);
         }
       }
     } catch (error) {
