@@ -135,8 +135,10 @@ public class Room {
 	 * @param timeSpend
 	 */
 	public boolean checkAndUpdateScore(String nickname, int stage, String userAnswer, int timeSpend){
+		System.out.println("[LOG] nickname:"+nickname+ " userAnswer:"+ userAnswer + " realAnswer:" + quizList.get(currentQuizIdx).getAnswer());
+
 		if(quizList.get(currentQuizIdx).getStage() != stage){
-			System.out.println("[비상!!!] 스테이지가 달라!!!"+ " 유저: " + nickname + " Room의 stage: "+ quizList.get(currentQuizIdx).getStage() +" 유저가 보낸 스테이지: "+ stage );
+			System.out.println("[비상!!!] 스테이지가 달라!!!"+ " 유저: " + nickname + "stageIDx: "+ currentQuizIdx + " Room의 stage: "+ quizList.get(currentQuizIdx).getStage() +" 유저가 보낸 스테이지: "+ stage );
 			return false;
 		}
 		if(!hasUserNamed(nickname)){
@@ -149,7 +151,7 @@ public class Room {
 		}
 
 		if(quizList.get(currentQuizIdx).getAnswer().equals(userAnswer)){
-			int point = 100 * (10000 - timeSpend); // TODO: 늦게 풀 수록 점수를 낮게 주고 싶은데 방법이 없나?
+			int point = (100_000 - timeSpend); // TODO: 늦게 풀 수록 점수를 낮게 주고 싶은데 방법이 없나?
 			System.out.println(" 			nickname:"+nickname+" answer:" + userAnswer+" point:" + point);
 			userInfo.get(nickname).addPoint(point);
 		}
