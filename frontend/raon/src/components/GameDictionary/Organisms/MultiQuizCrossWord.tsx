@@ -112,15 +112,14 @@ function MultiQuizCrossWord({
   const [inputValue, setInputValue] = useState('');
   const [isSolved, setIsSolved] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
-  // const [startTime, setStartTime] = useState(Date.now());
+  const [startTime, setStartTime] = useState(Date.now());
   const Stomp = useWebSocket();
 
   const setDictScore = useSetRecoilState(dictScoreState);
   const handleClick = (value: string, stage: number) => {
-    // const timeSpend = Date.now() - startTime;
+    const timeSpend = Date.now() - startTime;
 
     if (value === word) {
-      const timeSpend = 123;
       console.log(value, timeSpend, stage);
       Stomp.sendQuizResult(value, timeSpend, stage);
       // setIsCorrect(true);
