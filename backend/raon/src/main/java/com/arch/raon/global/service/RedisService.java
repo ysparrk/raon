@@ -53,13 +53,28 @@ public class RedisService {
     }
 
      */
-    public void setCountryGrammarPoint(String nickName, int point){
-        rankingRedis.opsForZSet().incrementScore("countryGrammar",nickName, point);
+    public void setCountryGrammarPoint(Long memberId, int point){
+        rankingRedis.opsForZSet().incrementScore("countryGrammar", String.valueOf(memberId), point);
     }
+
+    public void setSchoolGrammarPoint(String school, int point) {
+        rankingRedis.opsForZSet().incrementScore("schoolGrammar", String.valueOf(school), point);
+    }
+
+    public long getMyCountryGrammarRank(Long memberId) {
+        Long rank = rankingRedis.opsForZSet().reverseRank("countryGrammar", String.valueOf(memberId));
+        return rank != null ? rank : -1;
+    }
+
+    public double getMyCountryGrammarPoint(Long memberId){
+        Double score = rankingRedis.opsForZSet().score("countryGrammar", String.valueOf(memberId));
+        return score != null ? score : 0;
+    }
+
 
     public long getCountryGrammarPoint(String nickName){
         long rank = 0;
-        double score = rankingRedis.opsForZSet().score("countryGrammar",nickName);
+        double score = rankingRedis.opsForZSet().score("countryGrammar", nickName);
         System.out.println("Gscore = " + score);
         rank = rankingRedis.opsForZSet().reverseRank("countryGrammar", nickName);
         return rank;
@@ -90,7 +105,5 @@ public class RedisService {
         List<DictionaryMyRankQueryDTO> collect = typedTuples.stream().map(DictionaryMyRankQueryDTO::convertToDictionaryMyRankQueryDTO).collect(Collectors.toList());
         return collect;
     }
-
-
 
 }

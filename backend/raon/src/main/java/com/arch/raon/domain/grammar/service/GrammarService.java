@@ -11,7 +11,7 @@ import java.util.List;
 public interface GrammarService {
 	List<GrammarQuizResDTO> getQuizzes();
 
-	Long saveScoreResult(GrammarResultSaveReqDTO grammarResultSaveReqDTO, Long id);
+	void saveScoreResult(GrammarResultSaveReqDTO grammarResultSaveReqDTO, Long id);
 	void updateStatistics(GrammarResultSaveReqDTO grammarResultSaveReqDTO);
 
 	List<GrammarMyRankQueryDTO> getMiddlePlaceRankResult(int myIdx, List<GrammarMyRankQueryDTO> allRanks);

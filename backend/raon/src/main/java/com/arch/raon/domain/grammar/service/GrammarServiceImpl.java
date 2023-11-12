@@ -13,6 +13,7 @@ import com.arch.raon.domain.member.entity.Member;
 import com.arch.raon.domain.member.repository.MemberRepository;
 import com.arch.raon.global.exception.CustomException;
 import com.arch.raon.global.exception.ErrorCode;
+import com.arch.raon.global.service.RedisService;
 import com.arch.raon.global.util.enums.GrammarRanking;
 import com.arch.raon.global.util.enums.RankState;
 import org.springframework.stereotype.Service;
@@ -33,6 +34,7 @@ public class GrammarServiceImpl implements GrammarService {
 	private final GrammarQuizRepository grammarQuizRepository;
 	private final GrammarScoreRepository grammarScoreRepository;
 	private final MemberRepository memberRepository;
+	private final RedisService redisService;
 
 	@Override
 	public List<GrammarQuizResDTO> getQuizzes() {
@@ -65,9 +67,15 @@ public class GrammarServiceImpl implements GrammarService {
 
 	@Transactional
 	@Override
-	public Long saveScoreResult(GrammarResultSaveReqDTO grammarResultSaveReqDTO, Long id) {
+	public void saveScoreResult(GrammarResultSaveReqDTO grammarResultSaveReqDTO, Long id) {
 		int score = 0;
-		Member member = memberRepository.findById(id).get();
+		Member member = memberRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND) {
+			@Override
+			public ErrorCode getErrorCode() {
+				return super.getErrorCode();
+			}
+		});
+
 		List<GrammarResultDTO> grammarResultList = grammarResultSaveReqDTO.getGrammarResultList();
 		for (GrammarResultDTO grammarResultDTO : grammarResultList) {
 			if(grammarResultDTO.getHit() == 1) {
@@ -75,14 +83,9 @@ public class GrammarServiceImpl implements GrammarService {
 			}
 		}
 
-		GrammarScore grammarScoreEntity = GrammarScore
-				.builder()
-				.score(score)
-				.member(member)
-				.build();
+		redisService.setCountryGrammarPoint(member.getId(), score);
+		redisService.setSchoolGrammarPoint(member.getSchool(), score);
 
-		grammarScoreRepository.save(grammarScoreEntity);
-		return grammarScoreEntity.getId();
 	}
 
 	@Transactional
