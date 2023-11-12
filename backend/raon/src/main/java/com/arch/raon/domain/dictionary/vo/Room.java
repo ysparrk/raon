@@ -28,7 +28,7 @@ public class Room {
 	private GameState state = GameState.WAITING;
 	private final ConcurrentMap<String, User> userInfo = new ConcurrentHashMap<>();
 	private List<SocketQuizDTO> quizList = new ArrayList<>();
-	private int currentStage = 1;
+	private int currentQuizIdx = 0;
 	private int submitted = 0;
 	private String owner;
 
@@ -121,9 +121,9 @@ public class Room {
 
 
 	public SocketQuizDTO getNextQuiz(){
-		return currentStage == 10 // 0~9, so 9 is last stage
+		return currentQuizIdx == 10 // 0~9, so 9 is last stage
 			 ? null
-			 : quizList.get((currentStage++)-1);
+			 : quizList.get(currentQuizIdx++);
 	}
 
 	/**
@@ -135,8 +135,8 @@ public class Room {
 	 * @param timeSpend
 	 */
 	public boolean checkAndUpdateScore(String nickname, int stage, String userAnswer, int timeSpend){
-		if(currentStage != stage){
-			System.out.println("[비상!!!] 스테이지가 달라!!!"+ " 유저: " + nickname + " Room의 stage: "+ currentStage +" 유저가 보낸 스테이지: "+ stage );
+		if(quizList.get(currentQuizIdx).getStage() != stage){
+			System.out.println("[비상!!!] 스테이지가 달라!!!"+ " 유저: " + nickname + " Room의 stage: "+ quizList.get(currentQuizIdx).getStage() +" 유저가 보낸 스테이지: "+ stage );
 			return false;
 		}
 		if(!hasUserNamed(nickname)){
@@ -148,7 +148,7 @@ public class Room {
 			return false;
 		}
 
-		if(quizList.get(currentStage).getAnswer().equals(userAnswer)){
+		if(quizList.get(currentQuizIdx).getAnswer().equals(userAnswer)){
 			int point = 100 * (10000 - timeSpend); // TODO: 늦게 풀 수록 점수를 낮게 주고 싶은데 방법이 없나?
 			System.out.println(" 			nickname:"+nickname+" answer:" + userAnswer+" point:" + point);
 			userInfo.get(nickname).addPoint(point);
@@ -229,6 +229,6 @@ public class Room {
 	}
 
 	public int getStage() {
-		return currentStage;
+		return currentQuizIdx;
 	}
 }
