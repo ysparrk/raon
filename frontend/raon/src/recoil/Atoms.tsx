@@ -46,3 +46,8 @@ export const multiDictState = atom({
     stage: 0,
   },
 });
+
+export const gameStartState = atom({
+  key: 'gameStartState', 
+  default: false, 
+});

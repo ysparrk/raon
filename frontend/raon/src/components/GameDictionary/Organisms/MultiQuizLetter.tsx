@@ -81,7 +81,7 @@ function MultiQuizLetter({
   const handleClick = (value: string) => {
     const timeSpend = Date.now() - startTime;
 
-    console.log(value, timeSpend, stage);
+    console.log(value, timeSpend, QuizStage.stage);
     Stomp.sendQuizResult(value, timeSpend, QuizStage.stage);
     // if (value === word) {
     //   // setIsCorrect(true);
@@ -106,7 +106,7 @@ function MultiQuizLetter({
           isCorrect={isCorrect}
         />
       )}
-      <QuizQuestion>{stage} {meaning}</QuizQuestion>
+      <QuizQuestion>{meaning}</QuizQuestion>
       <QuizInitial>{initial}</QuizInitial>
       <QuizEnterDiv>
         <AnswerInputBox

@@ -152,7 +152,7 @@ function MultiQuizCrossWord({
           isCorrect={isCorrect}
         />
       )}
-      <QuizQuestion>{stage} 가운데에 한 글자를 넣어 각 단어를 완성하시오</QuizQuestion>
+      <QuizQuestion>가운데에 한 글자를 넣어 각 단어를 완성하시오</QuizQuestion>
       <QuizContentDiv>
         <div />
         <div>{north_word}</div>

@@ -4,7 +4,7 @@ import { Client, IMessage } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
 import { useSetRecoilState } from 'recoil';
 import { multiDictState } from '../recoil/Atoms';
-import { useNavigate } from 'react-router-dom';
+import { gameStartState } from '../recoil/Atoms';
 
 interface WebSocketContextProps {
   joinRoom: (
@@ -26,11 +26,12 @@ const WebSocketContext = createContext<WebSocketContextProps | undefined>(
   undefined,
 );
 
+
 export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const setMultiState = useSetRecoilState(multiDictState);
-  const navigate = useNavigate();
+  const setGameStart = useSetRecoilState(gameStartState);
 
   useEffect(() => {
     // Initialize WebSocket connection here if needed
@@ -94,7 +95,7 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({
           case 'STAGE_START':
             console.log('방장이 게임 시작')
             console.log(body)
-            navigate('/game/dictionary-multi-game');
+            setGameStart(true);
             break;
 
 

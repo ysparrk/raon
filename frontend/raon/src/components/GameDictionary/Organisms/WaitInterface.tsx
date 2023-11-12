@@ -11,6 +11,8 @@ import StartButton from '../../Common/Atoms/StartButton';
 import RoomExitButton from '../../Common/Atoms/ExitButtonInRoom';
 import { multiDictState } from '../../../recoil/Atoms';
 import { useWebSocket } from '../../../websocket/WebSocketContext';
+import { useRecoilValue } from 'recoil';
+import { gameStartState } from '../../../recoil/Atoms';
 
 const InterfaceDiv = styled.div`
   display: flex;
@@ -192,11 +194,19 @@ function WaitInterface() {
   //   stompClient.activate();
   // }, []);
 
+  const gameStart = useRecoilValue(gameStartState);
+
   useEffect(() => {
     setTimeout(() => {
       Stomp.createRoom();
     }, 500);
   }, []);
+
+  useEffect(() => {
+    if (gameStart) {
+      window.location.href = '/game/dictionary-multi-game'; // gameStart 상태값이 true일 경우 페이지 이동
+    }
+  }, [gameStart]);
 
   return (
     <>
