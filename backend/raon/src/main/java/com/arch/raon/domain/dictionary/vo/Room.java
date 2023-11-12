@@ -123,7 +123,7 @@ public class Room {
 	public SocketQuizDTO getNextQuiz(){
 		return currentQuizIdx == 10 // 0~9, so 9 is last stage
 			 ? null
-			 : quizList.get(currentQuizIdx++);
+			 : quizList.get(currentQuizIdx);
 	}
 
 	/**
@@ -224,11 +224,15 @@ public class Room {
 		return submitted == userInfo.size();
 	}
 
-	public void clearAnswer(){
+	public void clearSubmitted(){
 		submitted = 0;
 	}
 
+	public void updateQuiz(){
+		currentQuizIdx += 1;
+	}
+
 	public int getStage() {
-		return currentQuizIdx;
+		return currentQuizIdx+1;
 	}
 }
