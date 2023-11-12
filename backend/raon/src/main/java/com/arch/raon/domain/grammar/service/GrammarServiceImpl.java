@@ -1,14 +1,13 @@
 package com.arch.raon.domain.grammar.service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.IntStream;
-
+import com.arch.raon.domain.grammar.dto.query.GrammarMyRankQueryDTO;
 import com.arch.raon.domain.grammar.dto.request.GrammarResultDTO;
 import com.arch.raon.domain.grammar.dto.request.GrammarResultSaveReqDTO;
-import com.arch.raon.domain.grammar.dto.query.GrammarMyRankQueryDTO;
 import com.arch.raon.domain.grammar.dto.response.GrammarMyRankingResDTO;
 import com.arch.raon.domain.grammar.dto.response.GrammarQuizResDTO;
+import com.arch.raon.domain.grammar.entity.GrammarQuiz;
+import com.arch.raon.domain.grammar.repository.GrammarQuizRepository;
+import com.arch.raon.domain.grammar.repository.GrammarScoreRepository;
 import com.arch.raon.domain.member.entity.Member;
 import com.arch.raon.domain.member.repository.MemberRepository;
 import com.arch.raon.global.exception.CustomException;
@@ -16,15 +15,13 @@ import com.arch.raon.global.exception.ErrorCode;
 import com.arch.raon.global.service.RedisService;
 import com.arch.raon.global.util.enums.GrammarRanking;
 import com.arch.raon.global.util.enums.RankState;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.arch.raon.domain.grammar.entity.GrammarQuiz;
-import com.arch.raon.domain.grammar.entity.GrammarScore;
-import com.arch.raon.domain.grammar.repository.GrammarQuizRepository;
-import com.arch.raon.domain.grammar.repository.GrammarScoreRepository;
-
-import lombok.RequiredArgsConstructor;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.IntStream;
 
 @Service
 @Transactional(readOnly = true)
@@ -256,24 +253,25 @@ public class GrammarServiceImpl implements GrammarService {
 		});
 
 		// TODO: 순위 리스트 조회 시 리스트의 크기가 6 미만일 경우 예외처리
-		if (grammarRanking.equals(GrammarRanking.GRAMMAR_COUNTRY_MY)) {
+        switch (grammarRanking) {
+            case GRAMMAR_COUNTRY_MY -> {
+                List<GrammarMyRankQueryDTO> allByCountry = grammarScoreRepository.findAllByCountry();
+                GrammarMyRankingResDTO myRank = getMyRankByGrammarRanking(memberId, allByCountry);
+                return myRank;
+            }
+            case GRAMMAR_SCHOOL_MY -> {
+                List<GrammarMyRankQueryDTO> allBySchool = grammarScoreRepository.findAllBySchool(member);
+                GrammarMyRankingResDTO mySchoolRank = getMyRankByGrammarRanking(memberId, allBySchool);
+                return mySchoolRank;
+            }
+        }
 
-			List<GrammarMyRankQueryDTO> allByCountry = grammarScoreRepository.findAllByCountry();
-
-			GrammarMyRankingResDTO myRank = getMyRankByGrammarRanking(memberId, allByCountry);
-
-			return myRank;
-
-		} else if (grammarRanking.equals(GrammarRanking.GRAMMAR_SCHOOL_MY)) {
-			List<GrammarMyRankQueryDTO> allBySchool = grammarScoreRepository.findAllBySchool(member);
-			GrammarMyRankingResDTO myRank = getMyRankByGrammarRanking(memberId, allBySchool);
-
-			return myRank;
-
-		} else {
-			// TODO: 옳지 않은 enum으로 올때 예외처리
-			return null;
-		}
+		throw new CustomException(ErrorCode.GRAMMAR_RANKING_TYPE_UNAVAILABLE) {
+			@Override
+			public ErrorCode getErrorCode() {
+				return super.getErrorCode();
+			}
+		};
 
 	}
 
