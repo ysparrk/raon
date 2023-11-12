@@ -5,6 +5,8 @@ import { dictScoreState } from '../../../recoil/Atoms';
 import AnswerInputBox from '../Atoms/AnswerInputBox';
 import SingleModeAnswer from './SingleModeAnswer';
 import { useWebSocket } from '../../../websocket/WebSocketContext';
+import { useRecoilValue } from 'recoil';
+import { multiDictState } from '../../../recoil/Atoms';
 
 interface QuizLetterProps {
   stage: number;
@@ -72,14 +74,15 @@ function MultiQuizLetter({
   const [isSolved, setIsSolved] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
   const [startTime, setStartTime] = useState(Date.now());
+  const QuizStage = useRecoilValue(multiDictState);
   const Stomp = useWebSocket();
 
   // const setDictScore = useSetRecoilState(dictScoreState);
   const handleClick = (value: string) => {
     const timeSpend = Date.now() - startTime;
 
-    console.log(value, timeSpend);
-    Stomp.sendQuizResult(value, timeSpend, stage);
+    console.log(value, timeSpend, stage);
+    Stomp.sendQuizResult(value, timeSpend, QuizStage.stage);
     // if (value === word) {
     //   // setIsCorrect(true);
     //   // setIsSolved(true);
@@ -103,7 +106,7 @@ function MultiQuizLetter({
           isCorrect={isCorrect}
         />
       )}
-      <QuizQuestion>{meaning}</QuizQuestion>
+      <QuizQuestion>{stage} {meaning}</QuizQuestion>
       <QuizInitial>{initial}</QuizInitial>
       <QuizEnterDiv>
         <AnswerInputBox
@@ -113,7 +116,6 @@ function MultiQuizLetter({
           }}
           onEnter={() => {
             if (!isSolved) {
-              const stage = 0;
               handleClick(inputValue);
             }
           }}

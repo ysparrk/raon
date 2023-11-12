@@ -88,10 +88,6 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({
             console.log(body);
             break;
 
-          case 'STAGE_START':
-            console.log('퀴즈 들어옴');
-            console.log(body);
-            break;
 
           case 'DIRECTION_QUIZ':
             console.log('동서남북 퀴즈');
@@ -155,6 +151,7 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({
       });
       sessionStorage.setItem('roomId', roomId); // 세션에 roomId 저장
     };
+
 
     const leaveRoom = (): void => {
       console.log('방나가기 요청 보내기');

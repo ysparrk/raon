@@ -5,6 +5,10 @@ import { dictScoreState } from '../../../recoil/Atoms';
 import AnswerInputBox from '../Atoms/AnswerInputBox';
 import SingleModeAnswer from './SingleModeAnswer';
 import { useWebSocket } from '../../../websocket/WebSocketContext';
+import { useRecoilValue } from 'recoil';
+import { multiDictState } from '../../../recoil/Atoms';
+
+
 
 interface QuizCrossWordProps {
   stage: number;
@@ -115,14 +119,15 @@ function MultiQuizCrossWord({
   const [isSolved, setIsSolved] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
   const [startTime, setStartTime] = useState(Date.now());
+  const QuizStage = useRecoilValue(multiDictState);
   const Stomp = useWebSocket();
 
   const setDictScore = useSetRecoilState(dictScoreState);
   const handleClick = (value: string) => {
     const timeSpend = Date.now() - startTime;
 
-    console.log(value, timeSpend, stage);
-    Stomp.sendQuizResult(value, timeSpend, stage);
+    console.log(value, timeSpend, QuizStage.stage);
+    Stomp.sendQuizResult(value, timeSpend, QuizStage.stage);
     // if (value === word) {
     //   // setIsCorrect(true);
     //   // setIsSolved(true);
@@ -147,7 +152,7 @@ function MultiQuizCrossWord({
           isCorrect={isCorrect}
         />
       )}
-      <QuizQuestion>가운데에 한 글자를 넣어 각 단어를 완성하시오</QuizQuestion>
+      <QuizQuestion>{stage} 가운데에 한 글자를 넣어 각 단어를 완성하시오</QuizQuestion>
       <QuizContentDiv>
         <div />
         <div>{north_word}</div>

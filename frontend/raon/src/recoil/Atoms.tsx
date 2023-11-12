@@ -34,7 +34,7 @@ export const multiDictState = atom({
   key: 'multiDictState',
   default: {
     type: '',
-    id: '',
+    id: 0,
     word: '',
     initial: '',
     meaning: '',
@@ -43,5 +43,6 @@ export const multiDictState = atom({
     eastWord: '',
     southWord: '',
     answer: '',
+    stage: 0,
   },
 });
