@@ -223,6 +223,7 @@ public class Room {
 	}
 
 	public boolean isAllSubmit() {
+		System.out.println("			submitted:"+submitted + " userInfo.size():"+ userInfo.size());
 		return submitted == userInfo.size();
 	}
 

@@ -154,6 +154,8 @@ public class DictionarySocketController {
 		System.out.println("[ON-STAGE] 정답 보냄!!!! 요청자: " + reqDTO.getNickname() +" 방 아이디: "+ reqDTO.getRoomId());
 		RoomResult result = dictionarySocketService.addAnswerToRoom(reqDTO);
 
+		System.out.println("[ON-STAGE-RES] 결과 :" + result);
+
 		switch(result){
 			case GAME_STAGE_DATA_SEND_COMPLETE:
 				break; // 유저가 정답을 잘 보냈을 떄
