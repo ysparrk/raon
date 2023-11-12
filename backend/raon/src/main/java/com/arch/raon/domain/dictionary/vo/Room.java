@@ -164,7 +164,7 @@ public class Room {
 		List<User> rank = new ArrayList<>();
 
 		for(Map.Entry<String,User> entry : userInfo.entrySet()){
-			rank.add(new User(entry.getKey(), entry.getValue().getCurrent_point()));
+			rank.add(entry.getValue());
 		}
 
 		Collections.sort(rank);
