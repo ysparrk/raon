@@ -4,7 +4,7 @@ import { useSetRecoilState } from 'recoil';
 import { dictScoreState } from '../../../recoil/Atoms';
 import AnswerInputBox from '../Atoms/AnswerInputBox';
 import SingleModeAnswer from './SingleModeAnswer';
-import useWebSocket from '../../../websocket/WSSetting';
+import { useWebSocket } from '../../../websocket/WebSocketContext';
 
 interface QuizCrossWordProps {
   word: string;
@@ -113,18 +113,16 @@ function MultiQuizCrossWord({
   const [isSolved, setIsSolved] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
   // const [startTime, setStartTime] = useState(Date.now());
-  const { initializeWebSocket } = useWebSocket();
-  const { sendQuizResult } = initializeWebSocket();
-
+  const Stomp = useWebSocket();
 
   const setDictScore = useSetRecoilState(dictScoreState);
   const handleClick = (value: string, stage: number) => {
-    // const timeSpend = Date.now() - startTime; 
+    // const timeSpend = Date.now() - startTime;
 
     if (value === word) {
       const timeSpend = 123;
-      console.log(value, timeSpend, stage)
-      sendQuizResult(value, timeSpend, stage)
+      console.log(value, timeSpend, stage);
+      Stomp.sendQuizResult(value, timeSpend, stage);
       // setIsCorrect(true);
       // setIsSolved(true);
       // setInputValue('');
@@ -135,7 +133,6 @@ function MultiQuizCrossWord({
       // setInputValue('');
     }
   };
-
 
   return (
     <QuizDiv>

@@ -4,15 +4,18 @@ import AppRouter from './route/AppRouter';
 import { GlobalStyle } from './style/GlobalStyle';
 import BackgroundImage from './components/Common/Atoms/Background.tsx';
 import { BGMProvider } from './sound/SoundContext.tsx';
+import { WebSocketProvider } from './websocket/WebSocketContext.tsx';
 
 function App() {
   return (
     <RecoilRoot>
-      <BGMProvider>
-        <BackgroundImage />
-        <GlobalStyle />
-        <AppRouter />
-      </BGMProvider>
+      <WebSocketProvider>
+        <BGMProvider>
+          <BackgroundImage />
+          <GlobalStyle />
+          <AppRouter />
+        </BGMProvider>
+      </WebSocketProvider>
     </RecoilRoot>
   );
 }
