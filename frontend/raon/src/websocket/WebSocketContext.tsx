@@ -24,24 +24,33 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const setMultiState = useSetRecoilState(multiDictState);
-
+  
   useEffect(() => {
     // Initialize WebSocket connection here if needed
     return () => {
       // Clean up WebSocket connection when the component unmounts
     };
   }, []);
-
+  
   const initializeWebSocket = () => {
     const nickname = localStorage.getItem('nickname') ?? '미사용자';
     const roomId = sessionStorage.getItem('roomId') ?? '0000';
-
-    const socket = new SockJS(`${process.env.REACT_APP_API_URL}api/ws`, null, {
-      transports: ['websocket', 'xhr-streaming', 'xhr-polling'],
-    });
+    // const socket = new SockJS(`${process.env.REACT_APP_API_URL}api/ws`, null, {
+    //   transports: ['websocket', 'xhr-streaming', 'xhr-polling'],
+    // });
 
     const client = new Client({
-      webSocketFactory: () => socket,
+      webSocketFactory: () =>
+        new SockJS(`${process.env.REACT_APP_API_URL}api/ws`, null, {
+          transports: ['websocket', 'xhr-streaming', 'xhr-polling'],
+        }),
+      onWebSocketError: (error) => {
+        console.log('에러임');
+        console.log(error);
+      },
+      debug: (str) => {
+        console.log(str);
+      },
       onConnect: () => {
         if (roomId === '0000') {
           alert('구독한 방 아이디가 없습니다.');
@@ -53,6 +62,9 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({
           });
           console.log('Connected to the WebSocket server');
         }
+      },
+      onStompError: (error) => {
+        console.log(error);
       },
       reconnectDelay: 5000,
       heartbeatIncoming: 4000,
@@ -154,8 +166,11 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({
     };
 
     const createRoom = () => {
-      console.log('만들어');
       client.activate();
+    };
+
+    const checkStatus = () => {
+      console.log(client);
     };
 
     return {
@@ -163,6 +178,7 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({
       gameStart,
       createRoom,
       sendQuizResult,
+      checkStatus,
     };
   };
 

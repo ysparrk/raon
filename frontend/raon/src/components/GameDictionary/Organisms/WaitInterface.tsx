@@ -193,7 +193,9 @@ function WaitInterface() {
   // }, []);
 
   useEffect(() => {
-    Stomp.createRoom();
+    setTimeout(() => {
+      Stomp.createRoom();
+    }, 500);
   }, []);
 
   return (
@@ -210,7 +212,7 @@ function WaitInterface() {
           optionText="초대하기"
           buttoncolor="gold"
           onClick={() => {
-            console.log('test');
+            Stomp.checkStatus();
           }}
         />
       </InterfaceDiv>
