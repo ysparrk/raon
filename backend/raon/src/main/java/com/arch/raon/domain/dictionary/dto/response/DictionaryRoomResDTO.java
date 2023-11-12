@@ -20,4 +20,11 @@ public class DictionaryRoomResDTO implements Serializable {
 	public void setRoomIdExist(boolean roomIdExist) {
 		isRoomIdExist = roomIdExist;
 	}
+
+	@Override
+	public String toString() {
+		return "DictionaryRoomResDTO{" +
+			"isRoomIdExist=" + isRoomIdExist +
+			'}';
+	}
 }
