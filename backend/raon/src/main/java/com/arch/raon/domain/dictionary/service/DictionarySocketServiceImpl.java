@@ -110,7 +110,8 @@ public class DictionarySocketServiceImpl implements DictionarySocketService{
 		if(!Rooms.isUserInRoom(reqDTO.getNickname(), reqDTO.getRoomId()))
 			return RoomResult.FAIL_NOT_IN_ROOM;
 
-		Rooms.addUserAnswer(reqDTO.getRoomId()
+		Rooms.addUserAnswer(
+			  reqDTO.getRoomId()
 			, reqDTO.getNickname()
 			, reqDTO.getUserAnswer()
 			, reqDTO.getStage()
