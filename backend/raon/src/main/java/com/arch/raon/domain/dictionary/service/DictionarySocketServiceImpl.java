@@ -113,7 +113,7 @@ public class DictionarySocketServiceImpl implements DictionarySocketService{
 		Rooms.addUserAnswer(reqDTO.getRoomId()
 			, reqDTO.getNickname()
 			, reqDTO.getUserAnswer()
-			, reqDTO.getTimeSpend()
+			, reqDTO.getStage()
 			, reqDTO.getTimeSpend()
 		);
 

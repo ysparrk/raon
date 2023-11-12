@@ -161,7 +161,8 @@ public class DictionarySocketController {
 
 				SocketQuizDTO nextQuiz = dictionarySocketService.getNextQuizFrom(reqDTO.getRoomId());
 				sendToRoom(reqDTO.getRoomId(), nextQuiz);
-				
+				break;
+
 			case GAME_STAGE_DATA_SEND_COMPLETE:
 				break;
 		}
