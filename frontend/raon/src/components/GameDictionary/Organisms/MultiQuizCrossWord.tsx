@@ -7,6 +7,7 @@ import SingleModeAnswer from './SingleModeAnswer';
 import { useWebSocket } from '../../../websocket/WebSocketContext';
 
 interface QuizCrossWordProps {
+  stage: number;
   word: string;
   west_word: string;
   north_word: string;
@@ -102,6 +103,7 @@ const QuizEnterBtn = styled.div`
 `;
 
 function MultiQuizCrossWord({
+  stage,
   word,
   west_word,
   north_word,
@@ -116,21 +118,21 @@ function MultiQuizCrossWord({
   const Stomp = useWebSocket();
 
   const setDictScore = useSetRecoilState(dictScoreState);
-  const handleClick = (value: string, stage: number) => {
+  const handleClick = (value: string) => {
     const timeSpend = Date.now() - startTime;
 
-    if (value === word) {
-      console.log(value, timeSpend, stage);
-      Stomp.sendQuizResult(value, timeSpend, stage);
-      // setIsCorrect(true);
-      // setIsSolved(true);
-      // setInputValue('');
-      // setDictScore((prevValue) => prevValue + 10);
-    } else {
-      // setIsCorrect(false);
-      // setIsSolved(true);
-      // setInputValue('');
-    }
+    console.log(value, timeSpend, stage);
+    Stomp.sendQuizResult(value, timeSpend, stage);
+    // if (value === word) {
+    //   // setIsCorrect(true);
+    //   // setIsSolved(true);
+    //   // setInputValue('');
+    //   // setDictScore((prevValue) => prevValue + 10);
+    // } else {
+    //   // setIsCorrect(false);
+    //   // setIsSolved(true);
+    //   // setInputValue('');
+    // }
   };
 
   return (
@@ -165,15 +167,13 @@ function MultiQuizCrossWord({
           }}
           onEnter={() => {
             if (!isSolved) {
-              const stage = 0;
-              handleClick(inputValue, stage);
+              handleClick(inputValue);
             }
           }}
         />
         <QuizEnterBtn
           onClick={() => {
-            const stage = 0;
-            handleClick(inputValue, stage);
+            handleClick(inputValue);
           }}
         >
           제출
