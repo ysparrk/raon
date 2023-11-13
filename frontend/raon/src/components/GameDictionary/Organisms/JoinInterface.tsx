@@ -4,12 +4,12 @@ import styled from 'styled-components';
 import { Client } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
 import { v4 as uuidv4 } from 'uuid';
+import { useSetRecoilState } from 'recoil';
 import { postRoomId } from '../../../api/GameRoomCreateApi';
 import JoinButton from '../Atoms/JoinButton';
 import JoinInputBox from '../Atoms/JoinInputBox';
-import { multiDictState } from '../../../recoil/Atoms';
+import { roomManageState } from '../../../recoil/Atoms';
 import { useWebSocket } from '../../../websocket/WebSocketContext';
-import { useSetRecoilState } from 'recoil';
 
 const InterfaceDiv = styled.div`
   display: flex;
@@ -74,7 +74,7 @@ function JoinInterface() {
   const [isJoin, setIsJoin] = useState(false);
   const [inputBoxValue, setInputBoxValue] = useState('');
   const navigate = useNavigate();
-  const setMultiState = useSetRecoilState(multiDictState);
+  const setManagerState = useSetRecoilState(roomManageState);
   const Stomp = useWebSocket();
   const roomId = uuidv4();
 
@@ -92,7 +92,11 @@ function JoinInterface() {
         if (roomIdExist) {
           alert('방 아이디 중복');
         } else {
-          // 방 아이디 만들어지면 이동 및 세션에 roomId 저장
+          setManagerState((prev) => ({
+            ...prev,
+            manager: true,
+          }));
+
           sessionStorage.setItem('roomId', roomIdInput);
           navigate('/game/dictionary-quiz');
         }
@@ -112,12 +116,12 @@ function JoinInterface() {
         console.log('handle 들어옴');
         console.log(response.data.data.roomIdExist);
         const { roomIdExist } = response.data.data;
-        console.log(response)
-        
+        console.log(response);
+
         if (!roomIdExist) {
           alert('존재하지 않는 방');
         } else {
-          console.log('세션에 roomId 저장')
+          console.log('세션에 roomId 저장');
           // 방 아이디 만들어지면 이동 및 세션에 roomId 저장
           sessionStorage.setItem('roomId', roomIdInput);
           navigate('/game/dictionary-quiz');

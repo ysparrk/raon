@@ -1,15 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { useSetRecoilState } from 'recoil';
-import { dictScoreState } from '../../../recoil/Atoms';
+import { useSetRecoilState, useRecoilValue } from 'recoil';
+import { dictScoreState, multiDictState } from '../../../recoil/Atoms';
 import AnswerInputBox from '../Atoms/AnswerInputBox';
 import SingleModeAnswer from './SingleModeAnswer';
 import { useWebSocket } from '../../../websocket/WebSocketContext';
-import { useRecoilValue } from 'recoil';
-import { multiDictState } from '../../../recoil/Atoms';
+import Timer from '../../Common/Atoms/Timer';
 
 interface QuizLetterProps {
-  stage: number;
   word: string;
   initial: string;
   meaning: string;
@@ -63,8 +61,21 @@ const QuizEnterBtn = styled.div`
   font-size: 2.5rem;
 `;
 
+const TimerDiv = styled.div`
+  position: fixed;
+  display: flex;
+  flex-direction: row;
+  top: 15%;
+  right: 5%;
+  font-size: 3.1375rem;
+  font-family: 'ONE-Mobile-POP';
+  color: black;
+  justify-content: space-between;
+  align-items: center;
+  width: 7.5rem;
+`;
+
 function MultiQuizLetter({
-  stage,
   word,
   initial,
   meaning,
@@ -74,9 +85,23 @@ function MultiQuizLetter({
   const [isSolved, setIsSolved] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
   const [startTime, setStartTime] = useState(Date.now());
+  const [timerState, setTimerState] = useState(20);
   const QuizStage = useRecoilValue(multiDictState);
   const Stomp = useWebSocket();
+  useEffect(() => {
+    // 설정된 시간 간격마다 setInterval 콜백이 실행된다.
+    const id = setInterval(() => {
+      // 타이머 숫자가 하나씩 줄어들도록
+      setTimerState((count) => count - 1);
+    }, 1000);
 
+    // 0이 되면 카운트가 멈춤
+    if (timerState === 0) {
+      clearInterval(id);
+    }
+    return () => clearInterval(id);
+    // 카운트 변수가 바뀔때마다 useEffecct 실행
+  }, [timerState]);
   // const setDictScore = useSetRecoilState(dictScoreState);
   const handleClick = (value: string) => {
     const timeSpend = Date.now() - startTime;
@@ -108,6 +133,10 @@ function MultiQuizLetter({
       )}
       <QuizQuestion>{meaning}</QuizQuestion>
       <QuizInitial>{initial}</QuizInitial>
+      <TimerDiv>
+        <Timer />
+        {timerState}
+      </TimerDiv>
       <QuizEnterDiv>
         <AnswerInputBox
           inputText={inputValue}
