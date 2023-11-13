@@ -76,7 +76,7 @@ declare global {
 }
 
 function WaitInterface() {
-  const { Kakao } = window
+  const { Kakao } = window;
   const navigate = useNavigate();
   const setMultiState = useSetRecoilState(multiDictState);
   const setManagerState = useSetRecoilState(roomManageState);
@@ -84,13 +84,13 @@ function WaitInterface() {
   const Stomp = useWebSocket();
 
   const nickname = localStorage.getItem('nickname') ?? '미사용자';
-  const roomId = sessionStorage.getItem('roomId') ?? '0000';
+  let roomId = sessionStorage.getItem('roomId') ?? '0000';
   const gameStart = useRecoilValue(gameStartState);
 
   useEffect(() => {
     setTimeout(() => {
       Stomp.createRoom();
-    }, 500);
+    }, 100);
   }, []);
 
   useEffect(() => {
@@ -103,19 +103,19 @@ function WaitInterface() {
     Kakao.cleanup();
     Kakao.init(process.env.REACT_APP_JAVASCRIPT_KEY);
     console.log(Kakao.isInitialized());
-  })
+  });
 
   const handleshare = async () => {
+    roomId = (await sessionStorage.getItem('roomId')) ?? '0000';
     Kakao.Share.sendDefault({
       objectType: 'text',
-      text:
-        roomId,
+      text: roomId,
       link: {
         webUrl: 'https://arch-raon.com',
         // webUrl: 'http://localhost:3000',
       },
     });
-  }
+  };
 
   return (
     <>

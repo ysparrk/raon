@@ -149,10 +149,12 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({
             break;
           case 'LEAVE':
             console.log(body);
-            setRoomStatus((prev) => ({
-              ...prev,
-              users: body.users,
-            }));
+            if (body.nextOwner === nickname) {
+              setRoomStatus((prev) => ({
+                ...prev,
+                manager: true,
+              }));
+            }
             break;
           default:
             console.log(body);

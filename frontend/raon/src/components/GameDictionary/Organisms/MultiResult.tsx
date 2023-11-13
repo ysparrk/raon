@@ -30,11 +30,11 @@ const LeftDiv = styled.div`
 `;
 const RightDiv = styled.div`
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   width: 48vw;
   height: 58vh;
-  background-color: lightblue;
   color: white;
   font-family: 'ONE-Mobile-POP';
   font-size: 2.5rem;
@@ -71,6 +71,22 @@ const LeftOthersP = styled.p`
   font-family: 'ONE-Mobile-POP';
   font-size: 2.125rem;
   color: white;
+`;
+
+const RightTopicP = styled.div`
+  font-family: 'ONE-Mobile-POP';
+  font-size: 2.125rem;
+  color: black;
+`;
+const RightRankDiv = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  font-family: 'CookieRun';
+  font-size: 2.125rem;
+  color: black;
+  gap: 0.625rem;
 `;
 
 function MultiResult() {
@@ -122,7 +138,17 @@ function MultiResult() {
           ))}
         </LeftOthersDiv>
       </LeftDiv>
-      <RightDiv />
+      <RightDiv>
+        <RightTopicP>현재 점수</RightTopicP>
+        {Room.userResult.map(
+          (user: { nickname?: string; current_point?: number }, index) => (
+            <RightRankDiv key={user.nickname}>
+              <p>{user.nickname ?? '?'}</p>
+              <p>{user.current_point ?? '0'}</p>
+            </RightRankDiv>
+          ),
+        )}
+      </RightDiv>
     </ResultDiv>
   );
 }
