@@ -6,7 +6,7 @@ import lombok.Getter;
 
 @Getter
 public class GrammarMyRankQueryDTO {
-    private int rank;
+    private Long rank;
     private String nickname;
     private int score;
 
@@ -21,7 +21,7 @@ public class GrammarMyRankQueryDTO {
     }
 
     @Builder
-    public GrammarMyRankQueryDTO(int rank, String nickname, int score) {
+    public GrammarMyRankQueryDTO(Long rank, String nickname, int score) {
         this.rank = rank;
         this.nickname = nickname;
         this.score = score;
