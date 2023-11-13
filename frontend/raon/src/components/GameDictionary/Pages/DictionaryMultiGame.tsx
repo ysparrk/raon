@@ -6,9 +6,10 @@ import { useNavigate } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import ExitButton from '../../Common/Atoms/ExitButtonInRoom';
 import TitleBox from '../../Common/Atoms/TitleBox';
-import { multiDictState } from '../../../recoil/Atoms';
+import { multiDictState, roomManageState } from '../../../recoil/Atoms';
 import QuizCrossWord from '../Organisms/MultiQuizCrossWord';
 import QuizLetter from '../Organisms/MultiQuizLetter';
+import MultiResult from '../Organisms/MultiResult';
 
 const ContentDiv = styled.div`
   display: flex;
@@ -28,6 +29,18 @@ const CountDiv = styled.div`
 
 const DictionaryWaitingRoom = () => {
   const Quiz = useRecoilValue(multiDictState);
+  const Room = useRecoilValue(roomManageState);
+  if (Room.breakTime) {
+    return (
+      <div>
+        <TitleBox>국어사전 놀이</TitleBox>
+        <CountDiv>{Quiz.stage} / 10</CountDiv>
+        <ContentDiv>
+          <MultiResult />
+        </ContentDiv>
+      </div>
+    );
+  }
 
   if (Quiz.type === 'I') {
     return (

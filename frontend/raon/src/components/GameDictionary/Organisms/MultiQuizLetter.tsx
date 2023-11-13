@@ -105,6 +105,7 @@ function MultiQuizLetter({
     setTimerState(20);
     setIsSolved(false);
     setStartTime(Date.now());
+    setInputValue('');
   }, [QuizStage.stage]);
   useEffect(() => {
     // 설정된 시간 간격마다 setInterval 콜백이 실행된다.
@@ -116,7 +117,9 @@ function MultiQuizLetter({
     // 0이 되면 카운트가 멈춤
     if (timerState === 0) {
       clearInterval(id);
-      handleClick(inputValue);
+      if (!isSolved) {
+        handleClick(inputValue);
+      }
     }
     return () => clearInterval(id);
     // 카운트 변수가 바뀔때마다 useEffecct 실행

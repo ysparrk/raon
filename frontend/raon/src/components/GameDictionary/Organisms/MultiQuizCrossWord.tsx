@@ -125,7 +125,7 @@ const WaitDiv = styled.div`
   font-size: 5rem;
   color: black;
   width: 65.5rem;
-  height: 10rem;
+  height: 8rem;
 `;
 
 function MultiQuizCrossWord({
@@ -147,6 +147,7 @@ function MultiQuizCrossWord({
     setTimerState(20);
     setIsSolved(false);
     setStartTime(Date.now());
+    setInputValue('');
   }, [QuizStage.stage]);
   useEffect(() => {
     // 설정된 시간 간격마다 setInterval 콜백이 실행된다.
@@ -158,7 +159,9 @@ function MultiQuizCrossWord({
     // 0이 되면 카운트가 멈춤
     if (timerState === 0) {
       clearInterval(id);
-      handleClick(inputValue);
+      if (!isSolved) {
+        handleClick(inputValue);
+      }
     }
     return () => clearInterval(id);
     // 카운트 변수가 바뀔때마다 useEffecct 실행
@@ -183,16 +186,6 @@ function MultiQuizCrossWord({
 
   return (
     <QuizDiv>
-      {isSolved && (
-        <SingleModeAnswer
-          onClose={() => {
-            setIsSolved(false);
-            nextClick();
-          }}
-          answer={word}
-          isCorrect={isCorrect}
-        />
-      )}
       <QuizQuestion>가운데에 한 글자를 넣어 각 단어를 완성하시오</QuizQuestion>
       <QuizContentDiv>
         <div />
@@ -221,12 +214,14 @@ function MultiQuizCrossWord({
             onEnter={() => {
               if (!isSolved) {
                 handleClick(inputValue);
+                setIsSolved(true);
               }
             }}
           />
           <QuizEnterBtn
             onClick={() => {
               handleClick(inputValue);
+              setIsSolved(true);
             }}
           >
             제출

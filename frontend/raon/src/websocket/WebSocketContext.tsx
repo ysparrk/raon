@@ -104,6 +104,10 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({
           case 'DIRECTION_QUIZ':
             console.log('동서남북 퀴즈');
             console.log(body);
+            setRoomStatus((prev) => ({
+              ...prev,
+              breakTime: false,
+            }));
             setMultiState((prev) => ({
               ...prev,
               type: 'D',
@@ -113,13 +117,17 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({
               northWord: body.dictionaryDirectionQuiz.northWord,
               eastWord: body.dictionaryDirectionQuiz.eastWord,
               southWord: body.dictionaryDirectionQuiz.southWord,
-              answer: body.dictionaryDirectionQuiz.answer,
+              answer: body.answer,
             }));
             break;
 
           case 'INITIAL_QUIZ':
             console.log('초성퀴즈');
             console.log(body);
+            setRoomStatus((prev) => ({
+              ...prev,
+              breakTime: false,
+            }));
             setMultiState((prev) => ({
               ...prev,
               type: 'I',
@@ -128,9 +136,24 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({
               initial: body.dictionaryInitialQuiz.initial,
               meaning: body.dictionaryInitialQuiz.meaning,
               word: body.dictionaryInitialQuiz.word,
+              answer: body.answer,
             }));
             break;
-
+          case 'STAGE_RESULT':
+            console.log(body);
+            setRoomStatus((prev) => ({
+              ...prev,
+              userResult: body.users,
+              breakTime: true,
+            }));
+            break;
+          case 'LEAVE':
+            console.log(body);
+            setRoomStatus((prev) => ({
+              ...prev,
+              users: body.users,
+            }));
+            break;
           default:
             console.log(body);
             break;

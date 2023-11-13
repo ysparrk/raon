@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import Swal from 'sweetalert2';
 import InputBox from '../../Common/Atoms/InputBox.tsx';
 import ComboBox from '../../Common/Atoms/ComboBox.tsx';
 import DuplicationCheckButton from '../Atoms/DuplicateCheckButton.tsx';
@@ -8,7 +9,6 @@ import {
   postMemberSignup,
   postDuplicateCheck,
 } from '../../../api/MemberApi.tsx';
-import Swal from 'sweetalert2';
 
 const Container = styled.div`
   display: flex;
