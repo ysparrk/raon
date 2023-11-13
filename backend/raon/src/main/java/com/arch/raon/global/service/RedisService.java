@@ -31,20 +31,24 @@ public class RedisService {
     }
 
     /** 여기에 리프레쉬 관련 로직 넣으면 좋아용 **/
-    public void setRefreshToken(Long id, String refreshToken){
-        // key : id(member), value : refreshToken
-        securityRedis.opsForValue().set(String.valueOf(id), refreshToken);
+    public void setRefreshToken(String accessToken, String refreshToken){
+        // key : accessToken, value : refreshToken
+        securityRedis.opsForValue().set(accessToken, refreshToken);
         //30일
-        securityRedis.expire(String.valueOf(id),30L, TimeUnit.DAYS);
+        securityRedis.expire(accessToken,30L, TimeUnit.DAYS);
     }
 
-    public String getRefreshToken(Long id){
-        return securityRedis.opsForValue().get(String.valueOf(id));
+    public String getRefreshToken(String accessToken){
+        return securityRedis.opsForValue().get(accessToken);
     }
 
 
-    public boolean deleteRefreshToken(Long id){
-        return Boolean.TRUE.equals(securityRedis.delete(String.valueOf(id)));
+    public boolean deleteRefreshToken(String accessToken){
+        return Boolean.TRUE.equals(securityRedis.delete(accessToken));
+    }
+
+    public void updateRefreshTokenKey(String accessToken, String newAccessToken){
+        securityRedis.rename(accessToken, newAccessToken);
     }
 
 }
