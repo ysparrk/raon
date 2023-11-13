@@ -71,6 +71,7 @@ const LeftOthersP = styled.p`
   font-family: 'ONE-Mobile-POP';
   font-size: 2.125rem;
   color: white;
+  margin: 0.5rem;
 `;
 
 const RightTopicP = styled.div`
