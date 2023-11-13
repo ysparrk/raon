@@ -1,7 +1,10 @@
 package com.arch.raon.domain.dictionary.service;
 
 import java.util.List;
+import java.util.Optional;
 
+import com.arch.raon.domain.dictionary.vo.User;
+import com.arch.raon.global.service.RedisService;
 import org.springframework.stereotype.Service;
 
 import com.arch.raon.domain.dictionary.dto.request.SocketQuizReqDTO;
@@ -30,6 +33,8 @@ public class DictionarySocketServiceImpl implements DictionarySocketService{
 	private final MemberRepository memberRepository;
 	private final DictionaryDirectionQuizRepository dictionaryDirectionQuizRepository;
 	private final DictionaryInitialQuizRepository dictionaryInitialQuizRepository;
+	private final RedisService redisService;
+
 
 	@Override
 	public RoomResult connectRoom(String nickname, String roomId) {
@@ -132,6 +137,23 @@ public class DictionarySocketServiceImpl implements DictionarySocketService{
 	@Override
 	public SocketStageResultResDTO getStageResultOf(String roomId) {
 		return Rooms.getStageResult(roomId);
+	}
+
+	@Override
+	public void saveScore(String roomId) {
+		List<User> users = Rooms.getStageResult(roomId).getUsers();
+
+		for(User user : users){
+			Member member = memberRepository.findByNickname(user.getNickname()).orElseThrow(() -> new CustomException(ErrorCode.NO_SUCH_MEMBER){
+				@Override
+				public ErrorCode getErrorCode() {
+					return super.getErrorCode();
+				}
+			});
+
+			Long id = member.getId();
+			redisService.setCountryDictionaryPoint(id, user.getCurrent_point());
+		}
 	}
 
 }
