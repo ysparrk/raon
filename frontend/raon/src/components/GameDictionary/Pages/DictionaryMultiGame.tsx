@@ -16,6 +16,15 @@ const ContentDiv = styled.div`
   justify-content: center;
   align-items: center;
 `;
+const CountDiv = styled.div`
+  position: fixed;
+  display: flex;
+  top: 5%;
+  right: 5%;
+  font-size: 3.125rem;
+  font-family: 'ONE-Mobile-POP';
+  color: white;
+`;
 
 const DictionaryWaitingRoom = () => {
   const Quiz = useRecoilValue(multiDictState);
@@ -24,14 +33,17 @@ const DictionaryWaitingRoom = () => {
     return (
       <div>
         <TitleBox>국어사전 놀이</TitleBox>
-        <QuizLetter
-          word={Quiz.word}
-          initial={Quiz.initial}
-          meaning={Quiz.meaning}
-          nextClick={() => {
-            console.log('체크용');
-          }}
-        />
+        <CountDiv>{Quiz.stage} / 10</CountDiv>
+        <ContentDiv>
+          <QuizLetter
+            word={Quiz.word}
+            initial={Quiz.initial}
+            meaning={Quiz.meaning}
+            nextClick={() => {
+              console.log('체크용');
+            }}
+          />
+        </ContentDiv>
       </div>
     );
   }
@@ -39,16 +51,19 @@ const DictionaryWaitingRoom = () => {
     return (
       <div>
         <TitleBox>국어사전 놀이</TitleBox>
-        <QuizCrossWord
-          word={Quiz.answer}
-          north_word={Quiz.northWord}
-          east_word={Quiz.eastWord}
-          west_word={Quiz.westWord}
-          south_word={Quiz.southWord}
-          nextClick={() => {
-            console.log('체크용');
-          }}
-        />
+        <CountDiv>{Quiz.stage} / 10</CountDiv>
+        <ContentDiv>
+          <QuizCrossWord
+            word={Quiz.answer}
+            north_word={Quiz.northWord}
+            east_word={Quiz.eastWord}
+            west_word={Quiz.westWord}
+            south_word={Quiz.southWord}
+            nextClick={() => {
+              console.log('체크용');
+            }}
+          />
+        </ContentDiv>
       </div>
     );
   }

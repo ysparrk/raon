@@ -49,6 +49,7 @@ public class DictionarySocketController {
 	public ResponseEntity<ResponseDTO> ckeckRoomIdExist(@RequestBody SocketReqDTO reqDTO) {
 		System.out.println("[CHECK-ROOM] 방 확인 요청!!!! 요청자: " + reqDTO.getNickname() +" 방 아이디: "+ reqDTO.getRoomId());
 		DictionaryRoomResDTO roomResDTO = new DictionaryRoomResDTO(Rooms.hasRoomThatIdIs(reqDTO.getRoomId()));
+		System.out.println("[CHECK-ROOM-RESULT] 방 결과 : " + roomResDTO);
 		return ResponseEntity.status(HttpStatus.OK)
 			.body(ResponseDTO.builder()
 				.message("국어사전 퀴즈 방 존재 여부")
@@ -153,17 +154,30 @@ public class DictionarySocketController {
 		System.out.println("[ON-STAGE] 정답 보냄!!!! 요청자: " + reqDTO.getNickname() +" 방 아이디: "+ reqDTO.getRoomId());
 		RoomResult result = dictionarySocketService.addAnswerToRoom(reqDTO);
 
+		System.out.println("[ON-STAGE-RES] 결과 :" + result);
+
 		switch(result){
-			case STAGE_END:
+			case GAME_STAGE_DATA_SEND_COMPLETE:
+				break; // 유저가 정답을 잘 보냈을 떄
+			
+			case STAGE_END: // 모든 유저가 정답을 보냈을 떄
 				SocketStageResultResDTO ranking = dictionarySocketService.getStageResultOf(reqDTO.getRoomId());
 				sendToRoom(reqDTO.getRoomId(), ranking);
-				Thread.sleep(10000);
+
+				Thread.sleep(5000); // 이 시간동안 결과를 프론트에서 띄어줘야 하므로, 테스트를 위해 5초로 둔다.
 
 				SocketQuizDTO nextQuiz = dictionarySocketService.getNextQuizFrom(reqDTO.getRoomId());
 				sendToRoom(reqDTO.getRoomId(), nextQuiz);
-				
-			case GAME_STAGE_DATA_SEND_COMPLETE:
 				break;
+
+			case GAME_END: // 모든 유저가 마지막 스테이지의 정답을 보냈을 떄
+				SocketStageResultResDTO finalRanking = dictionarySocketService.getStageResultOf(reqDTO.getRoomId());
+				finalRanking.setMessage(SocketResponse.FINAL_RESULT);
+
+				// TODO : 결과를 db에 저장해야 한다.
+				
+				// 최종 결과 전송
+				sendToRoom(reqDTO.getRoomId(), finalRanking);
 		}
 	}
 

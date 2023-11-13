@@ -10,8 +10,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 
 public class SocketQuizDTO implements Serializable {
 	private SocketResponse message;
-
-
+	private int stage;
 
 	/**
 	 * 퀴즈는 초성 퀴즈 or 동서남북 퀴즈 중 하나 이므로
@@ -29,13 +28,15 @@ public class SocketQuizDTO implements Serializable {
 		super();
 	}
 
-	public SocketQuizDTO(SocketResponse message, DictionaryInitialQuiz dictionaryInitialQuiz) {
+	public SocketQuizDTO(SocketResponse message, int stage, DictionaryInitialQuiz dictionaryInitialQuiz) {
 		this.message = message;
+		this.stage = stage;
 		this.dictionaryInitialQuiz = dictionaryInitialQuiz;
 	}
 
-	public SocketQuizDTO(SocketResponse message, DictionaryDirectionQuiz dictionaryDirectionQuiz) {
+	public SocketQuizDTO(SocketResponse message, int stage, DictionaryDirectionQuiz dictionaryDirectionQuiz) {
 		this.message = message;
+		this.stage = stage;
 		this.dictionaryDirectionQuiz = dictionaryDirectionQuiz;
 	}
 
@@ -64,6 +65,14 @@ public class SocketQuizDTO implements Serializable {
 		this.dictionaryDirectionQuiz = dictionaryDirectionQuiz;
 	}
 
+	public int getStage() {
+		return stage;
+	}
+
+	public void setStage(int stage) {
+		this.stage = stage;
+	}
+
 	public String getAnswer(){
 		return dictionaryDirectionQuiz == null
 			 ? dictionaryInitialQuiz.getWord()
@@ -73,7 +82,8 @@ public class SocketQuizDTO implements Serializable {
 	@Override
 	public String toString() {
 		return "SocketQuizDTO{" +
-			"quizType='" + message + '\'' +
+			"message=" + message +
+			", stage=" + stage +
 			", dictionaryInitialQuiz=" + dictionaryInitialQuiz +
 			", dictionaryDirectionQuiz=" + dictionaryDirectionQuiz +
 			'}';

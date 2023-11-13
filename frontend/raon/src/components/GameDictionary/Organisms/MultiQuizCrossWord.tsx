@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { useSetRecoilState } from 'recoil';
-import { dictScoreState } from '../../../recoil/Atoms';
+import { useSetRecoilState, useRecoilValue } from 'recoil';
+import { dictScoreState, multiDictState } from '../../../recoil/Atoms';
 import AnswerInputBox from '../Atoms/AnswerInputBox';
 import SingleModeAnswer from './SingleModeAnswer';
+import { useWebSocket } from '../../../websocket/WebSocketContext';
+import Timer from '../../Common/Atoms/Timer';
 
 interface QuizCrossWordProps {
   word: string;
@@ -99,7 +101,16 @@ const QuizEnterBtn = styled.div`
   font-family: 'ONE-Mobile-POP';
   font-size: 2.5rem;
 `;
-
+const TimerDiv = styled.div`
+  position: fixed;
+  display: flex;
+  flex-direction: row;
+  top: 40%;
+  right: 5%;
+  font-size: 3.1375rem;
+  font-family: 'ONE-Mobile-POP';
+  color: black;
+`;
 function MultiQuizCrossWord({
   word,
   west_word,
@@ -111,20 +122,29 @@ function MultiQuizCrossWord({
   const [inputValue, setInputValue] = useState('');
   const [isSolved, setIsSolved] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
+  const [startTime, setStartTime] = useState(Date.now());
+  const [timerState, setTimerState] = useState(20);
+  const QuizStage = useRecoilValue(multiDictState);
+  const Stomp = useWebSocket();
 
   const setDictScore = useSetRecoilState(dictScoreState);
   const handleClick = (value: string) => {
-    if (value === word) {
-      setIsCorrect(true);
-      setIsSolved(true);
-      setInputValue('');
-      setDictScore((prevValue) => prevValue + 10);
-    } else {
-      setIsCorrect(false);
-      setIsSolved(true);
-      setInputValue('');
-    }
+    const timeSpend = Date.now() - startTime;
+
+    console.log(value, timeSpend, QuizStage.stage);
+    Stomp.sendQuizResult(value, timeSpend, QuizStage.stage);
+    // if (value === word) {
+    //   // setIsCorrect(true);
+    //   // setIsSolved(true);
+    //   // setInputValue('');
+    //   // setDictScore((prevValue) => prevValue + 10);
+    // } else {
+    //   // setIsCorrect(false);
+    //   // setIsSolved(true);
+    //   // setInputValue('');
+    // }
   };
+
   return (
     <QuizDiv>
       {isSolved && (
@@ -149,6 +169,10 @@ function MultiQuizCrossWord({
         <div>{south_word}</div>
         <div />
       </QuizContentDiv>
+      <TimerDiv>
+        <Timer />
+        {timerState}
+      </TimerDiv>
       <QuizEnterDiv>
         <AnswerInputBox
           inputText={inputValue}

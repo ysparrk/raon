@@ -8,7 +8,6 @@ import com.arch.raon.domain.dictionary.dto.response.socket.SocketJoinResDTO;
 import com.arch.raon.domain.dictionary.dto.response.socket.SocketQuizDTO;
 import com.arch.raon.domain.dictionary.dto.response.socket.SocketStageResultResDTO;
 import com.arch.raon.global.util.enums.GameState;
-import com.arch.raon.global.util.enums.RoomResult;
 import com.arch.raon.global.util.enums.SocketResponse;
 
 /**
@@ -175,5 +174,10 @@ public class Rooms {
 
 	public static boolean isLastStage(String roomId) {
 		return roomOf(roomId).getStage() == 9;
+	}
+
+	public static void updateNextQuiz(String roomId) {
+		roomOf(roomId).clearSubmitted();
+		roomOf(roomId).updateQuiz();
 	}
 }

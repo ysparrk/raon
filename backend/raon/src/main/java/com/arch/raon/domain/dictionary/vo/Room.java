@@ -10,7 +10,6 @@ import java.util.concurrent.ConcurrentMap;
 import com.arch.raon.domain.dictionary.dto.response.DictionaryQuizResDTO;
 import com.arch.raon.domain.dictionary.dto.response.socket.SocketQuizDTO;
 import com.arch.raon.global.util.enums.GameState;
-import com.arch.raon.global.util.enums.QuizType;
 import com.arch.raon.global.util.enums.SocketResponse;
 
 /**
@@ -28,9 +27,8 @@ import com.arch.raon.global.util.enums.SocketResponse;
 public class Room {
 	private GameState state = GameState.WAITING;
 	private final ConcurrentMap<String, User> userInfo = new ConcurrentHashMap<>();
-	private ConcurrentMap<String, String> latestAnswer = new ConcurrentHashMap<>();
 	private List<SocketQuizDTO> quizList = new ArrayList<>();
-	private int currentStage = 0;
+	private int currentQuizIdx = 0;
 	private int submitted = 0;
 	private String owner;
 
@@ -86,40 +84,46 @@ public class Room {
 	 */
 	public void shuffleAndSetQuizes(DictionaryQuizResDTO pureQuizes) {
 		int index = 0;
+		int stage = 1;
 
 		while (!pureQuizes.getDirectionQuizList().isEmpty() && !pureQuizes.getInitialQuizList().isEmpty()) {
-			boolean isGreaterThan50 = Math.random() * 100 > 50.0;
+			boolean isGreater = Math.random() * 100 > 70.0;
+			System.out.println("			퀴즈 셔플 isGreater 결과 : " + isGreater);
 			SocketQuizDTO nextQuiz = new SocketQuizDTO();
 
-			if (isGreaterThan50) {
+			if (isGreater) {
 				index = pureQuizes.getDirectionQuizList().size()-1;
-				nextQuiz.setMessage(SocketResponse.DIRECTION_QUIZ);
-				nextQuiz.setDictionaryDirectionQuiz(pureQuizes.getDirectionQuizList().remove(index));
+				nextQuiz = new SocketQuizDTO(SocketResponse.DIRECTION_QUIZ
+											, stage++
+											, pureQuizes.getDirectionQuizList().remove(index)
+				);
 			}
 			else {
 				index = pureQuizes.getInitialQuizList().size()-1;
-				nextQuiz.setMessage(SocketResponse.INITIAL_QUIZ);
-				nextQuiz.setDictionaryInitialQuiz(pureQuizes.getInitialQuizList().remove(index));
+				nextQuiz = new SocketQuizDTO(SocketResponse.INITIAL_QUIZ
+											, stage++
+											, pureQuizes.getInitialQuizList().remove(index)
+				);
 			}
 			quizList.add(nextQuiz);
 		}
 		if(pureQuizes.getDirectionQuizList().isEmpty()){
 			while(!pureQuizes.getInitialQuizList().isEmpty()){
-				quizList.add(new SocketQuizDTO(SocketResponse.INITIAL_QUIZ, pureQuizes.getInitialQuizList().remove(0)));
+				quizList.add(new SocketQuizDTO(SocketResponse.INITIAL_QUIZ, stage++, pureQuizes.getInitialQuizList().remove(0)));
 			}
 		}
 		else{
 			while(!pureQuizes.getDirectionQuizList().isEmpty()){
-				quizList.add(new SocketQuizDTO(SocketResponse.DIRECTION_QUIZ, pureQuizes.getDirectionQuizList().remove(0)));
+				quizList.add(new SocketQuizDTO(SocketResponse.DIRECTION_QUIZ, stage++, pureQuizes.getDirectionQuizList().remove(0)));
 			}
 		}
 	}
 
 
 	public SocketQuizDTO getNextQuiz(){
-		return currentStage == 9 // 0~9, so 9 is last stage
+		return currentQuizIdx == 10 // 0~9, so 9 is last stage
 			 ? null
-			 : quizList.get(currentStage++);
+			 : quizList.get(currentQuizIdx);
 	}
 
 	/**
@@ -131,8 +135,10 @@ public class Room {
 	 * @param timeSpend
 	 */
 	public boolean checkAndUpdateScore(String nickname, int stage, String userAnswer, int timeSpend){
-		if(currentStage != stage){
-			System.out.println("[비상!!!] 스테이지가 달라!!!"+ " 유저: " + nickname + " Room의 stage: "+ currentStage +" 유저가 보낸 스테이지: "+ stage );
+		System.out.println("[LOG] nickname:"+nickname+ " userAnswer:"+ userAnswer + " realAnswer:" + quizList.get(currentQuizIdx).getAnswer());
+
+		if(quizList.get(currentQuizIdx).getStage() != stage){
+			System.out.println("[비상!!!] 스테이지가 달라!!!"+ " 유저: " + nickname + "stageIDx: "+ currentQuizIdx + " Room의 stage: "+ quizList.get(currentQuizIdx).getStage() +" 유저가 보낸 스테이지: "+ stage );
 			return false;
 		}
 		if(!hasUserNamed(nickname)){
@@ -144,12 +150,13 @@ public class Room {
 			return false;
 		}
 
-		if(quizList.get(currentStage).getAnswer().equals(userAnswer)){
-			int point = 100 * (10000 - timeSpend); // TODO: 늦게 풀 수록 점수를 낮게 주고 싶은데 방법이 없나?
+		if(quizList.get(currentQuizIdx).getAnswer().equals(userAnswer)){
+			int point = (100_000 - timeSpend); // TODO: 늦게 풀 수록 점수를 낮게 주고 싶은데 방법이 없나?
+			System.out.println(" 			nickname:"+nickname+" answer:" + userAnswer+" point:" + point);
 			userInfo.get(nickname).addPoint(point);
 		}
 
-		addAnswerToMap(nickname,userAnswer);
+		updateUserAnswer(nickname,userAnswer);
 		submitted += 1;
 		return true;
 	}
@@ -159,7 +166,7 @@ public class Room {
 		List<User> rank = new ArrayList<>();
 
 		for(Map.Entry<String,User> entry : userInfo.entrySet()){
-			rank.add(new User(entry.getKey(), entry.getValue().getCurrent_point()));
+			rank.add(entry.getValue());
 		}
 
 		Collections.sort(rank);
@@ -191,12 +198,9 @@ public class Room {
 
 
 	//=========== 최근 답에 대한 메소드들 ====================
-	private void addUserToAnswerMap(String nickname){
-		latestAnswer.put(nickname,null);
-	}
-	private boolean addAnswerToMap(String nickname, String newAnswer){
-		if(userInfo.containsKey(nickname) && latestAnswer.containsKey(nickname)){
-			latestAnswer.replace(nickname, newAnswer);
+	private boolean updateUserAnswer(String nickname, String newAnswer){
+		if(userInfo.containsKey(nickname)){
+			userInfo.get(nickname).setLastAnswer(newAnswer);
 			return true;
 		}
 		return false;
@@ -219,14 +223,19 @@ public class Room {
 	}
 
 	public boolean isAllSubmit() {
-		return submitted == latestAnswer.size();
+		System.out.println("			submitted:"+submitted + " userInfo.size():"+ userInfo.size());
+		return submitted == userInfo.size();
 	}
 
-	public void clearAnswer(){
+	public void clearSubmitted(){
 		submitted = 0;
 	}
 
+	public void updateQuiz(){
+		currentQuizIdx += 1;
+	}
+
 	public int getStage() {
-		return currentStage;
+		return currentQuizIdx+1;
 	}
 }
