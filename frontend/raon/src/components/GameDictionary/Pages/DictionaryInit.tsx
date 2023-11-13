@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import InitInterface from '../Organisms/InitInterface';
 import LeftSpeakBalloon from '../../Common/Atoms/LeftSpeakBalloon';
 import RightSpeakBalloon from '../../Common/Atoms/RightSpeakBalloon';
+import HelpBox from '../Organisms/HelpBox';
 import HelpCharacter from '../../Common/Atoms/HelpCharacterDiv';
 
 const ContentDiv = styled.div`
@@ -26,6 +27,12 @@ const SpeakEventRightTopDiv = styled.div`
 `;
 
 const DictionaryInit = () => {
+  const [helpBoxVisible, setHelpBoxVisible] = useState(false);
+
+  const toggleHelpBox = () => {
+    setHelpBoxVisible((prev) => !prev);
+  };
+
   return (
     <div>
       <SpeakEventLeftDiv>
@@ -37,11 +44,8 @@ const DictionaryInit = () => {
       <ContentDiv>
         <InitInterface />
       </ContentDiv>
-      <HelpCharacter
-        onClick={() => {
-          console.log('도와줄게');
-        }}
-      />
+      <HelpCharacter onClick={toggleHelpBox} />
+      {helpBoxVisible && <HelpBox />}
     </div>
   );
 };

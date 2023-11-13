@@ -11,7 +11,7 @@ const SelectOptionDiv = styled.div`
   display: flex;
   position: relative;
   width: 35.625rem;
-  height: 15.5rem;
+  height: 7.5rem;
   margin: 1.25rem;
 `;
 const Circle = styled.div<SelectOptionProps>`
