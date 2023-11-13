@@ -173,7 +173,7 @@ public class Rooms {
 	}
 
 	public static boolean isLastStage(String roomId) {
-		return roomOf(roomId).getStage() == 9;
+		return roomOf(roomId).getStage() == 10;
 	}
 
 	public static void updateNextQuiz(String roomId) {

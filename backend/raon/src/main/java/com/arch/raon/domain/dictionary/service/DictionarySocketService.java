@@ -24,4 +24,6 @@ public interface DictionarySocketService {
 	RoomResult addAnswerToRoom(SocketQuizReqDTO reqDTO);
 
 	SocketStageResultResDTO getStageResultOf(String roomId);
+
+    void saveScore(String roomId);
 }

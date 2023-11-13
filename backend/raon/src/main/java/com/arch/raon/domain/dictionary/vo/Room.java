@@ -105,6 +105,7 @@ public class Room {
 											, pureQuizes.getInitialQuizList().remove(index)
 				);
 			}
+			System.out.println(nextQuiz);
 			quizList.add(nextQuiz);
 		}
 		if(pureQuizes.getDirectionQuizList().isEmpty()){
@@ -233,6 +234,7 @@ public class Room {
 
 	public void updateQuiz(){
 		currentQuizIdx += 1;
+		System.out.println("다음 스테이지 인덱스: " + currentQuizIdx);
 	}
 
 	public int getStage() {
