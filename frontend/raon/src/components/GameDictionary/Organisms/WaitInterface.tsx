@@ -69,7 +69,14 @@ const ButtonDiv = styled.div`
   right: 10%;
 `;
 
+declare global {
+  interface Window {
+    Kakao: any;
+  }
+}
+
 function WaitInterface() {
+  const { Kakao } = window
   const navigate = useNavigate();
   const setMultiState = useSetRecoilState(multiDictState);
   const setManagerState = useSetRecoilState(roomManageState);
@@ -91,6 +98,24 @@ function WaitInterface() {
       navigate('/game/dictionary-multi-game');
     }
   }, [gameStart]);
+
+  useEffect(() => {
+    Kakao.cleanup();
+    Kakao.init(process.env.REACT_APP_JAVASCRIPT_KEY);
+    console.log(Kakao.isInitialized());
+  })
+
+  const handleshare = async () => {
+    Kakao.Share.sendDefault({
+      objectType: 'text',
+      text:
+        roomId,
+      link: {
+        webUrl: 'https://arch-raon.com',
+        // webUrl: 'http://localhost:3000',
+      },
+    });
+  }
 
   return (
     <>
@@ -115,9 +140,7 @@ function WaitInterface() {
         <JoinButton
           optionText="초대하기"
           buttoncolor="gold"
-          onClick={() => {
-            Stomp.checkStatus();
-          }}
+          onClick={handleshare}
         />
       </InterfaceDiv>
       <ButtonDiv>
