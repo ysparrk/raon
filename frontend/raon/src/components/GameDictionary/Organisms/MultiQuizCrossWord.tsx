@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useSetRecoilState, useRecoilValue } from 'recoil';
 import { dictScoreState, multiDictState } from '../../../recoil/Atoms';
@@ -105,12 +105,29 @@ const TimerDiv = styled.div`
   position: fixed;
   display: flex;
   flex-direction: row;
-  top: 40%;
+  top: 15%;
   right: 5%;
   font-size: 3.1375rem;
   font-family: 'ONE-Mobile-POP';
   color: black;
+  justify-content: space-between;
+  align-items: center;
+  width: 7.5rem;
 `;
+
+const WaitDiv = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  font-family: 'CookieRun';
+  font-weight: 900;
+  font-size: 5rem;
+  color: black;
+  width: 65.5rem;
+  height: 10rem;
+`;
+
 function MultiQuizCrossWord({
   word,
   west_word,
@@ -126,7 +143,26 @@ function MultiQuizCrossWord({
   const [timerState, setTimerState] = useState(20);
   const QuizStage = useRecoilValue(multiDictState);
   const Stomp = useWebSocket();
+  useEffect(() => {
+    setTimerState(20);
+    setIsSolved(false);
+    setStartTime(Date.now());
+  }, [QuizStage.stage]);
+  useEffect(() => {
+    // 설정된 시간 간격마다 setInterval 콜백이 실행된다.
+    const id = setInterval(() => {
+      // 타이머 숫자가 하나씩 줄어들도록
+      setTimerState((count) => count - 1);
+    }, 1000);
 
+    // 0이 되면 카운트가 멈춤
+    if (timerState === 0) {
+      clearInterval(id);
+      handleClick(inputValue);
+    }
+    return () => clearInterval(id);
+    // 카운트 변수가 바뀔때마다 useEffecct 실행
+  }, [timerState]);
   const setDictScore = useSetRecoilState(dictScoreState);
   const handleClick = (value: string) => {
     const timeSpend = Date.now() - startTime;
@@ -173,26 +209,30 @@ function MultiQuizCrossWord({
         <Timer />
         {timerState}
       </TimerDiv>
-      <QuizEnterDiv>
-        <AnswerInputBox
-          inputText={inputValue}
-          onChange={(event) => {
-            setInputValue(event.target.value);
-          }}
-          onEnter={() => {
-            if (!isSolved) {
+      {isSolved ? (
+        <WaitDiv>제출 완료! 결과를 기다려주세요</WaitDiv>
+      ) : (
+        <QuizEnterDiv>
+          <AnswerInputBox
+            inputText={inputValue}
+            onChange={(event) => {
+              setInputValue(event.target.value);
+            }}
+            onEnter={() => {
+              if (!isSolved) {
+                handleClick(inputValue);
+              }
+            }}
+          />
+          <QuizEnterBtn
+            onClick={() => {
               handleClick(inputValue);
-            }
-          }}
-        />
-        <QuizEnterBtn
-          onClick={() => {
-            handleClick(inputValue);
-          }}
-        >
-          제출
-        </QuizEnterBtn>
-      </QuizEnterDiv>
+            }}
+          >
+            제출
+          </QuizEnterBtn>
+        </QuizEnterDiv>
+      )}
     </QuizDiv>
   );
 }
