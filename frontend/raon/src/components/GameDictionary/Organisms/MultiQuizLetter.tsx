@@ -4,8 +4,12 @@ import { useSetRecoilState } from 'recoil';
 import { dictScoreState } from '../../../recoil/Atoms';
 import AnswerInputBox from '../Atoms/AnswerInputBox';
 import SingleModeAnswer from './SingleModeAnswer';
+import { useWebSocket } from '../../../websocket/WebSocketContext';
+import { useRecoilValue } from 'recoil';
+import { multiDictState } from '../../../recoil/Atoms';
 
 interface QuizLetterProps {
+  stage: number;
   word: string;
   initial: string;
   meaning: string;
@@ -60,6 +64,7 @@ const QuizEnterBtn = styled.div`
 `;
 
 function MultiQuizLetter({
+  stage,
   word,
   initial,
   meaning,
@@ -68,19 +73,26 @@ function MultiQuizLetter({
   const [inputValue, setInputValue] = useState('');
   const [isSolved, setIsSolved] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
+  const [startTime, setStartTime] = useState(Date.now());
+  const QuizStage = useRecoilValue(multiDictState);
+  const Stomp = useWebSocket();
 
-  const setDictScore = useSetRecoilState(dictScoreState);
+  // const setDictScore = useSetRecoilState(dictScoreState);
   const handleClick = (value: string) => {
-    if (value === word) {
-      setIsCorrect(true);
-      setIsSolved(true);
-      setInputValue('');
-      setDictScore((prevValue) => prevValue + 10);
-    } else {
-      setIsCorrect(false);
-      setIsSolved(true);
-      setInputValue('');
-    }
+    const timeSpend = Date.now() - startTime;
+
+    console.log(value, timeSpend, QuizStage.stage);
+    Stomp.sendQuizResult(value, timeSpend, QuizStage.stage);
+    // if (value === word) {
+    //   // setIsCorrect(true);
+    //   // setIsSolved(true);
+    //   // setInputValue('');
+    //   // setDictScore((prevValue) => prevValue + 10);
+    // } else {
+    //   // setIsCorrect(false);
+    //   // setIsSolved(true);
+    //   // setInputValue('');
+    // }
   };
   return (
     <QuizDiv>

@@ -10,7 +10,9 @@ import JoinButton from '../Atoms/JoinButton';
 import StartButton from '../../Common/Atoms/StartButton';
 import RoomExitButton from '../../Common/Atoms/ExitButtonInRoom';
 import { multiDictState } from '../../../recoil/Atoms';
-import useWebSocket from '../../../websocket/WSSetting';
+import { useWebSocket } from '../../../websocket/WebSocketContext';
+import { useRecoilValue } from 'recoil';
+import { gameStartState } from '../../../recoil/Atoms';
 
 const InterfaceDiv = styled.div`
   display: flex;
@@ -64,8 +66,7 @@ function WaitInterface() {
   const [participants, setParticipants] = useState([]);
   const navigate = useNavigate();
   const setMultiState = useSetRecoilState(multiDictState);
-  const { initializeWebSocket } = useWebSocket();
-  const { leaveRoom, gameStart, createRoom } = initializeWebSocket();
+  const Stomp = useWebSocket();
 
   // const nickname = localStorage.getItem('nickname') ?? '미사용자';
   const roomId = sessionStorage.getItem('roomId') ?? '0000'; // 세션에서 roomId 가져오기, 기본값 0000
@@ -193,9 +194,19 @@ function WaitInterface() {
   //   stompClient.activate();
   // }, []);
 
+  const gameStart = useRecoilValue(gameStartState);
+
   useEffect(() => {
-    createRoom();
-  });
+    setTimeout(() => {
+      Stomp.createRoom();
+    }, 500);
+  }, []);
+
+  useEffect(() => {
+    if (gameStart) {
+      navigate('/game/dictionary-multi-game');
+    }
+  }, [gameStart]);
 
   return (
     <>
@@ -211,7 +222,7 @@ function WaitInterface() {
           optionText="초대하기"
           buttoncolor="gold"
           onClick={() => {
-            console.log('test');
+            Stomp.checkStatus();
           }}
         />
       </InterfaceDiv>
@@ -221,7 +232,7 @@ function WaitInterface() {
           onClick={() => {
             // if (stompClient) {
             console.log('게임 시작 버튼');
-            gameStart();
+            Stomp.gameStart();
             // gameStart(nickname, roomId);
             // }
             navigate('/game/dictionary-multi-game');
@@ -230,7 +241,7 @@ function WaitInterface() {
         <RoomExitButton
           onClick={() => {
             // if (stompClient) {
-            leaveRoom();
+            Stomp.leaveRoom();
             // leaveRoom(nickname, roomId);
             sessionStorage.removeItem('roomId');
             // }
