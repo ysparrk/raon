@@ -6,6 +6,8 @@ import com.arch.raon.domain.grammar.dto.response.GrammarQuizResDTO;
 import com.arch.raon.domain.grammar.service.GrammarService;
 import com.arch.raon.global.auth.dto.UserAuthentication;
 import com.arch.raon.global.dto.ResponseDTO;
+import com.arch.raon.global.exception.CustomException;
+import com.arch.raon.global.exception.ErrorCode;
 import com.arch.raon.global.util.enums.GrammarRanking;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -23,7 +25,6 @@ public class GrammarController {
 
 	@GetMapping ("/quiz")
 	public ResponseEntity<ResponseDTO> getQuizzes(
-//		@AuthenticationPrincipal Long memberId
 	){
 		List<GrammarQuizResDTO> quizzes = grammarService.getQuizzes();
 
@@ -54,25 +55,31 @@ public class GrammarController {
 	) {
 		GrammarMyRankingResDTO myRank = grammarService.getMyRank(userAuth.getId(), grammarRanking);
 
-		if (grammarRanking.equals(GrammarRanking.GRAMMAR_COUNTRY_MY)) {
-			return ResponseEntity.status(HttpStatus.OK)
-					.body(ResponseDTO.builder()
-							.message("맞춤법 퀴즈 전국 나의 랭킹")
-							.data(myRank)
-							.build());
+		switch (grammarRanking) {
+			case GRAMMAR_COUNTRY_MY -> {
+				return ResponseEntity.status(HttpStatus.OK)
+						.body(ResponseDTO.builder()
+								.message("맞춤법 퀴즈 전국 나의 랭킹")
+								.data(myRank)
+								.build());
+			}
 
-		} else if (grammarRanking.equals(GrammarRanking.GRAMMAR_SCHOOL_MY)) {
-			return ResponseEntity.status(HttpStatus.OK)
-					.body(ResponseDTO.builder()
-							.message("맞춤법 퀴즈 교내 나의 랭킹")
-							.data(myRank)
-							.build());
-		} else {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-					.body(ResponseDTO.builder()
-							.message("해당하는 랭킹 카테고리가 없습니다.")
-							.build());
+			case GRAMMAR_SCHOOL_MY -> {
+				return ResponseEntity.status(HttpStatus.OK)
+						.body(ResponseDTO.builder()
+								.message("맞춤법 퀴즈 교내 나의 랭킹")
+								.data(myRank)
+								.build());
+			}
+
+			default -> {
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+						.body(ResponseDTO.builder()
+								.message("해당하는 랭킹 카테고리가 없습니다.")
+								.build());
+			}
 		}
+
 	}
 
 }
