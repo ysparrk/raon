@@ -1,8 +1,10 @@
 package com.arch.raon.domain.member.controller;
 
 import com.arch.raon.domain.member.dto.request.MemberCheckNicknameReqDTO;
+import com.arch.raon.domain.member.dto.request.MemberCheckSchoolReqDTO;
 import com.arch.raon.domain.member.dto.request.MemberSignupReqDTO;
 import com.arch.raon.domain.member.dto.response.CheckActiveResDTO;
+import com.arch.raon.domain.member.dto.response.MemberCheckSchoolResDTO;
 import com.arch.raon.domain.member.dto.response.MemberDetailResDTO;
 import com.arch.raon.domain.member.service.MemberService;
 import com.arch.raon.global.auth.dto.UserAuthentication;
@@ -100,6 +102,20 @@ public class MemberController {
                 .body(ResponseDTO.builder()
                         .message("회원정보 조회")
                         .data(memberDetailResDTO)
+                        .build());
+    }
+
+    @PostMapping("/check-school")
+    public ResponseEntity<ResponseDTO> checkSchool(
+            @RequestBody MemberCheckSchoolReqDTO memberCheckSchoolReqDTO
+            ) {
+
+        MemberCheckSchoolResDTO memberCheckSchoolResDTO = memberService.checkSchool(memberCheckSchoolReqDTO.getKeyword());
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ResponseDTO.builder()
+                        .message("학교 명 조회")
+                        .data(memberCheckSchoolResDTO)
                         .build());
     }
 

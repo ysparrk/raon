@@ -2,19 +2,22 @@ package com.arch.raon.domain.member.service;
 
 import com.arch.raon.domain.member.dto.request.MemberSignupReqDTO;
 import com.arch.raon.domain.member.dto.response.CheckActiveResDTO;
+import com.arch.raon.domain.member.dto.response.MemberCheckSchoolResDTO;
 import com.arch.raon.domain.member.dto.response.MemberDetailResDTO;
 import com.arch.raon.domain.member.entity.Member;
+import com.arch.raon.domain.member.entity.School;
 import com.arch.raon.domain.member.repository.MemberRepository;
+import com.arch.raon.domain.member.repository.SchoolRepository;
 import com.arch.raon.global.auth.dto.AuthUserInfo;
 import com.arch.raon.global.auth.dto.OAuthUserInfo;
 import com.arch.raon.global.exception.CustomException;
 import com.arch.raon.global.exception.ErrorCode;
-import com.arch.raon.global.util.enums.Gender;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -23,6 +26,7 @@ import java.util.Optional;
 public class MemberServiceImpl implements MemberService{
 
     private final MemberRepository memberRepository;
+    private final SchoolRepository schoolRepository;
 
     @Override
     @Transactional
@@ -102,6 +106,41 @@ public class MemberServiceImpl implements MemberService{
                 .school(member.getSchool())
                 .yearOfBirth(member.getYearOfBirth())
                 .gender(member.getGender())
+                .build();
+    }
+
+    @Override
+    public MemberCheckSchoolResDTO checkSchool(String keyword){
+        if(keyword.length()<2){
+            throw new CustomException(ErrorCode.MISSING_INPUT_VALUE) {
+                @Override
+                public ErrorCode getErrorCode() {
+                    return super.getErrorCode();
+                }
+            };
+        }
+        String checkKeyword = keyword.substring(0,2);
+        if(checkKeyword.equals("초등") || checkKeyword.equals("등학") || checkKeyword.equals("학교")){
+            throw new CustomException(ErrorCode.INVALID_INPUT_VALUE) {
+                @Override
+                public ErrorCode getErrorCode() {
+                    return super.getErrorCode();
+                }
+            };
+        }
+
+        List<School> schoolList = schoolRepository.findBySchoolNameContaining(keyword);
+        if(schoolList.size()==0){
+            throw new CustomException(ErrorCode.SCHOOL_NOT_FOUND) {
+                @Override
+                public ErrorCode getErrorCode() {
+                    return super.getErrorCode();
+                }
+            };
+        }
+
+        return MemberCheckSchoolResDTO.builder()
+                .schoolNameList(schoolList)
                 .build();
     }
 }
