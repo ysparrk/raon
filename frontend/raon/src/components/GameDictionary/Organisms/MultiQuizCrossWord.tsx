@@ -1,17 +1,13 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { useSetRecoilState } from 'recoil';
-import { dictScoreState } from '../../../recoil/Atoms';
+import { useSetRecoilState, useRecoilValue } from 'recoil';
+import { dictScoreState, multiDictState } from '../../../recoil/Atoms';
 import AnswerInputBox from '../Atoms/AnswerInputBox';
 import SingleModeAnswer from './SingleModeAnswer';
 import { useWebSocket } from '../../../websocket/WebSocketContext';
-import { useRecoilValue } from 'recoil';
-import { multiDictState } from '../../../recoil/Atoms';
-
-
+import Timer from '../../Common/Atoms/Timer';
 
 interface QuizCrossWordProps {
-  stage: number;
   word: string;
   west_word: string;
   north_word: string;
@@ -105,9 +101,17 @@ const QuizEnterBtn = styled.div`
   font-family: 'ONE-Mobile-POP';
   font-size: 2.5rem;
 `;
-
+const TimerDiv = styled.div`
+  position: fixed;
+  display: flex;
+  flex-direction: row;
+  top: 40%;
+  right: 5%;
+  font-size: 3.1375rem;
+  font-family: 'ONE-Mobile-POP';
+  color: black;
+`;
 function MultiQuizCrossWord({
-  stage,
   word,
   west_word,
   north_word,
@@ -119,6 +123,7 @@ function MultiQuizCrossWord({
   const [isSolved, setIsSolved] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
   const [startTime, setStartTime] = useState(Date.now());
+  const [timerState, setTimerState] = useState(20);
   const QuizStage = useRecoilValue(multiDictState);
   const Stomp = useWebSocket();
 
@@ -164,6 +169,10 @@ function MultiQuizCrossWord({
         <div>{south_word}</div>
         <div />
       </QuizContentDiv>
+      <TimerDiv>
+        <Timer />
+        {timerState}
+      </TimerDiv>
       <QuizEnterDiv>
         <AnswerInputBox
           inputText={inputValue}

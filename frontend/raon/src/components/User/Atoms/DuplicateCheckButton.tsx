@@ -5,13 +5,12 @@ import styled from 'styled-components';
 interface StartButtonProps {
   onClick?: React.MouseEventHandler<HTMLDivElement>;
   content?: string;
-  fontColor?: string;
+  // fontColor?: string;
 }
 
 const DuplicationCheckButton = ({
   onClick,
-  content,
-  fontColor,
+  content, // fontColor,
 }: StartButtonProps) => {
   const textStyle: React.CSSProperties = {
     fontFamily: "'ONE-Mobile-POP'",

@@ -3,8 +3,11 @@ import React, { createContext, useContext, useEffect } from 'react';
 import { Client, IMessage } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
 import { useSetRecoilState } from 'recoil';
-import { multiDictState } from '../recoil/Atoms';
-import { gameStartState } from '../recoil/Atoms';
+import {
+  multiDictState,
+  gameStartState,
+  roomManageState,
+} from '../recoil/Atoms';
 
 interface WebSocketContextProps {
   leaveRoom: () => void;
@@ -22,12 +25,12 @@ const WebSocketContext = createContext<WebSocketContextProps | undefined>(
   undefined,
 );
 
-
 export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const setMultiState = useSetRecoilState(multiDictState);
   const setGameStart = useSetRecoilState(gameStartState);
+  const setRoomStatus = useSetRecoilState(roomManageState);
 
   useEffect(() => {
     // Initialize WebSocket connection here if needed
@@ -35,10 +38,10 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({
       // Clean up WebSocket connection when the component unmounts
     };
   }, []);
-  
+
   const initializeWebSocket = () => {
     const nickname = localStorage.getItem('nickname') ?? '미사용자';
-    const roomId = sessionStorage.getItem('roomId') ?? '0000';
+    let roomId = sessionStorage.getItem('roomId') ?? '0000';
     // const socket = new SockJS(`${process.env.REACT_APP_API_URL}api/ws`, null, {
     //   transports: ['websocket', 'xhr-streaming', 'xhr-polling'],
     // });
@@ -85,15 +88,18 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({
           case 'ENTER':
             console.log('방 사람 리스트');
             console.log(body);
+            setRoomStatus((prev) => ({
+              ...prev,
+              users: body.users,
+            }));
+
             break;
-          
 
           case 'STAGE_START':
-            console.log('방장이 게임 시작')
-            console.log(body)
+            console.log('방장이 게임 시작');
+            console.log(body);
             setGameStart(true);
             break;
-
 
           case 'DIRECTION_QUIZ':
             console.log('동서남북 퀴즈');
@@ -125,7 +131,6 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({
             }));
             break;
 
-          
           default:
             console.log(body);
             break;
@@ -175,7 +180,8 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({
       });
     };
 
-    const createRoom = () => {
+    const createRoom = async () => {
+      roomId = (await sessionStorage.getItem('roomId')) ?? '0000';
       client.activate();
     };
 

@@ -47,7 +47,16 @@ export const multiDictState = atom({
   },
 });
 
+export const roomManageState = atom({
+  key: 'roomManagerState',
+  default: {
+    manager: false,
+    users: [],
+    breakTime: false,
+    userResult: [],
+  },
+});
 export const gameStartState = atom({
-  key: 'gameStartState', 
-  default: false, 
+  key: 'gameStartState',
+  default: false,
 });

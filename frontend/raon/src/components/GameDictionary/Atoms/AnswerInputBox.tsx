@@ -30,6 +30,13 @@ const AnswerInputBox = ({
       onEnter();
     }
   };
+  const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+    // 정규표현식을 사용하여 한글만 허용
+    const koreanOnly = /^[ㄱ-ㅎ가-힣]*$/;
+    if (koreanOnly.test(event.target.value)) {
+      onChange(event);
+    }
+  };
 
   const formStyle = {
     width: '100%',
@@ -57,7 +64,7 @@ const AnswerInputBox = ({
         placeholder="정답 입력"
         onFocus={handleFocus}
         onBlur={handleBlur}
-        onChange={onChange}
+        onChange={handleInputChange}
         onKeyPress={handleKeyPress}
         autoComplete="off"
       />
