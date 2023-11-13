@@ -29,3 +29,34 @@ export const dictScoreState = atom<number>({
   key: 'dictScoreState',
   default: 0,
 });
+
+export const multiDictState = atom({
+  key: 'multiDictState',
+  default: {
+    type: '',
+    id: 0,
+    word: '',
+    initial: '',
+    meaning: '',
+    westWord: '',
+    northWord: '',
+    eastWord: '',
+    southWord: '',
+    answer: '',
+    stage: 0,
+  },
+});
+
+export const roomManageState = atom({
+  key: 'roomManagerState',
+  default: {
+    manager: false,
+    users: [],
+    breakTime: false,
+    userResult: [],
+  },
+});
+export const gameStartState = atom({
+  key: 'gameStartState',
+  default: false,
+});

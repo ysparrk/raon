@@ -4,8 +4,11 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 import com.arch.raon.domain.dictionary.dto.response.DictionaryQuizResDTO;
-import com.arch.raon.domain.dictionary.dto.response.SocketJoinResDTO;
+import com.arch.raon.domain.dictionary.dto.response.socket.SocketJoinResDTO;
+import com.arch.raon.domain.dictionary.dto.response.socket.SocketQuizDTO;
+import com.arch.raon.domain.dictionary.dto.response.socket.SocketStageResultResDTO;
 import com.arch.raon.global.util.enums.GameState;
+import com.arch.raon.global.util.enums.SocketResponse;
 
 /**
  * Room들을 모아 둔 자료구조이다. static으로 설정하여 전역에서 참조 가능하다.
@@ -57,6 +60,11 @@ public class Rooms {
 		}
 	}
 
+	public static SocketQuizDTO getNextQuizFrom(String roomId){
+		return roomOf(roomId).getNextQuiz();
+	}
+
+
 	/**
 	 * 유저가 방을 나간다.
 	 *
@@ -93,8 +101,7 @@ public class Rooms {
 	public static boolean gameStart(String roomId, String nickname){
 		if(hasRoomThatIdIs(roomId) && roomOf(roomId).getRoomOwner().equals(nickname)){
 			roomOf(roomId).PLAY();
-
-
+			return true;
 		}
 		return false;
 	}
@@ -107,6 +114,8 @@ public class Rooms {
 	 * 랜덤으로 생성한 퀴즈를 Room에 저장한다.
 	 *
 	 * 일단 각 방에서 퀴즈를 가지고 있어야 하므로 setter를 이용하여 저장한다.
+	 * 퀴즈를 넣을 때 알아서 순서를 만들어서 넣어야 한다.
+	 *
 	 *
 	 * @param roomId
 	 * @param dictionaryQuizResDTO
@@ -114,7 +123,7 @@ public class Rooms {
 	 */
 	public static boolean addQuizesToRoom(String roomId, DictionaryQuizResDTO dictionaryQuizResDTO){
 		if(hasRoomThatIdIs(roomId) && roomOf(roomId).getState() == GameState.PLAY){
-			roomOf(roomId).setQuizes(dictionaryQuizResDTO);
+			roomOf(roomId).shuffleAndSetQuizes(dictionaryQuizResDTO);
 		}
 		return false;
 	}
@@ -149,5 +158,26 @@ public class Rooms {
 
 	public static boolean isThatRoomFull(String roomId){
 		return roomOf(roomId).isRoomFull(MAX_PLAYERS);
+	}
+
+	public static void addUserAnswer(String roomId, String nickname, String userAnswer,int stage, int timeSpend) {
+		roomOf(roomId).checkAndUpdateScore(nickname,stage,userAnswer,timeSpend);
+	}
+
+	public static boolean isAllSubmit(String roomId){
+		return roomOf(roomId).isAllSubmit();
+	}
+
+	public static SocketStageResultResDTO getStageResult(String roomId) {
+		return new SocketStageResultResDTO(roomOf(roomId).getRank(), SocketResponse.STAGE_RESULT);
+	}
+
+	public static boolean isLastStage(String roomId) {
+		return roomOf(roomId).getStage() == 10;
+	}
+
+	public static void updateNextQuiz(String roomId) {
+		roomOf(roomId).clearSubmitted();
+		roomOf(roomId).updateQuiz();
 	}
 }

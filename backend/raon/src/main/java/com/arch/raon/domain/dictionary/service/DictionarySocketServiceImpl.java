@@ -1,20 +1,28 @@
 package com.arch.raon.domain.dictionary.service;
 
 import java.util.List;
+import java.util.Optional;
 
+import com.arch.raon.domain.dictionary.vo.User;
+import com.arch.raon.global.service.RedisService;
 import org.springframework.stereotype.Service;
 
+import com.arch.raon.domain.dictionary.dto.request.SocketQuizReqDTO;
 import com.arch.raon.domain.dictionary.dto.response.DictionaryQuizResDTO;
+import com.arch.raon.domain.dictionary.dto.response.socket.SocketQuizDTO;
+import com.arch.raon.domain.dictionary.dto.response.socket.SocketStageResultResDTO;
 import com.arch.raon.domain.dictionary.entity.DictionaryDirectionQuiz;
 import com.arch.raon.domain.dictionary.entity.DictionaryInitialQuiz;
 import com.arch.raon.domain.dictionary.repository.DictionaryDirectionQuizRepository;
 import com.arch.raon.domain.dictionary.repository.DictionaryInitialQuizRepository;
+import com.arch.raon.domain.dictionary.vo.Room;
 import com.arch.raon.domain.dictionary.vo.Rooms;
 import com.arch.raon.domain.member.entity.Member;
 import com.arch.raon.domain.member.repository.MemberRepository;
 import com.arch.raon.global.exception.CustomException;
 import com.arch.raon.global.exception.ErrorCode;
 import com.arch.raon.global.util.enums.RoomResult;
+import com.arch.raon.global.util.enums.SocketResponse;
 
 import lombok.RequiredArgsConstructor;
 
@@ -25,6 +33,8 @@ public class DictionarySocketServiceImpl implements DictionarySocketService{
 	private final MemberRepository memberRepository;
 	private final DictionaryDirectionQuizRepository dictionaryDirectionQuizRepository;
 	private final DictionaryInitialQuizRepository dictionaryInitialQuizRepository;
+	private final RedisService redisService;
+
 
 	@Override
 	public RoomResult connectRoom(String nickname, String roomId) {
@@ -59,11 +69,11 @@ public class DictionarySocketServiceImpl implements DictionarySocketService{
 	public RoomResult startGame(String roomId, String nickname) {
 		if(!Rooms.hasRoomThatIdIs(roomId)) // 방이 존재하지 않으면
 			return RoomResult.FAIL_NONEXIST_ROOM;
-		if(!Rooms.isUserInRoom(nickname, roomId)) // 방에 유저가 존재하지 않으면
+		if(!Rooms.isUserInRoom(nickname, roomId)) // 요청을 보낸 유저가 방에 존재하지 않을 때
 			return RoomResult.FAIL_NOT_IN_ROOM;
 		if(!Rooms.isUserOwner(roomId, nickname)) // 방장이 아닐 때
 			return RoomResult.GAME_START_FAIL_NOT_A_OWNER;
-		if(!Rooms.isRoomPlaying(roomId)) // 이미 게임 중일 때
+		if(Rooms.isRoomPlaying(roomId)) // 이미 게임 중일 때
 			return RoomResult.GAME_START_FAIL_ALREADY_PLAYING;
 
 		Rooms.gameStart(roomId, nickname);
@@ -81,12 +91,11 @@ public class DictionarySocketServiceImpl implements DictionarySocketService{
 		return member != null;
 	}
 
-
 	@Override
 	public DictionaryQuizResDTO getQuizes() {
 		List<DictionaryDirectionQuiz> directionQuizes = dictionaryDirectionQuizRepository.random3();
 		List<DictionaryInitialQuiz> initialQuizes = dictionaryInitialQuizRepository.random7();
-		return new DictionaryQuizResDTO(initialQuizes, directionQuizes, "gameStart");
+		return new DictionaryQuizResDTO(initialQuizes, directionQuizes, SocketResponse.GAME_READY);
 	}
 
 	@Override
@@ -94,5 +103,57 @@ public class DictionarySocketServiceImpl implements DictionarySocketService{
 		Rooms.addQuizesToRoom(roomId, quizes);
 	}
 
+	@Override
+	public SocketQuizDTO getNextQuizFrom(String roomId) {
+		return Rooms.getNextQuizFrom(roomId);
+	}
+
+	@Override
+	public RoomResult addAnswerToRoom(SocketQuizReqDTO reqDTO) {
+		if(!Rooms.hasRoomThatIdIs(reqDTO.getRoomId()))
+			return RoomResult.FAIL_NONEXIST_ROOM;
+		if(!Rooms.isUserInRoom(reqDTO.getNickname(), reqDTO.getRoomId()))
+			return RoomResult.FAIL_NOT_IN_ROOM;
+
+		Rooms.addUserAnswer(
+			  reqDTO.getRoomId()
+			, reqDTO.getNickname()
+			, reqDTO.getUserAnswer()
+			, reqDTO.getStage()
+			, reqDTO.getTimeSpend()
+		);
+
+		if(Rooms.isAllSubmit(reqDTO.getRoomId())){
+			if(Rooms.isLastStage(reqDTO.getRoomId())){
+				return RoomResult.GAME_END;
+			}
+			Rooms.updateNextQuiz(reqDTO.getRoomId());
+			return RoomResult.STAGE_END;
+		}
+		return RoomResult.GAME_STAGE_DATA_SEND_COMPLETE;
+	}
+
+
+	@Override
+	public SocketStageResultResDTO getStageResultOf(String roomId) {
+		return Rooms.getStageResult(roomId);
+	}
+
+	@Override
+	public void saveScore(String roomId) {
+		List<User> users = Rooms.getStageResult(roomId).getUsers();
+
+		for(User user : users){
+			Member member = memberRepository.findByNickname(user.getNickname()).orElseThrow(() -> new CustomException(ErrorCode.NO_SUCH_MEMBER){
+				@Override
+				public ErrorCode getErrorCode() {
+					return super.getErrorCode();
+				}
+			});
+
+			Long id = member.getId();
+			redisService.setCountryDictionaryPoint(id, user.getCurrent_point());
+		}
+	}
 
 }

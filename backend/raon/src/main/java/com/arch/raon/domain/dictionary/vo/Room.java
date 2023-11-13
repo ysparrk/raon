@@ -8,7 +8,9 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 import com.arch.raon.domain.dictionary.dto.response.DictionaryQuizResDTO;
+import com.arch.raon.domain.dictionary.dto.response.socket.SocketQuizDTO;
 import com.arch.raon.global.util.enums.GameState;
+import com.arch.raon.global.util.enums.SocketResponse;
 
 /**
  * Room은 국어사전 퀴즈를 플레이하기 위한 사람들이 모인 곳이다.
@@ -25,8 +27,9 @@ import com.arch.raon.global.util.enums.GameState;
 public class Room {
 	private GameState state = GameState.WAITING;
 	private final ConcurrentMap<String, User> userInfo = new ConcurrentHashMap<>();
-	private ConcurrentMap<String, String> latestAnswer = new ConcurrentHashMap<>();
-	private DictionaryQuizResDTO quizes;
+	private List<SocketQuizDTO> quizList = new ArrayList<>();
+	private int currentQuizIdx = 0;
+	private int submitted = 0;
 	private String owner;
 
 	public Room(String nickname){
@@ -34,12 +37,10 @@ public class Room {
 		this.owner = nickname;
 	}
 
-
 	//========== WAITING일 때의 메소드들 =========================
 	public boolean hasUserNamed(String nickname){
 		return userInfo.containsKey(nickname);
 	}
-
 	public boolean isRoomFull(int maxPlayer){
 		return userInfo.size() >= maxPlayer;
 	}
@@ -77,17 +78,104 @@ public class Room {
 
 	//=========== PLAY일 때의 메소드들 ==================================
 
+	/**
+	 * 퀴즈를 받아 섞은 후 저장한다.
+	 * 퀴즈의 내용과 답을 room에서 가지고 있어야 하므로 List로 퀴즈를 저장한다.
+	 */
+	public void shuffleAndSetQuizes(DictionaryQuizResDTO pureQuizes) {
+		int index = 0;
+		int stage = 1;
+
+		while (!pureQuizes.getDirectionQuizList().isEmpty() && !pureQuizes.getInitialQuizList().isEmpty()) {
+			boolean isGreater = Math.random() * 100 > 70.0;
+			System.out.println("			퀴즈 셔플 isGreater 결과 : " + isGreater);
+			SocketQuizDTO nextQuiz = new SocketQuizDTO();
+
+			if (isGreater) {
+				index = pureQuizes.getDirectionQuizList().size()-1;
+				nextQuiz = new SocketQuizDTO(SocketResponse.DIRECTION_QUIZ
+											, stage++
+											, pureQuizes.getDirectionQuizList().remove(index)
+				);
+			}
+			else {
+				index = pureQuizes.getInitialQuizList().size()-1;
+				nextQuiz = new SocketQuizDTO(SocketResponse.INITIAL_QUIZ
+											, stage++
+											, pureQuizes.getInitialQuizList().remove(index)
+				);
+			}
+			System.out.println(nextQuiz);
+			quizList.add(nextQuiz);
+		}
+		if(pureQuizes.getDirectionQuizList().isEmpty()){
+			while(!pureQuizes.getInitialQuizList().isEmpty()){
+				quizList.add(new SocketQuizDTO(SocketResponse.INITIAL_QUIZ, stage++, pureQuizes.getInitialQuizList().remove(0)));
+			}
+		}
+		else{
+			while(!pureQuizes.getDirectionQuizList().isEmpty()){
+				quizList.add(new SocketQuizDTO(SocketResponse.DIRECTION_QUIZ, stage++, pureQuizes.getDirectionQuizList().remove(0)));
+			}
+		}
+	}
+
+
+	public SocketQuizDTO getNextQuiz(){
+		return currentQuizIdx == 10 // 0~9, so 9 is last stage
+			 ? null
+			 : quizList.get(currentQuizIdx);
+	}
+
+	/**
+	 * 방 안의 유저가 보낸 답을 비교하고 점수를 업데이트 한다.
+	 *
+	 * @param nickname
+	 * @param stage
+	 * @param userAnswer
+	 * @param timeSpend
+	 */
+	public boolean checkAndUpdateScore(String nickname, int stage, String userAnswer, int timeSpend){
+		System.out.println("[LOG] nickname:"+nickname+ " userAnswer:"+ userAnswer + " realAnswer:" + quizList.get(currentQuizIdx).getAnswer());
+
+		if(quizList.get(currentQuizIdx).getStage() != stage){
+			System.out.println("[비상!!!] 스테이지가 달라!!!"+ " 유저: " + nickname + "stageIDx: "+ currentQuizIdx + " Room의 stage: "+ quizList.get(currentQuizIdx).getStage() +" 유저가 보낸 스테이지: "+ stage );
+			return false;
+		}
+		if(!hasUserNamed(nickname)){
+			System.out.println("[비상!!!] 유저가 방에 없어!!!"+ " 유저: " + nickname);
+			return false;
+		}
+		if(timeSpend <= 0){
+			System.out.println("[비상!!!] 유저가 0초 미만으로 문제를 풀었어!!!"+ " 유저: " + nickname + " 클리어 시간: " + timeSpend);
+			return false;
+		}
+
+		if(quizList.get(currentQuizIdx).getAnswer().equals(userAnswer)){
+			int point = (100_000 - timeSpend); // TODO: 늦게 풀 수록 점수를 낮게 주고 싶은데 방법이 없나?
+			System.out.println(" 			nickname:"+nickname+" answer:" + userAnswer+" point:" + point);
+			userInfo.get(nickname).addPoint(point);
+		}
+
+		updateUserAnswer(nickname,userAnswer);
+		submitted += 1;
+		return true;
+	}
+
 	// 현재 방에 있는 사람들의 순위를 구한다. 점수가 높은 순서대로 정렬된 리스트 리턴
-	public List<String> getRank(){
-		List<String> rank = new ArrayList<>();
+	public List<User> getRank(){
+		List<User> rank = new ArrayList<>();
 
 		for(Map.Entry<String,User> entry : userInfo.entrySet()){
-			rank.add(entry.getKey());
+			rank.add(entry.getValue());
 		}
 
 		Collections.sort(rank);
 		return rank;
 	}
+
+
+
 
 	//============ 방장에 대한 메소드들 =========================
 
@@ -111,12 +199,9 @@ public class Room {
 
 
 	//=========== 최근 답에 대한 메소드들 ====================
-	private void addUserToAnswerMap(String nickname){
-		latestAnswer.put(nickname,null);
-	}
-	private boolean addAnswerToMap(String nickname, String newAnswer){
-		if(userInfo.containsKey(nickname) && latestAnswer.containsKey(nickname)){
-			latestAnswer.replace(nickname, newAnswer);
+	private boolean updateUserAnswer(String nickname, String newAnswer){
+		if(userInfo.containsKey(nickname)){
+			userInfo.get(nickname).setLastAnswer(newAnswer);
 			return true;
 		}
 		return false;
@@ -130,13 +215,29 @@ public class Room {
 	public void setOwner(String owner) {
 		this.owner = owner;
 	}
+
 	public GameState getState() {
 		return state;
 	}
 	public void setState(GameState state) {
 		this.state = state;
 	}
-	public void setQuizes(DictionaryQuizResDTO quizes) {
-		this.quizes = quizes;
+
+	public boolean isAllSubmit() {
+		System.out.println("			submitted:"+submitted + " userInfo.size():"+ userInfo.size());
+		return submitted == userInfo.size();
+	}
+
+	public void clearSubmitted(){
+		submitted = 0;
+	}
+
+	public void updateQuiz(){
+		currentQuizIdx += 1;
+		System.out.println("다음 스테이지 인덱스: " + currentQuizIdx);
+	}
+
+	public int getStage() {
+		return currentQuizIdx+1;
 	}
 }

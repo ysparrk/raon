@@ -76,13 +76,13 @@ public class GrammarServiceImpl implements GrammarService {
 		}
 
 		GrammarScore grammarScoreEntity = GrammarScore
-			.builder()
-			.score(score)
-			.member(member)
-			.build();
+				.builder()
+				.score(score)
+				.member(member)
+				.build();
 
-		 grammarScoreRepository.save(grammarScoreEntity);
-		 return grammarScoreEntity.getId();
+		grammarScoreRepository.save(grammarScoreEntity);
+		return grammarScoreEntity.getId();
 	}
 
 	@Transactional
@@ -185,14 +185,14 @@ public class GrammarServiceImpl implements GrammarService {
 		 * 2. 그 밑이면 1~3등 / 유저 +-1 이랑 유저
 		 * 3. 최하위 순위 / top1~3 최하위 1~3
 		 */
-		
+
 		Member member = memberRepository.findById(memberId).orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND) {
 			@Override
 			public ErrorCode getErrorCode() {
 				return super.getErrorCode();
 			}
 		});
-		
+
 
 		// 순위 리스트에서 내 인덱스
 		int myIdx = IntStream.range(0, rankList.size())
@@ -239,7 +239,7 @@ public class GrammarServiceImpl implements GrammarService {
 
 			return grammarMyRankingResDTO;
 		}
-		
+
 	}
 
 	@Override

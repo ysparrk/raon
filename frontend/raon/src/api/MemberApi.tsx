@@ -29,4 +29,14 @@ const postMemberSignup = async (data: MemberSignup): Promise<AxiosResponse> => {
   }
 };
 
-export { getMemberActive, postMemberSignup };
+const postDuplicateCheck = async (nickname: string): Promise<AxiosResponse> => {
+  try {
+    const response = await api.post(`api/members/check/nickname`, nickname);
+    return response;
+  } catch (error) {
+    console.log('중복확인 검사 실패', error);
+    throw error;
+  }
+};
+
+export { getMemberActive, postMemberSignup, postDuplicateCheck };

@@ -27,10 +27,11 @@ import DictionarySingleGame from '../components/GameDictionary/Pages/DictionaryS
 import DictionaryInit from '../components/GameDictionary/Pages/DictionaryInit.tsx';
 import DictionaryWaitingRoom from '../components/GameDictionary/Pages/DictionaryWaitingRoom.tsx';
 import DictionarySingleResult from '../components/GameDictionary/Pages/DictionarySingleResult.tsx';
+import DictionaryMultiGame from '../components/GameDictionary/Pages/DictionaryMultiGame.tsx';
 // import DictionaryResult from '../components/GameDictionary/Pages/DictionaryResult.tsx';
 
 // // Ranking
-// import Ranking from '../components/Ranking/Pages/Ranking.tsx';
+import Ranking from '../components/Ranking/Pages/Ranking.tsx';
 
 const AppRouter: React.FC = () => {
   return (
@@ -59,6 +60,10 @@ const AppRouter: React.FC = () => {
           element={<DictionarySingleGame />}
         />
         <Route
+          path="/game/dictionary-multi-game"
+          element={<DictionaryMultiGame />}
+        />
+        <Route
           path="/game/dictionary-game/waiting-room"
           element={<DictionaryWaitingRoom />}
         />
@@ -66,7 +71,7 @@ const AppRouter: React.FC = () => {
           path="/game/dictionary-single-result"
           element={<DictionarySingleResult />}
         />
-        {/* <Route path="/user/" element={<Foundation />} /> */}
+        <Route path="/ranking" element={<Ranking />} />
       </Routes>
     </BrowserRouter>
     // </div>

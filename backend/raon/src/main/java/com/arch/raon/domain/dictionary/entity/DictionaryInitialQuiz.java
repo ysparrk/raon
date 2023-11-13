@@ -27,3 +27,4 @@ public class DictionaryInitialQuiz {
     @Column(name = "meaning", nullable = false)
     private String meaning;
 }
+

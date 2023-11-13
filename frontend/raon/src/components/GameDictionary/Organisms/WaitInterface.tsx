@@ -4,9 +4,17 @@ import styled from 'styled-components';
 import { Client } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
 import { v4 as uuidv4 } from 'uuid';
+import constructWithOptions from 'styled-components/dist/constructors/constructWithOptions';
+import { useSetRecoilState, useRecoilValue } from 'recoil';
 import JoinButton from '../Atoms/JoinButton';
 import StartButton from '../../Common/Atoms/StartButton';
 import RoomExitButton from '../../Common/Atoms/ExitButtonInRoom';
+import {
+  multiDictState,
+  gameStartState,
+  roomManageState,
+} from '../../../recoil/Atoms';
+import { useWebSocket } from '../../../websocket/WebSocketContext';
 
 const InterfaceDiv = styled.div`
   display: flex;
@@ -45,6 +53,11 @@ const RoomParticipantsText = styled.div`
   font-family: 'ONE-Mobile-POP';
   color: #ffcd4a;
 `;
+const RoomMyText = styled.div`
+  font-size: 35px;
+  font-family: 'ONE-Mobile-POP';
+  color: #c4dc23;
+`;
 
 const ButtonDiv = styled.div`
   position: absolute;
@@ -56,69 +69,60 @@ const ButtonDiv = styled.div`
   right: 10%;
 `;
 
+declare global {
+  interface Window {
+    Kakao: any;
+  }
+}
+
 function WaitInterface() {
-  const [participants, setParticipants] = useState([]);
+  const { Kakao } = window
   const navigate = useNavigate();
+  const setMultiState = useSetRecoilState(multiDictState);
+  const setManagerState = useSetRecoilState(roomManageState);
+  const roomStatus = useRecoilValue(roomManageState);
+  const Stomp = useWebSocket();
 
-  const nickname = localStorage.getItem('nickname') ?? "미사용자";
-  const roomId = sessionStorage.getItem('roomId') ?? "0000"; // 세션에서 roomId 가져오기, 기본값 0000
+  const nickname = localStorage.getItem('nickname') ?? '미사용자';
+  const roomId = sessionStorage.getItem('roomId') ?? '0000';
+  const gameStart = useRecoilValue(gameStartState);
 
-
-  // 웹 소켓 클라이언트 설정
-  const socket = new SockJS(`${process.env.REACT_APP_API_URL}api/ws`, null, {
-    transports: ['websocket', 'xhr-streaming', 'xhr-polling'],
-  });
-  const stompClient = new Client({
-    webSocketFactory: () => socket,
-
-    onConnect: () => {
-      // 구독 시작
-      // 서버로 메시지 보내기
-      if (roomId == '0000') {
-        alert("구독한 방 아이디가 없습니다.")
-      } else {
-        stompClient.subscribe(`/topic/dictionary-quiz/room/${roomId}`, callback);
-        stompClient.publish({ destination: '/dictionary-quiz/connect-room', body: JSON.stringify({nickname, roomId}) });
-        console.log('Connected to the WebSocket server');
-      }
-  
-    },
-    reconnectDelay: 5000, // 자동 재 연결
-    heartbeatIncoming: 4000,
-    heartbeatOutgoing: 4000,
-  });
-
-  // 콜백함수 => roomId 받기
-  const callback: (message: any) => void = (message: any) => {
-    if (message.body) {
-      const body: any = JSON.parse(message.body);
-      console.log(body);
-    }
-  };
-
-
-
-  // 방을 나가는 사용자 닉네임, roomId 보내기
-  const leaveRoom = (client: Client, nickname: string, roomId: string): void => {
-    console.log("방나가기 요청 보내기")
-    client.publish({
-      destination: `/dictionary-quiz/leave`,
-      body: JSON.stringify({nickname, roomId}),
-    });
-  };
-
-  // 웹소켓 연결 종료
-  const disconnectWebSocket = (client: Client): void => {
-    if (client && client.connected) {
-      console.log("소켓종료")
-      client.deactivate();
-    }
-  };
-
-  // 컴포넌트 마운트 시 웹 소켓 연결 시작
   useEffect(() => {
-    stompClient.activate();
+    setTimeout(() => {
+      Stomp.createRoom();
+    }, 500);
   }, []);
+
+  useEffect(() => {
+    if (gameStart) {
+      navigate('/game/dictionary-multi-game');
+    }
+  }, [gameStart]);
+
+  useEffect(() => {
+    Kakao.cleanup();
+    Kakao.init(process.env.REACT_APP_JAVASCRIPT_KEY);
+    console.log(Kakao.isInitialized());
+  })
+
+  const handleshare = async () => {
+    Kakao.Share.sendDefault({
+      objectType: 'text',
+      text:
+        roomId,
+      link: {
+        webUrl: 'https://arch-raon.com',
+      },
+      buttons: [
+        {
+          title: '게임 참여하러 가기!!',
+          link: {
+            webUrl: 'https://arch-raon.com',
+          },
+        },
+      ],
+    });
+  }
 
   return (
     <>
@@ -126,29 +130,50 @@ function WaitInterface() {
         <RoomCurrentDiv>
           <RoomHeadText>방 코드</RoomHeadText>
           <RoomCodeText>{roomId}</RoomCodeText>
-          <RoomParticipantsText>참가자</RoomParticipantsText>
-          <RoomParticipantsText>참가자</RoomParticipantsText>
-          <RoomParticipantsText>참가자</RoomParticipantsText>
-          <RoomParticipantsText>참가자</RoomParticipantsText>
+          {roomStatus.users &&
+            roomStatus.users.map((participant, index) => (
+              <div key={participant}>
+                {nickname === participant ? (
+                  <RoomMyText>{participant}</RoomMyText>
+                ) : (
+                  <RoomParticipantsText>{participant}</RoomParticipantsText>
+                )}
+              </div>
+              // <RoomParticipantsText key={participant}>
+              //   {participant}
+              // </RoomParticipantsText>
+            ))}
         </RoomCurrentDiv>
         <JoinButton
           optionText="초대하기"
           buttoncolor="gold"
-          onClick={() => {
-            console.log('test');
-          }}
+          onClick={handleshare}
         />
       </InterfaceDiv>
       <ButtonDiv>
-        <StartButton onClick={() => navigate('/game/dictionary-game')} />
-        <RoomExitButton onClick={() => {
-          if (stompClient) {
-            leaveRoom(stompClient, nickname, roomId);
-            disconnectWebSocket(stompClient);
+        <StartButton
+          content="시작하기"
+          onClick={() => {
+            console.log('게임 시작 버튼');
+            if (roomStatus.manager) {
+              Stomp.gameStart();
+              // navigate('/game/dictionary-multi-game');
+            } else {
+              alert('방장만이 게임을 시작할 수 있어요');
+            }
+          }}
+        />
+        <RoomExitButton
+          onClick={() => {
+            Stomp.leaveRoom();
+            setManagerState((prev) => ({
+              ...prev,
+              manager: false,
+            }));
             sessionStorage.removeItem('roomId');
-          }
-        navigate('/main')}} />
-        
+            navigate('/main');
+          }}
+        />
       </ButtonDiv>
     </>
   );
