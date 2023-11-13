@@ -118,6 +118,7 @@ function WaitInterface() {
           title: '게임 참여하러 가기!!',
           link: {
             webUrl: 'https://arch-raon.com',
+            mobileWebUrl: 'https://arch-raon.com',
           },
         },
       ],
