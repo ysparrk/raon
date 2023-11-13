@@ -1,12 +1,16 @@
 package com.arch.raon.global.service;
 
 import com.arch.raon.domain.dictionary.dto.query.DictionaryMyRankQueryDTO;
+import com.arch.raon.domain.grammar.dto.redis.GrammarCountryMyRankRedisDTO;
+import com.arch.raon.domain.grammar.dto.redis.GrammarSchoolMyRankRedisDTO;
+import com.arch.raon.domain.grammar.dto.redis.GrammarSchoolRedisDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
@@ -53,6 +57,34 @@ public class RedisService {
     }
 
      */
+
+    // TODO: 닉네임, 학교명 변경에 따른 점수 변경 고려하기
+    public void setCountryMyGrammarPoint(Long memberId, Long nickname, int point){
+        String value = memberId + ":" + nickname;
+        rankingRedis.opsForZSet().incrementScore("countryMyGrammar", value, point);
+    }
+
+    public void setSchoolMyGrammarPoint(Long memberId, Long nickname, String school, int point){
+        String key = "schoolMyGrammar:" + school;
+        String value = memberId + ":" + nickname;
+        rankingRedis.opsForZSet().incrementScore(key, value, point);
+    }
+
+    public void setSchoolGrammarPoint(String school, int point) {
+        rankingRedis.opsForZSet().incrementScore("schoolGrammar", String.valueOf(school), point);
+    }
+
+    public Long getMyCountryGrammarRank(Long memberId) {
+        Long rank = rankingRedis.opsForZSet().reverseRank("countryGrammar", String.valueOf(memberId));
+        return rank != null ? rank : -1;
+    }
+
+    public double getMyCountryGrammarPoint(Long memberId){
+        Double score = rankingRedis.opsForZSet().score("countryGrammar", String.valueOf(memberId));
+        return score != null ? score : 0;
+    }
+
+
     public void setCountryGrammarPoint(String nickName, int point){
         rankingRedis.opsForZSet().incrementScore("countryGrammar",nickName, point);
     }
@@ -91,6 +123,48 @@ public class RedisService {
         return collect;
     }
 
+    public List<GrammarCountryMyRankRedisDTO> getCountryMyGrammarRankList(){
+        ZSetOperations<String, String> stringStringZSetOperations = rankingRedis.opsForZSet();
+        Set<ZSetOperations.TypedTuple<String>> typedTuples;
+        typedTuples = stringStringZSetOperations.reverseRangeWithScores("countryMyGrammar", 0, -1);
+        List<GrammarCountryMyRankRedisDTO> collect = new ArrayList<>();
+        int rank = 1;
+        for (ZSetOperations.TypedTuple<String> typedTuple : typedTuples) {
+            collect.add(GrammarCountryMyRankRedisDTO.convertToGrammarCountryMyRankRedisDTO(typedTuple, rank++));
+        }
+        return collect;
+    }
+
+
+    // 맞춤법 퀴즈 개인 교내 조회
+    public List<GrammarSchoolMyRankRedisDTO> getSchoolMyGrammarRankList(String school){
+        ZSetOperations<String, String> stringStringZSetOperations = rankingRedis.opsForZSet();
+        String key = "schoolMyGrammar:" + school;
+        Set<ZSetOperations.TypedTuple<String>> typedTuples;
+        typedTuples = stringStringZSetOperations.reverseRangeWithScores(key, 0, -1);
+
+        List<GrammarSchoolMyRankRedisDTO> collect = new ArrayList<>();
+        int rank = 1;
+        for (ZSetOperations.TypedTuple<String> typedTuple : typedTuples) {
+            collect.add(GrammarSchoolMyRankRedisDTO.convertToGrammarSchoolMyRankRedisDTO(typedTuple, rank++));
+        }
+        return collect;
+    }
+
+    // 학교별 랭킹 조회
+    public List<GrammarSchoolRedisDTO> getSchoolGrammarRankList(){
+        ZSetOperations<String, String> stringStringZSetOperations = rankingRedis.opsForZSet();
+        String key = "schoolGrammar";
+        Set<ZSetOperations.TypedTuple<String>> typedTuples;
+        typedTuples = stringStringZSetOperations.reverseRangeWithScores(key, 0, -1);
+
+        List<GrammarSchoolRedisDTO> collect = new ArrayList<>();
+        int rank = 1;
+        for (ZSetOperations.TypedTuple<String> typedTuple : typedTuples) {
+            collect.add(new GrammarSchoolRedisDTO(typedTuple.getValue(), rank++, typedTuple.getScore().intValue()));
+        }
+        return collect;
+    }
 
 
 }
