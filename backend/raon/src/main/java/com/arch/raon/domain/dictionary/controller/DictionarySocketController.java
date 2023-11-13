@@ -1,5 +1,7 @@
 package com.arch.raon.domain.dictionary.controller;
 
+import com.arch.raon.domain.dictionary.service.DictionaryService;
+import com.arch.raon.domain.dictionary.vo.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -31,6 +33,7 @@ public class DictionarySocketController {
 
 	private final SimpMessagingTemplate messagingTemplate;
 	private final DictionarySocketService dictionarySocketService;
+	private final DictionaryService dictionaryService;
 
 	/**
 	 * roomId가 유효한지 체크하는 HTTP 요청에 대한 응답이다.
@@ -174,10 +177,13 @@ public class DictionarySocketController {
 				SocketStageResultResDTO finalRanking = dictionarySocketService.getStageResultOf(reqDTO.getRoomId());
 				finalRanking.setMessage(SocketResponse.FINAL_RESULT);
 
-				// TODO : 결과를 db에 저장해야 한다.
-				
+
 				// 최종 결과 전송
 				sendToRoom(reqDTO.getRoomId(), finalRanking);
+
+				// TODO : 결과를 db에 저장해야 한다.
+				// 태현이가 구현 한 레포지토리 객체를 사용한다.
+				dictionarySocketService.saveScore(reqDTO.getRoomId());
 		}
 	}
 
