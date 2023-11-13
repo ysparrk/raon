@@ -112,8 +112,16 @@ function WaitInterface() {
       text: roomId,
       link: {
         webUrl: 'https://arch-raon.com',
-        // webUrl: 'http://localhost:3000',
       },
+      buttons: [
+        {
+          title: '게임 참여하러 가기!!',
+          link: {
+            webUrl: 'https://arch-raon.com',
+            mobileWebUrl: 'https://arch-raon.com',
+          },
+        },
+      ],
     });
   };
 

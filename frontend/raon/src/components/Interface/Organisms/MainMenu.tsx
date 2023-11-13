@@ -15,7 +15,7 @@ const MenuContainer = styled.div`
   align-items: center;
   max-width: 90%;
   margin: 0 auto;
-  height: 90vh; // 뷰포트의 높이에 따라 컨테이너의 높이를 설정
+  height: 90vh;
 `;
 
 const MainMenu = () => {
