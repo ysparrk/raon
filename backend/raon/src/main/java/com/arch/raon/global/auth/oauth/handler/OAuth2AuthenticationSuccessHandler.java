@@ -39,9 +39,10 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
         String accessToken = jwtService.createAccessToken(oAuth2User.getUserInfo().getId());
         String refreshToken = jwtService.createRefreshToken();
+        System.out.println(refreshToken);
         // RefreshToken 쿠키, Redis에 저장
         setRefreshTokenInCookie(response, refreshToken);
-        redisService.setRefreshToken(accessToken, refreshToken);
+        redisService.setRefreshToken(String.valueOf(oAuth2User.getUserInfo().getId()), refreshToken);
 
         String redirect_uri = CookieService.getCookie(request, REDIRECT_URI_PARAM_COOKIE_NAME)
                 .map(cookie -> cookie.getValue())

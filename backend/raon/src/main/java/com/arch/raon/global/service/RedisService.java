@@ -26,34 +26,25 @@ public class RedisService {
         this.securityRedis = securityRedis;
     }
 
-    public void setTestData(String str){
-        securityRedis.opsForValue().set(str,"please");
-        securityRedis.expire(str,30, TimeUnit.SECONDS);
-    }
-
-    public String getTestData(String str){
-        return securityRedis.opsForValue().get(str);
-    }
-
     /** 여기에 리프레쉬 관련 로직 넣으면 좋아용 **/
-    public void setRefreshToken(String accessToken, String refreshToken){
+    public void setRefreshToken(String id, String refreshToken){
         // key : accessToken, value : refreshToken
-        securityRedis.opsForValue().set(accessToken, refreshToken);
+        securityRedis.opsForValue().set(id, refreshToken);
         //30일
-        securityRedis.expire(accessToken,30L, TimeUnit.DAYS);
+        securityRedis.expire(id,30L, TimeUnit.DAYS);
     }
 
-    public String getRefreshToken(String accessToken){
-        return securityRedis.opsForValue().get(accessToken);
+    public String getRefreshToken(String id){
+        return securityRedis.opsForValue().get(id);
     }
 
 
-    public boolean deleteRefreshToken(String accessToken){
-        return Boolean.TRUE.equals(securityRedis.delete(accessToken));
+    public boolean deleteRefreshToken(String id){
+        return Boolean.TRUE.equals(securityRedis.delete(id));
     }
 
-    public void updateRefreshTokenKey(String accessToken, String newAccessToken){
-        securityRedis.rename(accessToken, newAccessToken);
+    public void updateRefreshTokenKey(String id, String newAccessToken){
+        securityRedis.rename(id, newAccessToken);
     }
 
     public void setCountryGrammarPoint(String nickName, int point){

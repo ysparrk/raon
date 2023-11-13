@@ -48,19 +48,6 @@ public class MemberController {
                         .build());
     }
 
-    @PostMapping("/test/set")
-    public String testSet(){
-        redisService.setTestData("arch");
-        return "set";
-    }
-
-    @PostMapping("/test/get")
-    public String testGet(@AuthenticationPrincipal UserAuthentication userAuth){
-        String str = redisService.getTestData("arch");
-        System.out.println(userAuth.getId());
-        return str;
-    }
-
     @PostMapping("/check/nickname")
     public ResponseEntity<ResponseDTO> checkNickname(
             @AuthenticationPrincipal UserAuthentication userAuth,

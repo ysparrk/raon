@@ -9,11 +9,13 @@ import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import net.minidev.json.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.spec.SecretKeySpec;
-import java.nio.charset.StandardCharsets;
+import java.text.ParseException;
 import java.util.Base64;
 import java.util.Date;
 import java.util.Objects;
@@ -71,7 +73,9 @@ public class JwtService {
         // refreshToken 확인
         validateToken(refreshToken);
         String accessToken = reissueTokenReqDTO.getAccessToken();
-        String redisRefreshToken = redisService.getRefreshToken(accessToken);
+        Long id = Long.valueOf(extractSubFromToken(accessToken));
+        System.out.println(id);
+        String redisRefreshToken = redisService.getRefreshToken(String.valueOf(id));
 
         // 기존 refreshToken 일치 확인
         if (!Objects.equals(redisRefreshToken, refreshToken)){
@@ -79,11 +83,10 @@ public class JwtService {
         }
 
         // newAccessToken 생성
-        Long id = Long.valueOf(extractSubFromToken(accessToken));
         String newAccessToken = createAccessToken(id);
 
         // redis 업데이트
-        redisService.updateRefreshTokenKey(accessToken, newAccessToken);
+        redisService.updateRefreshTokenKey(String.valueOf(id), newAccessToken);
 
         return newAccessToken;
     }
@@ -114,15 +117,18 @@ public class JwtService {
         return (int) refreshTokenExpire;
     }
 
-    public String extractSubFromToken(String jwtToken) {
-        // JWT 토큰을 "."으로 나눠서 header, payload, signature로 분리
-        String[] parts = jwtToken.split("\\.");
-
-        // payload 부분을 Base64 디코딩하여 JSON 문자열을 얻음
-        String payloadBase64 = parts[1];
-        String payloadJson = new String(Base64.getUrlDecoder().decode(payloadBase64), StandardCharsets.UTF_8);
-
-        // JSON 문자열을 파싱하여 sub 값을 추출
-        return payloadJson.substring(8, 13);
+    public String extractSubFromToken(String expiredAccessToken) {
+        JSONParser jsonParser = new JSONParser();
+        String[] split = expiredAccessToken.split("\\.");
+        byte[] payLoad = split[1].getBytes();
+        Base64.Decoder decoder = Base64.getDecoder();
+        byte[] userId = decoder.decode(payLoad);
+        JSONObject jsonObject = null;
+        try{
+            jsonObject = (JSONObject) jsonParser.parse(new String(userId));
+        }catch (Exception e){
+            throw new TokenException(ErrorCode.TOKEN_INVALID);
+        }
+        return (String) jsonObject.get("sub");
     }
 }
