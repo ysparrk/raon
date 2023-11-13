@@ -144,6 +144,7 @@ function MultiResult() {
         {Room.userResult.map(
           (user: { nickname?: string; current_point?: number }, index) => (
             <RightRankDiv key={user.nickname}>
+              <p>{index + 1}</p>
               <p>{user.nickname ?? '?'}</p>
               <p>{user.current_point ?? '0'}</p>
             </RightRankDiv>
