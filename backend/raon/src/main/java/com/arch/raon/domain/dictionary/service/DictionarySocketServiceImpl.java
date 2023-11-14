@@ -156,4 +156,9 @@ public class DictionarySocketServiceImpl implements DictionarySocketService{
 		}
 	}
 
+	@Override
+	public List<String> getUserNickNames(String roomId) {
+		return Rooms.getUserNickNameOf(roomId);
+	}
+
 }
