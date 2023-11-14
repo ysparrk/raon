@@ -51,9 +51,32 @@ const postSchoolsList = async (keyword: string): Promise<AxiosResponse> => {
   }
 };
 
+const postMemberInfoGet = async (): Promise<AxiosResponse> => {
+  try {
+    const response = await api.post(`api/members/detail`);
+    return response.data;
+  } catch (error) {
+    console.log('개인정보 조회 실패', error);
+    throw error;
+  }
+};
+const postMemberInfoAdjust = async (
+  data: MemberSignup,
+): Promise<AxiosResponse> => {
+  try {
+    const response = await api.post(`api/members/modify`, data);
+    return response.data;
+  } catch (error) {
+    console.log('개인정보 수정 실패', error);
+    throw error;
+  }
+};
+
 export {
   getMemberActive,
   postMemberSignup,
   postDuplicateCheck,
   postSchoolsList,
+  postMemberInfoGet,
+  postMemberInfoAdjust,
 };

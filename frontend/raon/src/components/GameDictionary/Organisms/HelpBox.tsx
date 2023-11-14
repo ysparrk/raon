@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import styled from 'styled-components';
 import helpDictionaryImage1 from '../../../assets/Images/helpDictionaryImage1.png';
 import helpDictionaryImage2 from '../../../assets/Images/helpDictionaryImage2.png';
 import helpDictionaryImage3 from '../../../assets/Images/helpDictionaryImage3.png';
@@ -6,6 +7,8 @@ import helpDictionaryImage4 from '../../../assets/Images/helpDictionaryImage4.pn
 import helpDictionaryImage5 from '../../../assets/Images/helpDictionaryImage5.png';
 import helpDictionaryImage6 from '../../../assets/Images/helpDictionaryImage6.png';
 import { ReactComponent as Arrow } from '../../../assets/Images/arrow.svg';
+import BlurView from '../../GameSummarize/Atoms/BlurView';
+
 
 const TopBox: React.FC<{
   imageIndex: number;
@@ -22,37 +25,40 @@ const TopBox: React.FC<{
   ];
 
   return (
-    <div
-      style={{
-        backgroundColor: '#F9E8B6',
-        position: 'fixed',
-        top: 0,
-        left: '5%',
-        width: '90%',
-        height: '78%',
-        zIndex: 7,
-        border: '5px solid black',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        fontSize: '24px',
-      }}
-    >
-      <Arrow onClick={handleLeftArrowClick} />
-      <img
-        src={images[imageIndex]}
-        alt="Spelling Help"
+    <>
+      <BlurView />
+      <div
         style={{
-          maxWidth: '80%',
-          maxHeight: '80%',
-          objectFit: 'contain',
+          backgroundColor: '#F9E8B6',
+          position: 'fixed',
+          top: 0,
+          left: '5%',
+          width: '90%',
+          height: '78%',
+          zIndex: 7,
+          border: '5px solid black',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          fontSize: '24px',
         }}
-      />
-      <Arrow
-        onClick={handleRightArrowClick}
-        style={{ transform: 'rotate(180deg)' }}
-      />
-    </div>
+      >
+        <Arrow onClick={handleLeftArrowClick} />
+        <img
+          src={images[imageIndex]}
+          alt="Spelling Help"
+          style={{
+            maxWidth: '80%',
+            maxHeight: '80%',
+            objectFit: 'contain',
+          }}
+        />
+        <Arrow
+          onClick={handleRightArrowClick}
+          style={{ transform: 'rotate(180deg)' }}
+        />
+      </div>
+    </>
   );
 };
 
@@ -109,6 +115,7 @@ const HelpBox: React.FC = () => {
         }}
       >
         {comments[index]}
+        
       </div>
     </>
   );

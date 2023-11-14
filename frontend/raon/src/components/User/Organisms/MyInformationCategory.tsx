@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import Swal from 'sweetalert2';
@@ -6,13 +6,15 @@ import InputBox from '../../Common/Atoms/InputBox.tsx';
 import ComboBox from '../../Common/Atoms/ComboBox.tsx';
 import DuplicationCheckButton from '../Atoms/DuplicateCheckButton.tsx';
 import {
-  postMemberSignup,
+  postMemberInfoAdjust,
+  postMemberInfoGet,
   postDuplicateCheck,
   postSchoolsList,
 } from '../../../api/MemberApi.tsx';
 import BlurBoxDiv from '../../Common/Atoms/BlurBackGround.tsx';
 import SmallButton from '../../Common/Atoms/SmallButton.tsx';
 import SchoolInputBox from '../Atoms/SchoolSearchInputBox.tsx';
+import ExitButton from '../../Common/Atoms/ExitButton.tsx';
 
 const Container = styled.div`
   display: flex;
@@ -35,7 +37,7 @@ const Button = styled.button`
   padding: 20px 80px;
   border: none;
   border-radius: 20px;
-  background-color: #fae100;
+  background-color: #383414;
   margin-top: 80px;
   font-size: 32px;
   font-family: 'CookieRun';
@@ -162,7 +164,18 @@ const Selection = styled.div`
   border-radius: 0.9375rem;
 `;
 
-const InformationCategory = () => {
+interface MyImageDivProps {
+  imageUrl: string;
+}
+const MyImageDiv = styled.div<MyImageDivProps>`
+  display: flex;
+  width: 12rem;
+  height: 12rem;
+  border-radius: 12px;
+  background-image: url(${(props) => props.imageUrl});
+  background-size: cover;
+`;
+const MyInformationCategory = () => {
   const navigate = useNavigate();
 
   const [nickname, setNickname] = useState('');
@@ -174,7 +187,22 @@ const InformationCategory = () => {
   const [searchWord, setSearchWord] = useState('');
   const [searchSchools, setSearchSchools] = useState<any[]>([]);
   const genderOptions = ['남자', '여자'];
+  const [myImage, setMyImage] = useState('');
 
+  useEffect(() => {
+    const GetMyInfo = async () => {
+      const response = await postMemberInfoGet();
+      console.log(response);
+      setNickname(response.data.nickname);
+      setBirthday(response.data.yearOfBirth);
+      setSchool(response.data.school);
+      if (response.data.gender === 'FEMALE') {
+        setGender('여자');
+      }
+      setMyImage(response.data.profileUrl);
+    };
+    GetMyInfo();
+  }, []);
   const handleSubmit = async () => {
     if (!nicknameCheck) {
       Swal.fire({
@@ -202,7 +230,7 @@ const InformationCategory = () => {
 
     console.log(memberData);
     try {
-      const response = await postMemberSignup(memberData);
+      const response = await postMemberInfoAdjust(memberData);
       console.log('회원가입 성공:', response);
       localStorage.setItem('nickname', nickname);
       navigate('/main');
@@ -244,6 +272,7 @@ const InformationCategory = () => {
 
   return (
     <Container>
+      <MyImageDiv imageUrl={myImage} />
       <Content>
         {isSearch && (
           <>
@@ -358,9 +387,10 @@ const InformationCategory = () => {
           }}
         />
       </Content>
-      <Button onClick={handleSubmit}>제 출 하 기</Button>
+      <Button onClick={handleSubmit}>수정하기</Button>
+      <ExitButton to="/main" />
     </Container>
   );
 };
 
-export default InformationCategory;
+export default MyInformationCategory;

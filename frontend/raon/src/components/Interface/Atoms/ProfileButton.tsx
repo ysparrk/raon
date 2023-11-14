@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 const StyledButton = styled.button`
@@ -20,9 +21,17 @@ const CenteredContainer = styled.div`
 `;
 
 const ProfileButton = () => {
+  const navigate = useNavigate();
   return (
     <CenteredContainer>
-      <StyledButton type="button">내 정보</StyledButton>
+      <StyledButton
+        type="button"
+        onClick={() => {
+          navigate('/information/myinfo');
+        }}
+      >
+        내 정보
+      </StyledButton>
     </CenteredContainer>
   );
 };
