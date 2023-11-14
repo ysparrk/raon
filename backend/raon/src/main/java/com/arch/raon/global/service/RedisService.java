@@ -1,12 +1,14 @@
 package com.arch.raon.global.service;
 
 import com.arch.raon.domain.dictionary.dto.query.DictionaryMyRankQueryDTO;
+import com.arch.raon.domain.grammar.dto.redis.GrammarMyRankRedisDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
@@ -53,6 +55,55 @@ public class RedisService {
     }
 
      */
+
+    // TODO: 닉네임, 학교명 변경에 따른 점수 변경 고려하기
+    public void setCountryMyGrammarPoint(String nickname, int point){
+        rankingRedis.opsForZSet().incrementScore("countryMyGrammar", nickname, point);
+    }
+
+    public void setSchoolMyGrammarPoint(String nickname, String school, int point){
+        String key = "schoolMyGrammar:" + school;
+        rankingRedis.opsForZSet().incrementScore(key, nickname, point);
+    }
+
+    public void setSchoolGrammarPoint(String school, int point) {
+        rankingRedis.opsForZSet().incrementScore("schoolGrammar", school, point);
+    }
+
+    public Long getCountryMyGrammarRank(String nickname) {
+        Long rank = rankingRedis.opsForZSet().reverseRank("countryMyGrammar", nickname);
+        return rank != null ? rank : -1;
+    }
+
+    public double getCountryMyGrammarPoint(String nickname){
+        Double score = rankingRedis.opsForZSet().score("countryMyGrammar", nickname);
+        return score != null ? score : 0;
+    }
+
+
+    public Long getSchoolMyGrammarRank(String nickname, String school) {
+        String key = "schoolMyGrammar:" + school;
+        Long rank = rankingRedis.opsForZSet().reverseRank(key, nickname);
+        return rank != null ? rank : -1;
+    }
+
+
+    public double getSchoolMyGrammarPoint(String nickname, String school) {
+        String key = "schoolMyGrammar:" + school;
+        Double score = rankingRedis.opsForZSet().score(key, nickname);
+        return score != null ? score : 0;
+    }
+
+    public Long getSchoolGrammarRank(String school) {
+        Long rank = rankingRedis.opsForZSet().reverseRank("schoolGrammar", school);
+        return rank != null ? rank : -1;
+    }
+
+    public double getSchoolGrammarPoint(String school) {
+        Double score = rankingRedis.opsForZSet().score("schoolGrammar", school);
+        return score != null ? score : 0;
+    }
+
     public void setCountryGrammarPoint(String nickName, int point){
         rankingRedis.opsForZSet().incrementScore("countryGrammar",nickName, point);
     }
@@ -115,6 +166,44 @@ public class RedisService {
         return collect;
     }
 
+
+    public List<GrammarMyRankRedisDTO> getCountryMyGrammarRankList(){
+        ZSetOperations<String, String> stringStringZSetOperations = rankingRedis.opsForZSet();
+        Set<ZSetOperations.TypedTuple<String>> typedTuples;
+        typedTuples = stringStringZSetOperations.reverseRangeWithScores("countryMyGrammar", 0, -1);
+        List<GrammarMyRankRedisDTO> collect = new ArrayList<>();
+        for (ZSetOperations.TypedTuple<String> typedTuple : typedTuples) {
+            collect.add(GrammarMyRankRedisDTO.convertToGrammarMyRankRedisDTO(typedTuple));
+        }
+        return collect;
+    }
+
+    public List<GrammarMyRankRedisDTO> getSchoolMyGrammarRankList(String school){
+        ZSetOperations<String, String> stringStringZSetOperations = rankingRedis.opsForZSet();
+        String key = "schoolMyGrammar:" + school;
+        Set<ZSetOperations.TypedTuple<String>> typedTuples;
+        typedTuples = stringStringZSetOperations.reverseRangeWithScores(key, 0, -1);
+
+        List<GrammarMyRankRedisDTO> collect = new ArrayList<>();
+        for (ZSetOperations.TypedTuple<String> typedTuple : typedTuples) {
+            collect.add(GrammarMyRankRedisDTO.convertToGrammarMyRankRedisDTO(typedTuple));
+        }
+        return collect;
+    }
+
+    public List<GrammarMyRankRedisDTO> getSchoolGrammarRankList(){
+        ZSetOperations<String, String> stringStringZSetOperations = rankingRedis.opsForZSet();
+        String key = "schoolGrammar";
+        Set<ZSetOperations.TypedTuple<String>> typedTuples;
+        typedTuples = stringStringZSetOperations.reverseRangeWithScores(key, 0, -1);
+
+        List<GrammarMyRankRedisDTO> collect = new ArrayList<>();
+        for (ZSetOperations.TypedTuple<String> typedTuple : typedTuples) {
+            collect.add(GrammarMyRankRedisDTO.convertToGrammarMyRankRedisDTO(typedTuple));
+        }
+        return collect;
+    }
+
     public List<DictionaryMyRankQueryDTO> getSchoolMyDictionaryRank(String school){
         ZSetOperations<String, String> stringStringZSetOperations = rankingRedis.opsForZSet();
         Set<ZSetOperations.TypedTuple<String>> typedTuples;
@@ -137,7 +226,6 @@ public class RedisService {
         rankingRedis.opsForZSet().remove("countryDictionary",oldNickName);
         rankingRedis.opsForZSet().remove("countryDictionary:"+oldSchool,oldNickName);
     }
-
 
 
 }

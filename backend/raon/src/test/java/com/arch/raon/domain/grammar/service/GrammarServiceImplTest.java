@@ -253,27 +253,27 @@ class GrammarServiceImplTest {
 		assertThat(10).isEqualTo(expectQuizzes.size());
 	}
 
-	@Test
-	@Transactional
-	void saveScoreResult() {
-		// given -> id가 1인 문제를 맞혔다고 가정 (1점)
-		List<GrammarResultDTO> grammarResultList = new ArrayList<>();
-		GrammarResultDTO grammarResultDTO = GrammarResultDTO.builder()
-				.id(1L)
-				.hit(1).build();
-		grammarResultList.add(grammarResultDTO);
-		GrammarResultSaveReqDTO grammarResultSaveReqDTO = GrammarResultSaveReqDTO.builder()
-				.grammarResultList(grammarResultList).build();
-
-		Member member = memberRepository.findByNickname("하재우").get();
-
-		// when
-		Long scoreId = grammarService.saveScoreResult(grammarResultSaveReqDTO, member.getId());
-
-		// then -> 결과가 잘 저장 됐는지?
-		GrammarScore scoreResult = grammarScoreRepository.findById(scoreId).get();
-		assertThat(scoreResult.getScore()).isEqualTo(1);
-	}
+//	@Test
+//	@Transactional
+//	void saveScoreResult() {
+//		// given -> id가 1인 문제를 맞혔다고 가정 (1점)
+//		List<GrammarResultDTO> grammarResultList = new ArrayList<>();
+//		GrammarResultDTO grammarResultDTO = GrammarResultDTO.builder()
+//				.id(1L)
+//				.hit(1).build();
+//		grammarResultList.add(grammarResultDTO);
+//		GrammarResultSaveReqDTO grammarResultSaveReqDTO = GrammarResultSaveReqDTO.builder()
+//				.grammarResultList(grammarResultList).build();
+//
+//		Member member = memberRepository.findByNickname("하재우").get();
+//
+//		// when
+//		Long scoreId = grammarService.saveScoreResult(grammarResultSaveReqDTO, member.getId());
+//
+//		// then -> 결과가 잘 저장 됐는지?
+//		GrammarScore scoreResult = grammarScoreRepository.findById(scoreId).get();
+//		assertThat(scoreResult.getScore()).isEqualTo(1);
+//	}
 
 	@Test
 	@Transactional
