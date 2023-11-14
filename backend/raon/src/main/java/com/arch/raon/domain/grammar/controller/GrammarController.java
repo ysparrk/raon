@@ -1,6 +1,7 @@
 package com.arch.raon.domain.grammar.controller;
 
 import com.arch.raon.domain.grammar.dto.request.GrammarResultSaveReqDTO;
+import com.arch.raon.domain.grammar.dto.response.GrammarMyRankListResDTO;
 import com.arch.raon.domain.grammar.dto.response.GrammarMyRankingResDTO;
 import com.arch.raon.domain.grammar.dto.response.GrammarQuizResDTO;
 import com.arch.raon.domain.grammar.service.GrammarService;
@@ -23,7 +24,6 @@ public class GrammarController {
 
 	@GetMapping ("/quiz")
 	public ResponseEntity<ResponseDTO> getQuizzes(
-//		@AuthenticationPrincipal Long memberId
 	){
 		List<GrammarQuizResDTO> quizzes = grammarService.getQuizzes();
 
@@ -75,4 +75,42 @@ public class GrammarController {
 		}
 	}
 
+	@GetMapping("/ranking/country-my")
+	public ResponseEntity<ResponseDTO> getCountryMyRankList(
+			@AuthenticationPrincipal UserAuthentication userAuth
+	) {
+		GrammarMyRankListResDTO countryMyGrammarRankList = grammarService.getCountryMyGrammarRankList(userAuth.getId());
+
+		return ResponseEntity.status(HttpStatus.OK)
+				.body(ResponseDTO.builder()
+						.message("맞춤법 퀴즈 전국 랭킹 리스트")
+						.data(countryMyGrammarRankList)
+						.build());
+	}
+
+	@GetMapping("/ranking/school-my")
+	public ResponseEntity<ResponseDTO> getSchoolMyRankList(
+			@AuthenticationPrincipal UserAuthentication userAuth
+	) {
+		GrammarMyRankListResDTO schoolMyGrammarRankList = grammarService.getSchoolMyGrammarRankList(userAuth.getId());
+
+		return ResponseEntity.status(HttpStatus.OK)
+				.body(ResponseDTO.builder()
+						.message("맞춤법 퀴즈 교내 랭킹 리스트")
+						.data(schoolMyGrammarRankList)
+						.build());
+	}
+
+	@GetMapping("/ranking/school")
+	public ResponseEntity<ResponseDTO> getSchoolRankList(
+			@AuthenticationPrincipal UserAuthentication userAuth
+	) {
+		GrammarMyRankListResDTO schoolGrammarRankList = grammarService.getSchoolGrammarRankList(userAuth.getId());
+
+		return ResponseEntity.status(HttpStatus.OK)
+				.body(ResponseDTO.builder()
+						.message("맞춤법 퀴즈 학교별 랭킹 리스트")
+						.data(schoolGrammarRankList)
+						.build());
+	}
 }
