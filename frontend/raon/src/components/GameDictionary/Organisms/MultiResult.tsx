@@ -71,6 +71,7 @@ const LeftOthersP = styled.p`
   font-family: 'ONE-Mobile-POP';
   font-size: 2.125rem;
   color: white;
+  margin: 0.5rem;
 `;
 
 const RightTopicP = styled.div`
@@ -143,6 +144,7 @@ function MultiResult() {
         {Room.userResult.map(
           (user: { nickname?: string; current_point?: number }, index) => (
             <RightRankDiv key={user.nickname}>
+              <p>{index + 1}</p>
               <p>{user.nickname ?? '?'}</p>
               <p>{user.current_point ?? '0'}</p>
             </RightRankDiv>
