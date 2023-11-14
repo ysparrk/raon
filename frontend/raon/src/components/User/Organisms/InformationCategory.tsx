@@ -156,13 +156,13 @@ const InformationCategory = () => {
 
   const [nickname, setNickname] = useState('');
   const [birthday, setBirthday] = useState('');
-  const [gender, setGender] = useState('MALE');
+  const [gender, setGender] = useState('남자');
   const [school, setSchool] = useState('');
   const [nicknameCheck, setNicknameCheck] = useState(false);
   const [isSearch, setIsSearch] = useState(false);
   const [searchWord, setSearchWord] = useState('');
   const [searchSchools, setSearchSchools] = useState<any[]>([]);
-  const genderOptions = ['MALE', 'FEMALE'];
+  const genderOptions = ['남자', '여자'];
 
   const handleSubmit = async () => {
     if (!nicknameCheck) {
