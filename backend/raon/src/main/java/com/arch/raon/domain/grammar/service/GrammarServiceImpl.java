@@ -293,7 +293,7 @@ public class GrammarServiceImpl implements GrammarService {
 
 		GrammarMyRankListResDTO rankList = GrammarMyRankListResDTO.builder()
 				.myRank(myRank)
-				.myScore(myScore)
+				.myScore((int) myScore)
 				.rankList(rankRedisList)
 				.build();
 
@@ -315,7 +315,7 @@ public class GrammarServiceImpl implements GrammarService {
 
 		GrammarMyRankListResDTO rankList = GrammarMyRankListResDTO.builder()
 				.myRank(myRank)
-				.myScore(myScore)
+				.myScore((int) myScore)
 				.rankList(rankRedisList)
 				.build();
 
@@ -338,7 +338,7 @@ public class GrammarServiceImpl implements GrammarService {
 
 		GrammarMyRankListResDTO rankList = GrammarMyRankListResDTO.builder()
 				.myRank(mySchoolRank)
-				.myScore(mySchoolScore)
+				.myScore((int) mySchoolScore)
 				.rankList(schoolGrammarRankList)
 				.build();
 

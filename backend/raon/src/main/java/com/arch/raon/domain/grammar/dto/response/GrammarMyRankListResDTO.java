@@ -9,7 +9,7 @@ import java.util.List;
 @Getter
 public class GrammarMyRankListResDTO {
     private Long myRank;
-    private double myScore;
+    private int myScore;
     private List<GrammarMyRankRedisDTO> rankList;
 
     public GrammarMyRankListResDTO() {
@@ -17,7 +17,7 @@ public class GrammarMyRankListResDTO {
     }
 
     @Builder
-    public GrammarMyRankListResDTO(Long myRank, double myScore, List<GrammarMyRankRedisDTO> rankList) {
+    public GrammarMyRankListResDTO(Long myRank, int myScore, List<GrammarMyRankRedisDTO> rankList) {
         this.myRank = myRank;
         this.myScore = myScore;
         this.rankList = rankList;
