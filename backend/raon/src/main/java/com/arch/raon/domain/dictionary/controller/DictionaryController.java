@@ -1,10 +1,8 @@
 package com.arch.raon.domain.dictionary.controller;
 
 import com.arch.raon.domain.dictionary.dto.request.DictionaryScoreReqDTO;
-import com.arch.raon.domain.dictionary.dto.response.DictionaryMyRankResDTO;
+import com.arch.raon.domain.dictionary.dto.response.DictionaryRankResDTO;
 import com.arch.raon.domain.dictionary.dto.response.DictionaryQuizResDTO;
-import com.arch.raon.domain.dictionary.dto.response.DictionarySchoolMyRankResDTO;
-import com.arch.raon.domain.dictionary.dto.response.DictionarySchoolRankResDTO;
 import com.arch.raon.domain.dictionary.service.DictionaryService;
 import com.arch.raon.global.auth.dto.UserAuthentication;
 import com.arch.raon.global.dto.ResponseDTO;
@@ -51,7 +49,7 @@ public class DictionaryController {
             @AuthenticationPrincipal UserAuthentication userAuth
     ) {
 
-        DictionaryMyRankResDTO dictionaryMyRankResDTO = dictionaryService.getMyRank(userAuth.getId());
+        DictionaryRankResDTO dictionaryMyRankResDTO = dictionaryService.getMyRank(userAuth.getId());
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ResponseDTO.builder()
@@ -65,7 +63,7 @@ public class DictionaryController {
             @AuthenticationPrincipal UserAuthentication userAuth
     ) {
 
-        DictionarySchoolMyRankResDTO dictionarySchoolMyRankResDTO = dictionaryService.getSchoolMyRanking(userAuth.getId());
+        DictionaryRankResDTO dictionarySchoolMyRankResDTO = dictionaryService.getSchoolMyRanking(userAuth.getId());
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ResponseDTO.builder()
@@ -79,7 +77,7 @@ public class DictionaryController {
             @AuthenticationPrincipal UserAuthentication userAuth
     ) {
 
-        DictionarySchoolRankResDTO dictionarySchoolRankResDTO =  dictionaryService.getSchoolRanking(userAuth.getId());
+        DictionaryRankResDTO dictionarySchoolRankResDTO =  dictionaryService.getSchoolRanking(userAuth.getId());
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ResponseDTO.builder()

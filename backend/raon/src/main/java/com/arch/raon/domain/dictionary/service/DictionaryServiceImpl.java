@@ -2,10 +2,8 @@ package com.arch.raon.domain.dictionary.service;
 
 import com.arch.raon.domain.dictionary.dto.query.DictionaryMyRankQueryDTO;
 import com.arch.raon.domain.dictionary.dto.request.DictionaryScoreReqDTO;
-import com.arch.raon.domain.dictionary.dto.response.DictionaryMyRankResDTO;
+import com.arch.raon.domain.dictionary.dto.response.DictionaryRankResDTO;
 import com.arch.raon.domain.dictionary.dto.response.DictionaryQuizResDTO;
-import com.arch.raon.domain.dictionary.dto.response.DictionarySchoolMyRankResDTO;
-import com.arch.raon.domain.dictionary.dto.response.DictionarySchoolRankResDTO;
 import com.arch.raon.domain.dictionary.entity.DictionaryDirectionQuiz;
 import com.arch.raon.domain.dictionary.entity.DictionaryInitialQuiz;
 import com.arch.raon.domain.dictionary.repository.DictionaryDirectionQuizRepository;
@@ -19,7 +17,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -62,7 +59,7 @@ public class DictionaryServiceImpl implements DictionaryService {
     }
 
     @Override
-    public DictionaryMyRankResDTO getMyRank(Long memberId){
+    public DictionaryRankResDTO getMyRank(Long memberId){
         Member member = memberRepository.findById(memberId).get();
         if(member==null){
             throw new CustomException(ErrorCode.NO_SUCH_MEMBER) {
@@ -78,7 +75,7 @@ public class DictionaryServiceImpl implements DictionaryService {
 
         List<DictionaryMyRankQueryDTO> rankList = redisService.getCountryDictionaryRank();
 
-        DictionaryMyRankResDTO dictionaryMyRankResDTO = DictionaryMyRankResDTO.builder()
+        DictionaryRankResDTO dictionaryMyRankResDTO = DictionaryRankResDTO.builder()
                 .myRank(myRank)
                 .myScore(myScore)
                 .rankList(rankList)
@@ -88,7 +85,7 @@ public class DictionaryServiceImpl implements DictionaryService {
     }
 
     @Override
-    public DictionarySchoolMyRankResDTO getSchoolMyRanking(Long memberId){
+    public DictionaryRankResDTO getSchoolMyRanking(Long memberId){
         Member member = memberRepository.findById(memberId).get();
         if(member==null){
             throw new CustomException(ErrorCode.NO_SUCH_MEMBER) {
@@ -104,7 +101,7 @@ public class DictionaryServiceImpl implements DictionaryService {
 
         List<DictionaryMyRankQueryDTO> rankList = redisService.getSchoolMyDictionaryRank(member.getSchool());
 
-        DictionarySchoolMyRankResDTO dictionaryMyRankResDTO = DictionarySchoolMyRankResDTO.builder()
+        DictionaryRankResDTO dictionaryMyRankResDTO = DictionaryRankResDTO.builder()
                 .myRank(myRank)
                 .myScore(myScore)
                 .rankList(rankList)
@@ -114,7 +111,7 @@ public class DictionaryServiceImpl implements DictionaryService {
     }
 
     @Override
-    public DictionarySchoolRankResDTO getSchoolRanking(Long memberId){
+    public DictionaryRankResDTO getSchoolRanking(Long memberId){
         Member member = memberRepository.findById(memberId).get();
         if(member==null){
             throw new CustomException(ErrorCode.NO_SUCH_MEMBER) {
@@ -124,15 +121,15 @@ public class DictionaryServiceImpl implements DictionaryService {
                 }
             };
         }
-        double myScore = redisService.getSchoolDictionaryPoint(member.getSchool());
-        long myRank = redisService.getSchoolDictionaryMyRank(member.getSchool());
-        myRank++;
+        double mySchoolScore = redisService.getSchoolDictionaryPoint(member.getSchool());
+        long mySchoolRank = redisService.getSchoolDictionaryMyRank(member.getSchool());
+        mySchoolRank++;
 
         List<DictionaryMyRankQueryDTO> rankList = redisService.getSchoolDictionaryRank(member.getSchool());
 
-        DictionarySchoolRankResDTO dictionarySchoolRankResDTO = DictionarySchoolRankResDTO.builder()
-                .myRank(myRank)
-                .myScore(myScore)
+        DictionaryRankResDTO dictionarySchoolRankResDTO = DictionaryRankResDTO.builder()
+                .myRank(mySchoolRank)
+                .myScore(mySchoolScore)
                 .rankList(rankList)
                 .build();
 
