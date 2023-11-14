@@ -104,18 +104,6 @@ public class RedisService {
         return score != null ? score : 0;
     }
 
-    public void setCountryGrammarPoint(String nickName, int point){
-        rankingRedis.opsForZSet().incrementScore("countryGrammar",nickName, point);
-    }
-
-    public long getCountryGrammarPoint(String nickName){
-        long rank = 0;
-        double score = rankingRedis.opsForZSet().score("countryGrammar",nickName);
-        System.out.println("Gscore = " + score);
-        rank = rankingRedis.opsForZSet().reverseRank("countryGrammar", nickName);
-        return rank;
-    }
-
     public void setCountryDictionaryPoint(String nickName, int point){
         rankingRedis.opsForZSet().incrementScore("countryDictionary", nickName, point);
     }
@@ -129,33 +117,33 @@ public class RedisService {
     }
 
     public double getCountryDictionaryPoint(String nickName){
-        double score = rankingRedis.opsForZSet().score("countryDictionary", nickName);
-        return score;
+        Double score = rankingRedis.opsForZSet().score("countryDictionary", nickName);
+        return score != null ? score : 0;
     }
 
     public long getCountryDictionaryMyRank(String nickName){
-        long rank = rankingRedis.opsForZSet().reverseRank("countryDictionary", nickName);
-        return rank;
+        Long rank = rankingRedis.opsForZSet().reverseRank("countryDictionary", nickName);
+        return rank != null ? rank : -1;
     }
 
     public double getSchoolMyDictionaryPoint(String nickName, String school){
-        double score = rankingRedis.opsForZSet().score("countryDictionary:" + school, nickName);
-        return score;
+        Double score = rankingRedis.opsForZSet().score("countryDictionary:" + school, nickName);
+        return score != null ? score : 0;
     }
 
     public long getSchoolMyDictionaryMyRank(String nickName, String school){
-        long rank = rankingRedis.opsForZSet().reverseRank("countryDictionary:" + school, nickName);
-        return rank;
+        Long rank = rankingRedis.opsForZSet().reverseRank("countryDictionary:" + school, nickName);
+        return rank != null ? rank : -1;
     }
 
     public double getSchoolDictionaryPoint(String school){
-        double score = rankingRedis.opsForZSet().score("schoolDictionary", school);
-        return score;
+        Double score = rankingRedis.opsForZSet().score("schoolDictionary", school);
+        return score != null ? score : 0;
     }
 
     public long getSchoolDictionaryMyRank(String school){
-        long rank = rankingRedis.opsForZSet().reverseRank("schoolDictionary", school);
-        return rank;
+        Long rank = rankingRedis.opsForZSet().reverseRank("schoolDictionary", school);
+        return rank != null ? rank : -1;
     }
 
     public List<DictionaryMyRankQueryDTO> getCountryDictionaryRank(){
