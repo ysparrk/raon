@@ -65,28 +65,68 @@ public class RedisService {
         return rank;
     }
 
-    public void setCountryDictionaryPoint(Long id, int point){
-        rankingRedis.opsForZSet().incrementScore("countryDictionary", String.valueOf(id), point);
+    public void setCountryDictionaryPoint(String nickName, int point){
+        rankingRedis.opsForZSet().incrementScore("countryDictionary", nickName, point);
     }
 
-    public double getCountryDictionaryPoint(Long id){
-        double score = rankingRedis.opsForZSet().score("countryDictionary",String.valueOf(id));
+    public void setSchoolDictionaryPoint(String nickName, String school, int point){
+        rankingRedis.opsForZSet().incrementScore("countryDictionary:" + school, nickName, point);
+    }
+
+    public void setMySchoolDictionaryPoint(String school, int point){
+        rankingRedis.opsForZSet().incrementScore("schoolDictionary", school, point);
+    }
+
+    public double getCountryDictionaryPoint(String nickName){
+        double score = rankingRedis.opsForZSet().score("countryDictionary", nickName);
         return score;
     }
 
-    public long getCountryDictionaryMyRank(Long id){
-        long rank = rankingRedis.opsForZSet().reverseRank("countryDictionary", String.valueOf(id));
+    public long getCountryDictionaryMyRank(String nickName){
+        long rank = rankingRedis.opsForZSet().reverseRank("countryDictionary", nickName);
         return rank;
     }
 
-    public List<DictionaryMyRankQueryDTO> getCountryDictionaryRank(long myRank){
+    public double getSchoolMyDictionaryPoint(String nickName, String school){
+        double score = rankingRedis.opsForZSet().score("countryDictionary:" + school, nickName);
+        return score;
+    }
+
+    public long getSchoolMyDictionaryMyRank(String nickName, String school){
+        long rank = rankingRedis.opsForZSet().reverseRank("countryDictionary:" + school, nickName);
+        return rank;
+    }
+
+    public double getSchoolDictionaryPoint(String school){
+        double score = rankingRedis.opsForZSet().score("schoolDictionary", school);
+        return score;
+    }
+
+    public long getSchoolDictionaryMyRank(String school){
+        long rank = rankingRedis.opsForZSet().reverseRank("schoolDictionary", school);
+        return rank;
+    }
+
+    public List<DictionaryMyRankQueryDTO> getCountryDictionaryRank(){
         ZSetOperations<String, String> stringStringZSetOperations = rankingRedis.opsForZSet();
         Set<ZSetOperations.TypedTuple<String>> typedTuples;
-        if(myRank==0 || myRank==1){
-            typedTuples = stringStringZSetOperations.reverseRangeWithScores("countryDictionary", 0, 2);
-        }else{
-            typedTuples = stringStringZSetOperations.reverseRangeWithScores("countryDictionary", myRank-2, myRank);
-        }
+        typedTuples = stringStringZSetOperations.reverseRangeWithScores("countryDictionary", 0, -1);
+        List<DictionaryMyRankQueryDTO> collect = typedTuples.stream().map(DictionaryMyRankQueryDTO::convertToDictionaryMyRankQueryDTO).collect(Collectors.toList());
+        return collect;
+    }
+
+    public List<DictionaryMyRankQueryDTO> getSchoolMyDictionaryRank(String school){
+        ZSetOperations<String, String> stringStringZSetOperations = rankingRedis.opsForZSet();
+        Set<ZSetOperations.TypedTuple<String>> typedTuples;
+        typedTuples = stringStringZSetOperations.reverseRangeWithScores("countryDictionary:" + school, 0, -1);
+        List<DictionaryMyRankQueryDTO> collect = typedTuples.stream().map(DictionaryMyRankQueryDTO::convertToDictionaryMyRankQueryDTO).collect(Collectors.toList());
+        return collect;
+    }
+
+    public List<DictionaryMyRankQueryDTO> getSchoolDictionaryRank(String school){
+        ZSetOperations<String, String> stringStringZSetOperations = rankingRedis.opsForZSet();
+        Set<ZSetOperations.TypedTuple<String>> typedTuples;
+        typedTuples = stringStringZSetOperations.reverseRangeWithScores("schoolDictionary", 0, -1);
         List<DictionaryMyRankQueryDTO> collect = typedTuples.stream().map(DictionaryMyRankQueryDTO::convertToDictionaryMyRankQueryDTO).collect(Collectors.toList());
         return collect;
     }
