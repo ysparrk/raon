@@ -131,6 +131,13 @@ public class RedisService {
         return collect;
     }
 
+    public void changeMemberInfo(String oldNickName,String oldSchool, String newNickName, String newSchool){
+        rankingRedis.opsForZSet().incrementScore("countryDictionary", newNickName, getCountryDictionaryPoint(oldNickName));
+        rankingRedis.opsForZSet().incrementScore("countryDictionary:" + newSchool, newNickName, getSchoolMyDictionaryPoint(oldNickName,oldSchool));
+        rankingRedis.opsForZSet().remove("countryDictionary",oldNickName);
+        rankingRedis.opsForZSet().remove("countryDictionary:"+oldSchool,oldNickName);
+    }
+
 
 
 }
