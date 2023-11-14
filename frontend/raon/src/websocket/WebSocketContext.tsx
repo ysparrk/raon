@@ -149,12 +149,26 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({
             break;
           case 'LEAVE':
             console.log(body);
+            setRoomStatus((prev) => ({
+              ...prev,
+              users: body.lefts,
+            }));
             if (body.nextOwner === nickname) {
               setRoomStatus((prev) => ({
                 ...prev,
                 manager: true,
               }));
+              alert('방장이 되었습니다');
             }
+            break;
+          case 'FINAL_RESULT':
+            console.log(body);
+            setRoomStatus((prev) => ({
+              ...prev,
+              userResult: body.users,
+              isFinish: true,
+            }));
+            setGameStart(false);
             break;
           default:
             console.log(body);
