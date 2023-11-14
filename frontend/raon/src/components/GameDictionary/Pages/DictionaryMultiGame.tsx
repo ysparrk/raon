@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Client } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
@@ -17,6 +17,18 @@ const ContentDiv = styled.div`
   justify-content: center;
   align-items: center;
 `;
+
+const ReadyDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-family: 'CookieRun';
+  font-weight: 900;
+  color: white;
+  height: 70vh;
+  font-size: 5.125rem;
+`;
 const CountDiv = styled.div`
   position: fixed;
   display: flex;
@@ -30,6 +42,13 @@ const CountDiv = styled.div`
 const DictionaryWaitingRoom = () => {
   const Quiz = useRecoilValue(multiDictState);
   const Room = useRecoilValue(roomManageState);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (Room.isFinish) {
+      navigate('/game/dictionary-multi-result');
+    }
+  }, [Room.isFinish]);
   if (Room.breakTime) {
     return (
       <div>
@@ -84,7 +103,9 @@ const DictionaryWaitingRoom = () => {
   return (
     <div>
       <TitleBox>국어사전 놀이</TitleBox>
-      <ContentDiv>게임시작중</ContentDiv>
+      <ContentDiv>
+        <ReadyDiv>곧 게임이 시작됩니다!</ReadyDiv>
+      </ContentDiv>
     </div>
   );
 };
