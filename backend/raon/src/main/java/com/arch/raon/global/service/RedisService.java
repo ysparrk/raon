@@ -225,7 +225,10 @@ public class RedisService {
         rankingRedis.opsForZSet().incrementScore("countryDictionary:" + newSchool, newNickName, getSchoolMyDictionaryPoint(oldNickName,oldSchool));
         rankingRedis.opsForZSet().remove("countryDictionary",oldNickName);
         rankingRedis.opsForZSet().remove("countryDictionary:"+oldSchool,oldNickName);
+        rankingRedis.opsForZSet().incrementScore("countryMyGrammar", newNickName, getCountryMyGrammarPoint(oldNickName));
+        rankingRedis.opsForZSet().incrementScore("schoolMyGrammar:" + newSchool, newNickName, getSchoolMyGrammarPoint(oldNickName, oldSchool));
+        rankingRedis.opsForZSet().remove("countryMyGrammar", oldNickName);
+        rankingRedis.opsForZSet().remove("schoolMyGrammar:" + oldSchool, oldNickName);
     }
-
 
 }
