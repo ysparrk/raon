@@ -21,10 +21,10 @@ public class GrammarSchoolMyRankRedisDTO {
         this.score = score;
     }
 
-    public static GrammarSchoolMyRankRedisDTO convertToGrammarSchoolMyRankRedisDTO(ZSetOperations.TypedTuple<String> typedTuple, int rank){
-        String[] values = typedTuple.getValue().split(":");
-        String nickname = values[1];
-        int score = typedTuple.getScore().intValue();
-        return new GrammarSchoolMyRankRedisDTO(nickname, rank, score);
-    }
+//    public static GrammarSchoolMyRankRedisDTO convertToGrammarSchoolMyRankRedisDTO(ZSetOperations.TypedTuple<String> typedTuple, int rank){
+//        String[] values = typedTuple.getValue().split(":");
+//        String nickname = values[1];
+//        int score = typedTuple.getScore().intValue();
+//        return new GrammarSchoolMyRankRedisDTO(nickname, rank, score);
+//    }
 }

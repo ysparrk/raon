@@ -1,8 +1,10 @@
 package com.arch.raon.domain.grammar.service;
 
-import com.arch.raon.domain.grammar.dto.query.GrammarMyRankRedisDTO;
+import com.arch.raon.domain.grammar.dto.query.GrammarMyRankQueryDTO;
+import com.arch.raon.domain.grammar.dto.redis.GrammarMyRankRedisDTO;
 import com.arch.raon.domain.grammar.dto.request.GrammarResultDTO;
 import com.arch.raon.domain.grammar.dto.request.GrammarResultSaveReqDTO;
+import com.arch.raon.domain.grammar.dto.response.GrammarMyRankListResDTO;
 import com.arch.raon.domain.grammar.dto.response.GrammarMyRankingResDTO;
 import com.arch.raon.domain.grammar.dto.response.GrammarQuizResDTO;
 import com.arch.raon.domain.grammar.entity.GrammarQuiz;
@@ -82,8 +84,8 @@ public class GrammarServiceImpl implements GrammarService {
 			}
 		}
 
-		redisService.setCountryMyGrammarPoint(member.getId(), member.getNickname(), score);
-		redisService.setSchoolMyGrammarPoint(member.getId(), member.getNickname(), member.getSchool(), score);
+		redisService.setCountryMyGrammarPoint(member.getNickname(), score);
+		redisService.setSchoolMyGrammarPoint(member.getNickname(), member.getSchool(), score);
 		redisService.setSchoolGrammarPoint(member.getSchool(), score);
 	}
 
@@ -104,15 +106,15 @@ public class GrammarServiceImpl implements GrammarService {
 
 
 	@Override
-	public List<GrammarMyRankRedisDTO> getMiddlePlaceRankResult(int myIdx, List<GrammarMyRankRedisDTO> allRanks) {
+	public List<GrammarMyRankQueryDTO> getMiddlePlaceRankResult(int myIdx, List<GrammarMyRankQueryDTO> allRanks) {
 
-		List<GrammarMyRankRedisDTO> selectedRankResults = new ArrayList<>();
+		List<GrammarMyRankQueryDTO> selectedRankResults = new ArrayList<>();
 
 		// TOP3
 		for (int i = 0; i < 3; i++) {
 			if (i < allRanks.size()) {
-				GrammarMyRankRedisDTO baseDTO = allRanks.get(i);
-				selectedRankResults.add(new GrammarMyRankRedisDTO(i+1, baseDTO.getNickname(), baseDTO.getScore()));
+				GrammarMyRankQueryDTO baseDTO = allRanks.get(i);
+				selectedRankResults.add(new GrammarMyRankQueryDTO(i+1, baseDTO.getNickname(), baseDTO.getScore()));
 			}
 
 		}
@@ -120,8 +122,8 @@ public class GrammarServiceImpl implements GrammarService {
 		// member의 바로 위 한명, member, member의 바로 아래 한명
 		for (int i = myIdx - 1; i <= myIdx + 1; i++) {
 			if (i >= 0 && i < allRanks.size()) {
-				GrammarMyRankRedisDTO baseDTO = allRanks.get(i);
-				selectedRankResults.add(new GrammarMyRankRedisDTO(i+1, baseDTO.getNickname(), baseDTO.getScore()));
+				GrammarMyRankQueryDTO baseDTO = allRanks.get(i);
+				selectedRankResults.add(new GrammarMyRankQueryDTO(i+1, baseDTO.getNickname(), baseDTO.getScore()));
 			}
 		}
 
@@ -129,15 +131,15 @@ public class GrammarServiceImpl implements GrammarService {
 	}
 
 	@Override
-	public List<GrammarMyRankRedisDTO> getTopPlaceRankResult(List<GrammarMyRankRedisDTO> allRanks) {
+	public List<GrammarMyRankQueryDTO> getTopPlaceRankResult(List<GrammarMyRankQueryDTO> allRanks) {
 
-		List<GrammarMyRankRedisDTO> selectedRankResults = new ArrayList<>();
+		List<GrammarMyRankQueryDTO> selectedRankResults = new ArrayList<>();
 
 		// TOP6
 		for (int i = 0; i < 6; i++) {
 			if (i < allRanks.size()) {
-				GrammarMyRankRedisDTO baseDTO = allRanks.get(i);
-				selectedRankResults.add(new GrammarMyRankRedisDTO(i+1, baseDTO.getNickname(), baseDTO.getScore()));
+				GrammarMyRankQueryDTO baseDTO = allRanks.get(i);
+				selectedRankResults.add(new GrammarMyRankQueryDTO(i+1, baseDTO.getNickname(), baseDTO.getScore()));
 			}
 
 		}
@@ -146,15 +148,15 @@ public class GrammarServiceImpl implements GrammarService {
 	}
 
 	@Override
-	public List<GrammarMyRankRedisDTO> getLastPlaceRankResult(List<GrammarMyRankRedisDTO> allByCountry) {
+	public List<GrammarMyRankQueryDTO> getLastPlaceRankResult(List<GrammarMyRankQueryDTO> allByCountry) {
 
-		List<GrammarMyRankRedisDTO> selectedRankResults = new ArrayList<>();
+		List<GrammarMyRankQueryDTO> selectedRankResults = new ArrayList<>();
 
 		// TOP3
 		for (int i = 0; i < 3; i++) {
 			if (i < allByCountry.size()) {
-				GrammarMyRankRedisDTO baseDTO = allByCountry.get(i);
-				selectedRankResults.add(new GrammarMyRankRedisDTO(i+1, baseDTO.getNickname(), baseDTO.getScore()));
+				GrammarMyRankQueryDTO baseDTO = allByCountry.get(i);
+				selectedRankResults.add(new GrammarMyRankQueryDTO(i+1, baseDTO.getNickname(), baseDTO.getScore()));
 			}
 
 		}
@@ -162,8 +164,8 @@ public class GrammarServiceImpl implements GrammarService {
 		// Last Top3
 		for (int i = allByCountry.size()-3; i < allByCountry.size(); i++) {
 			if (i < allByCountry.size()) {
-				GrammarMyRankRedisDTO baseDTO = allByCountry.get(i);
-				selectedRankResults.add(new GrammarMyRankRedisDTO(i+1, baseDTO.getNickname(), baseDTO.getScore()));
+				GrammarMyRankQueryDTO baseDTO = allByCountry.get(i);
+				selectedRankResults.add(new GrammarMyRankQueryDTO(i+1, baseDTO.getNickname(), baseDTO.getScore()));
 			}
 
 		}
@@ -179,7 +181,7 @@ public class GrammarServiceImpl implements GrammarService {
 	 * @return
 	 */
 	@Override
-	public GrammarMyRankingResDTO getMyRankByGrammarRanking(Long memberId, List<GrammarMyRankRedisDTO> rankList) {
+	public GrammarMyRankingResDTO getMyRankByGrammarRanking(Long memberId, List<GrammarMyRankQueryDTO> rankList) {
 
 		/**
 		 * 랭킹 조회
@@ -204,7 +206,7 @@ public class GrammarServiceImpl implements GrammarService {
 
 		if (myIdx < 5) {
 			// TOP_PLACE
-			List<GrammarMyRankRedisDTO> topPlaceRankResult = getTopPlaceRankResult(rankList);
+			List<GrammarMyRankQueryDTO> topPlaceRankResult = getTopPlaceRankResult(rankList);
 
 			GrammarMyRankingResDTO grammarMyRankingResDTO = GrammarMyRankingResDTO.builder()
 					.myRank(myIdx+1)
@@ -217,7 +219,7 @@ public class GrammarServiceImpl implements GrammarService {
 
 		} else if (myIdx == rankList.size() - 1) {
 			// LAST_PLACE
-			List<GrammarMyRankRedisDTO> lastPlaceRankResult = getLastPlaceRankResult(rankList);
+			List<GrammarMyRankQueryDTO> lastPlaceRankResult = getLastPlaceRankResult(rankList);
 
 			GrammarMyRankingResDTO grammarMyRankingResDTO = GrammarMyRankingResDTO.builder()
 					.myRank(myIdx+1)
@@ -230,7 +232,7 @@ public class GrammarServiceImpl implements GrammarService {
 
 		} else {
 			// MIDDLE_PLACE
-			List<GrammarMyRankRedisDTO> middlePlaceRankResult = getMiddlePlaceRankResult(myIdx, rankList);
+			List<GrammarMyRankQueryDTO> middlePlaceRankResult = getMiddlePlaceRankResult(myIdx, rankList);
 
 			GrammarMyRankingResDTO grammarMyRankingResDTO = GrammarMyRankingResDTO.builder()
 					.myRank(myIdx+1)
@@ -257,14 +259,14 @@ public class GrammarServiceImpl implements GrammarService {
 		// TODO: 순위 리스트 조회 시 리스트의 크기가 6 미만일 경우 예외처리
 		if (grammarRanking.equals(GrammarRanking.GRAMMAR_COUNTRY_MY)) {
 
-			List<GrammarMyRankRedisDTO> allByCountry = grammarScoreRepository.findAllByCountry();
+			List<GrammarMyRankQueryDTO> allByCountry = grammarScoreRepository.findAllByCountry();
 
 			GrammarMyRankingResDTO myRank = getMyRankByGrammarRanking(memberId, allByCountry);
 
 			return myRank;
 
 		} else if (grammarRanking.equals(GrammarRanking.GRAMMAR_SCHOOL_MY)) {
-			List<GrammarMyRankRedisDTO> allBySchool = grammarScoreRepository.findAllBySchool(member);
+			List<GrammarMyRankQueryDTO> allBySchool = grammarScoreRepository.findAllBySchool(member);
 			GrammarMyRankingResDTO myRank = getMyRankByGrammarRanking(memberId, allBySchool);
 
 			return myRank;
@@ -277,8 +279,49 @@ public class GrammarServiceImpl implements GrammarService {
 	}
 
 	@Override
-	public GrammarMyRankingResDTO getRank(Long memberId, GrammarRanking grammarRanking) {
-		return null;
+	public GrammarMyRankListResDTO getCountryMyGrammarRankList(Long memberId) {
+		Member member = memberRepository.findById(memberId).orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND) {
+			@Override
+			public ErrorCode getErrorCode() {
+				return super.getErrorCode();
+			}
+		});
+
+		List<GrammarMyRankRedisDTO> rankRedisList = redisService.getCountryMyGrammarRankList();
+		Long myRank = redisService.getCountryMyGrammarRank(member.getNickname());
+		double myScore = redisService.getCountryMyGrammarPoint(member.getNickname());
+
+		GrammarMyRankListResDTO rankList = GrammarMyRankListResDTO.builder()
+				.myRank(myRank)
+				.myScore(myScore)
+				.rankList(rankRedisList)
+				.build();
+
+		return rankList;
 	}
+
+	@Override
+	public GrammarMyRankListResDTO getSchoolMyGrammarRankList(Long memberId) {
+		Member member = memberRepository.findById(memberId).orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND) {
+			@Override
+			public ErrorCode getErrorCode() {
+				return super.getErrorCode();
+			}
+		});
+
+		List<GrammarMyRankRedisDTO> rankRedisList = redisService.getSchoolMyGrammarRankList(member.getSchool());
+		Long myRank = redisService.getSchoolMyGrammarRank(member.getNickname(), member.getSchool());
+		double myScore = redisService.getSchoolMyGrammarPoint(member.getNickname(), member.getSchool());
+
+		GrammarMyRankListResDTO rankList = GrammarMyRankListResDTO.builder()
+				.myRank(myRank)
+				.myScore(myScore)
+				.rankList(rankRedisList)
+				.build();
+
+
+		return rankList;
+	}
+
 
 }
