@@ -26,4 +26,6 @@ public interface DictionarySocketService {
 	SocketStageResultResDTO getStageResultOf(String roomId);
 
     void saveScore(String roomId);
+
+	List<String> getUserNickNames(String roomId);
 }
