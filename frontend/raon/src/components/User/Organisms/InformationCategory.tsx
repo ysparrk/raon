@@ -140,14 +140,23 @@ const SchoolListDiv = styled.div`
 
 const SchoolElemDiv = styled.div`
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   text-align: center;
-  width: 100%;
+  width: 60%;
   font-family: 'NanumBarunGothic';
   color: black;
 `;
 
+const SchoolRegionSpan = styled.span`
+  color: gray;
+  font-size: 1.125rem;
+`;
+
 const Selection = styled.div`
+  display: flex;
+  justify-content: space-between;
+  text-align: center;
+  width: 100%;
   background-color: #eaea70;
 `;
 
@@ -273,9 +282,19 @@ const InformationCategory = () => {
                       }}
                     >
                       {school === schoolElem.schoolName ? (
-                        <Selection>{schoolElem.schoolName}</Selection>
+                        <Selection>
+                          {schoolElem.schoolName}
+                          <SchoolRegionSpan>
+                            {schoolElem.location}
+                          </SchoolRegionSpan>
+                        </Selection>
                       ) : (
-                        schoolElem.schoolName
+                        <>
+                          {schoolElem.schoolName}
+                          <SchoolRegionSpan>
+                            {schoolElem.location}
+                          </SchoolRegionSpan>
+                        </>
                       )}
                     </SchoolElemDiv>
                   ))}
