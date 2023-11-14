@@ -84,9 +84,9 @@ public class GrammarServiceImpl implements GrammarService {
 			}
 		}
 
-		redisService.setCountryMyGrammarPoint(member.getNickname(), score);
-		redisService.setSchoolMyGrammarPoint(member.getNickname(), member.getSchool(), score);
-		redisService.setSchoolGrammarPoint(member.getSchool(), score);
+		redisService.setCountryMyGrammarPoint(member.getNickname(), score * 10);
+		redisService.setSchoolMyGrammarPoint(member.getNickname(), member.getSchool(), score * 10);
+		redisService.setSchoolGrammarPoint(member.getSchool(), score * 10);
 	}
 
 	@Transactional
@@ -292,8 +292,8 @@ public class GrammarServiceImpl implements GrammarService {
 		double myScore = redisService.getCountryMyGrammarPoint(member.getNickname());
 
 		GrammarMyRankListResDTO rankList = GrammarMyRankListResDTO.builder()
-				.myRank(myRank)
-				.myScore(myScore)
+				.myRank(myRank+1)
+				.myScore((int) myScore)
 				.rankList(rankRedisList)
 				.build();
 
@@ -314,8 +314,8 @@ public class GrammarServiceImpl implements GrammarService {
 		double myScore = redisService.getSchoolMyGrammarPoint(member.getNickname(), member.getSchool());
 
 		GrammarMyRankListResDTO rankList = GrammarMyRankListResDTO.builder()
-				.myRank(myRank)
-				.myScore(myScore)
+				.myRank(myRank+1)
+				.myScore((int) myScore)
 				.rankList(rankRedisList)
 				.build();
 
@@ -337,8 +337,8 @@ public class GrammarServiceImpl implements GrammarService {
 		double mySchoolScore = redisService.getSchoolGrammarPoint(member.getSchool());
 
 		GrammarMyRankListResDTO rankList = GrammarMyRankListResDTO.builder()
-				.myRank(mySchoolRank)
-				.myScore(mySchoolScore)
+				.myRank(mySchoolRank+1)
+				.myScore((int) mySchoolScore)
 				.rankList(schoolGrammarRankList)
 				.build();
 

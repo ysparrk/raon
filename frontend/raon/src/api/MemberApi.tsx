@@ -39,4 +39,21 @@ const postDuplicateCheck = async (nickname: string): Promise<AxiosResponse> => {
   }
 };
 
-export { getMemberActive, postMemberSignup, postDuplicateCheck };
+const postSchoolsList = async (keyword: string): Promise<AxiosResponse> => {
+  try {
+    const response = await api.post(`api/members/check-school`, {
+      keyword,
+    });
+    return response.data;
+  } catch (error) {
+    console.log('학교조회 실패', error);
+    throw error;
+  }
+};
+
+export {
+  getMemberActive,
+  postMemberSignup,
+  postDuplicateCheck,
+  postSchoolsList,
+};
