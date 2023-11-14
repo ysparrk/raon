@@ -84,9 +84,9 @@ public class GrammarServiceImpl implements GrammarService {
 			}
 		}
 
-		redisService.setCountryMyGrammarPoint(member.getNickname(), score);
-		redisService.setSchoolMyGrammarPoint(member.getNickname(), member.getSchool(), score);
-		redisService.setSchoolGrammarPoint(member.getSchool(), score);
+		redisService.setCountryMyGrammarPoint(member.getNickname(), score * 10);
+		redisService.setSchoolMyGrammarPoint(member.getNickname(), member.getSchool(), score * 10);
+		redisService.setSchoolGrammarPoint(member.getSchool(), score * 10);
 	}
 
 	@Transactional
