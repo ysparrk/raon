@@ -73,6 +73,12 @@ public class MemberServiceImpl implements MemberService{
     }
     @Override
     public boolean checkNickname(String nickname){
+        for(int i=1; i<=10; i++){
+            String str = "테스트" + i;
+            if(nickname.equals(str)){
+                return false;
+            }
+        }
         Optional<Member> byNickname = memberRepository.findByNickname(nickname);
         if(byNickname.isPresent()){
             return false;
