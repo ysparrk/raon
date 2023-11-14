@@ -292,7 +292,7 @@ public class GrammarServiceImpl implements GrammarService {
 		double myScore = redisService.getCountryMyGrammarPoint(member.getNickname());
 
 		GrammarMyRankListResDTO rankList = GrammarMyRankListResDTO.builder()
-				.myRank(myRank)
+				.myRank(myRank+1)
 				.myScore((int) myScore)
 				.rankList(rankRedisList)
 				.build();
@@ -314,7 +314,7 @@ public class GrammarServiceImpl implements GrammarService {
 		double myScore = redisService.getSchoolMyGrammarPoint(member.getNickname(), member.getSchool());
 
 		GrammarMyRankListResDTO rankList = GrammarMyRankListResDTO.builder()
-				.myRank(myRank)
+				.myRank(myRank+1)
 				.myScore((int) myScore)
 				.rankList(rankRedisList)
 				.build();
@@ -337,7 +337,7 @@ public class GrammarServiceImpl implements GrammarService {
 		double mySchoolScore = redisService.getSchoolGrammarPoint(member.getSchool());
 
 		GrammarMyRankListResDTO rankList = GrammarMyRankListResDTO.builder()
-				.myRank(mySchoolRank)
+				.myRank(mySchoolRank+1)
 				.myScore((int) mySchoolScore)
 				.rankList(schoolGrammarRankList)
 				.build();
