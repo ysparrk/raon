@@ -56,7 +56,6 @@ public class RedisService {
 
      */
 
-    // TODO: 닉네임, 학교명 변경에 따른 점수 변경 고려하기
     public void setCountryMyGrammarPoint(String nickname, int point){
         rankingRedis.opsForZSet().incrementScore("countryMyGrammar", nickname, point);
     }
