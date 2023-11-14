@@ -4,6 +4,7 @@ import com.arch.raon.domain.grammar.dto.request.GrammarResultSaveReqDTO;
 import com.arch.raon.domain.grammar.dto.response.GrammarMyRankListResDTO;
 import com.arch.raon.domain.grammar.dto.response.GrammarMyRankingResDTO;
 import com.arch.raon.domain.grammar.dto.response.GrammarQuizResDTO;
+import com.arch.raon.domain.grammar.dto.response.GrammarSchoolRankListResDTO;
 import com.arch.raon.domain.grammar.service.GrammarService;
 import com.arch.raon.global.auth.dto.UserAuthentication;
 import com.arch.raon.global.dto.ResponseDTO;
@@ -98,6 +99,19 @@ public class GrammarController {
 				.body(ResponseDTO.builder()
 						.message("맞춤법 퀴즈 교내 랭킹 리스트")
 						.data(schoolMyGrammarRankList)
+						.build());
+	}
+
+	@GetMapping("/ranking/school")
+	public ResponseEntity<ResponseDTO> getSchoolRankList(
+			@AuthenticationPrincipal UserAuthentication userAuth
+	) {
+		GrammarSchoolRankListResDTO schoolGrammarRankList = grammarService.getSchoolGrammarRankList(userAuth.getId());
+
+		return ResponseEntity.status(HttpStatus.OK)
+				.body(ResponseDTO.builder()
+						.message("맞춤법 퀴즈 학교별 랭킹 리스트")
+						.data(schoolGrammarRankList)
 						.build());
 	}
 }

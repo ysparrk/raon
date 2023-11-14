@@ -5,6 +5,7 @@ import com.arch.raon.domain.grammar.dto.request.GrammarResultSaveReqDTO;
 import com.arch.raon.domain.grammar.dto.response.GrammarMyRankListResDTO;
 import com.arch.raon.domain.grammar.dto.response.GrammarMyRankingResDTO;
 import com.arch.raon.domain.grammar.dto.response.GrammarQuizResDTO;
+import com.arch.raon.domain.grammar.dto.response.GrammarSchoolRankListResDTO;
 import com.arch.raon.global.util.enums.GrammarRanking;
 
 import java.util.List;
@@ -21,8 +22,9 @@ public interface GrammarService {
 	GrammarMyRankingResDTO getMyRankByGrammarRanking(Long memberId, List<GrammarMyRankQueryDTO> rankList);
 	GrammarMyRankingResDTO getMyRank(Long memberId, GrammarRanking grammarRanking);
 
-	// 레디스 적용
+	// Redis 적용
 	GrammarMyRankListResDTO getCountryMyGrammarRankList(Long memberId);
 	GrammarMyRankListResDTO getSchoolMyGrammarRankList(Long memberId);
+	GrammarSchoolRankListResDTO getSchoolGrammarRankList(Long memberId);
 
 }

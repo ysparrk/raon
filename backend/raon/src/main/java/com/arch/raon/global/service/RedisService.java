@@ -95,6 +95,16 @@ public class RedisService {
         return score != null ? score : 0;
     }
 
+    public Long getSchoolGrammarRank(String school) {
+        Long rank = rankingRedis.opsForZSet().reverseRank("schoolGrammar", school);
+        return rank != null ? rank : -1;
+    }
+
+    public double getSchoolGrammarPoint(String school) {
+        Double score = rankingRedis.opsForZSet().score("schoolGrammar", school);
+        return score != null ? score : 0;
+    }
+
     public void setCountryGrammarPoint(String nickName, int point){
         rankingRedis.opsForZSet().incrementScore("countryGrammar",nickName, point);
     }
