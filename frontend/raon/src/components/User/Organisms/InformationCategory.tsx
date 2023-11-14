@@ -173,12 +173,23 @@ const InformationCategory = () => {
       });
       return;
     }
+    const convertGender = (koreanGender: string): string => {
+      const genderMapping: Record<string, string> = {
+        남자: 'MALE',
+        여자: 'FEMALE',
+      };
+
+      return genderMapping[koreanGender] || koreanGender;
+    };
+
     const memberData = {
       nickname,
       school,
       yearOfBirth: Number(birthday),
-      gender,
+      gender: convertGender(gender),
     };
+
+    console.log(memberData);
     try {
       const response = await postMemberSignup(memberData);
       console.log('회원가입 성공:', response);
