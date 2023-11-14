@@ -1,15 +1,15 @@
 package com.arch.raon.domain.dictionary.service;
 
 import com.arch.raon.domain.dictionary.dto.query.DictionaryMyRankQueryDTO;
-import com.arch.raon.domain.dictionary.dto.query.DictionaryRankQueryDTO;
 import com.arch.raon.domain.dictionary.dto.request.DictionaryScoreReqDTO;
 import com.arch.raon.domain.dictionary.dto.response.DictionaryMyRankResDTO;
 import com.arch.raon.domain.dictionary.dto.response.DictionaryQuizResDTO;
+import com.arch.raon.domain.dictionary.dto.response.DictionarySchoolMyRankResDTO;
+import com.arch.raon.domain.dictionary.dto.response.DictionarySchoolRankResDTO;
 import com.arch.raon.domain.dictionary.entity.DictionaryDirectionQuiz;
 import com.arch.raon.domain.dictionary.entity.DictionaryInitialQuiz;
 import com.arch.raon.domain.dictionary.repository.DictionaryDirectionQuizRepository;
 import com.arch.raon.domain.dictionary.repository.DictionaryInitialQuizRepository;
-import com.arch.raon.domain.dictionary.repository.DictionaryScoreRepository;
 import com.arch.raon.domain.member.entity.Member;
 import com.arch.raon.domain.member.repository.MemberRepository;
 import com.arch.raon.global.exception.CustomException;
@@ -56,7 +56,9 @@ public class DictionaryServiceImpl implements DictionaryService {
             }
         });
 
-        redisService.setCountryDictionaryPoint(memberId,dictionaryScoreReqDTO.getScore());
+        redisService.setCountryDictionaryPoint(member.getNickname(),dictionaryScoreReqDTO.getScore());
+        redisService.setSchoolDictionaryPoint(member.getNickname(),member.getSchool(),dictionaryScoreReqDTO.getScore());
+        redisService.setMySchoolDictionaryPoint(member.getSchool(),dictionaryScoreReqDTO.getScore());
     }
 
     @Override
@@ -70,40 +72,71 @@ public class DictionaryServiceImpl implements DictionaryService {
                 }
             };
         }
-        double myScore = redisService.getCountryDictionaryPoint(memberId);
-        long myRank = redisService.getCountryDictionaryMyRank(memberId);
+        double myScore = redisService.getCountryDictionaryPoint(member.getNickname());
+        long myRank = redisService.getCountryDictionaryMyRank(member.getNickname());
         myRank++;
 
-        List<DictionaryMyRankQueryDTO> myRankIdList = redisService.getCountryDictionaryRank(myRank);
-        List<DictionaryMyRankQueryDTO> topRankIdList = redisService.getCountryDictionaryRank(0);
-
-        List<DictionaryRankQueryDTO> myRankList = new ArrayList<>();
-        List<DictionaryRankQueryDTO> topRankList = new ArrayList<>();
-
-        for(DictionaryMyRankQueryDTO d : myRankIdList){
-            member = memberRepository.findById(d.getId()).get();
-            if(member==null){
-                continue;
-            }
-            myRankList.add(new DictionaryRankQueryDTO(member.getNickname(),d.getScore()));
-        }
-
-        for(DictionaryMyRankQueryDTO d : topRankIdList){
-            member = memberRepository.findById(d.getId()).get();
-            if(member==null){
-                continue;
-            }
-            topRankList.add(new DictionaryRankQueryDTO(member.getNickname(),d.getScore()));
-        }
+        List<DictionaryMyRankQueryDTO> rankList = redisService.getCountryDictionaryRank();
 
         DictionaryMyRankResDTO dictionaryMyRankResDTO = DictionaryMyRankResDTO.builder()
                 .myRank(myRank)
                 .myScore(myScore)
-                .myRankList(myRankList)
-                .topRankList(topRankList)
+                .rankList(rankList)
                 .build();
 
         return dictionaryMyRankResDTO;
+    }
+
+    @Override
+    public DictionarySchoolMyRankResDTO getSchoolMyRanking(Long memberId){
+        Member member = memberRepository.findById(memberId).get();
+        if(member==null){
+            throw new CustomException(ErrorCode.NO_SUCH_MEMBER) {
+                @Override
+                public ErrorCode getErrorCode() {
+                    return super.getErrorCode();
+                }
+            };
+        }
+        double myScore = redisService.getSchoolMyDictionaryPoint(member.getNickname(),member.getSchool());
+        long myRank = redisService.getSchoolMyDictionaryMyRank(member.getNickname(), member.getSchool());
+        myRank++;
+
+        List<DictionaryMyRankQueryDTO> rankList = redisService.getSchoolMyDictionaryRank(member.getSchool());
+
+        DictionarySchoolMyRankResDTO dictionaryMyRankResDTO = DictionarySchoolMyRankResDTO.builder()
+                .myRank(myRank)
+                .myScore(myScore)
+                .rankList(rankList)
+                .build();
+
+        return dictionaryMyRankResDTO;
+    }
+
+    @Override
+    public DictionarySchoolRankResDTO getSchoolRanking(Long memberId){
+        Member member = memberRepository.findById(memberId).get();
+        if(member==null){
+            throw new CustomException(ErrorCode.NO_SUCH_MEMBER) {
+                @Override
+                public ErrorCode getErrorCode() {
+                    return super.getErrorCode();
+                }
+            };
+        }
+        double myScore = redisService.getSchoolDictionaryPoint(member.getSchool());
+        long myRank = redisService.getSchoolDictionaryMyRank(member.getSchool());
+        myRank++;
+
+        List<DictionaryMyRankQueryDTO> rankList = redisService.getSchoolDictionaryRank(member.getSchool());
+
+        DictionarySchoolRankResDTO dictionarySchoolRankResDTO = DictionarySchoolRankResDTO.builder()
+                .myRank(myRank)
+                .myScore(myScore)
+                .rankList(rankList)
+                .build();
+
+        return dictionarySchoolRankResDTO;
     }
 
 }

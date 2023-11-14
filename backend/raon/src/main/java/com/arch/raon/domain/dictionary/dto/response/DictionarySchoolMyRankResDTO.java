@@ -7,19 +7,19 @@ import lombok.Getter;
 import java.util.List;
 
 @Getter
-public class DictionaryMyRankResDTO {
+public class DictionarySchoolMyRankResDTO {
     private long myRank;
     private int myScore;
     private List<DictionaryMyRankQueryDTO> rankList;
 
 
     @Builder
-    public DictionaryMyRankResDTO(long myRank, double myScore, List<DictionaryMyRankQueryDTO> rankList) {
+    public DictionarySchoolMyRankResDTO(long myRank, double myScore, List<DictionaryMyRankQueryDTO> rankList) {
         this.myRank = myRank;
         this.myScore = (int) myScore;
         this.rankList = rankList;
     }
 
-    public DictionaryMyRankResDTO() {
+    public DictionarySchoolMyRankResDTO() {
     }
 }
