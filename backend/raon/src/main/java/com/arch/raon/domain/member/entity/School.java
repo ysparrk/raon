@@ -20,9 +20,13 @@ public class School {
     @Column(name = "school", length = 256, nullable = false)
     private String schoolName;
 
+    @Column(name = "location", length = 256, nullable = false)
+    private String location;
+
     @Builder
-    public School(Long id, String schoolName) {
+    public School(Long id, String schoolName, String location) {
         this.id = id;
         this.schoolName = schoolName;
+        this.location = location;
     }
 }
