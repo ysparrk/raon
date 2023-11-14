@@ -40,7 +40,7 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({
   }, []);
 
   const initializeWebSocket = () => {
-    const nickname = localStorage.getItem('nickname') ?? '미사용자';
+    let nickname = localStorage.getItem('nickname') ?? '미사용자';
     let roomId = sessionStorage.getItem('roomId') ?? '0000';
     // const socket = new SockJS(`${process.env.REACT_APP_API_URL}api/ws`, null, {
     //   transports: ['websocket', 'xhr-streaming', 'xhr-polling'],
@@ -149,12 +149,26 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({
             break;
           case 'LEAVE':
             console.log(body);
+            setRoomStatus((prev) => ({
+              ...prev,
+              users: body.lefts,
+            }));
             if (body.nextOwner === nickname) {
               setRoomStatus((prev) => ({
                 ...prev,
                 manager: true,
               }));
+              alert('방장이 되었습니다');
             }
+            break;
+          case 'FINAL_RESULT':
+            console.log(body);
+            setRoomStatus((prev) => ({
+              ...prev,
+              userResult: body.users,
+              isFinish: true,
+            }));
+            setGameStart(false);
             break;
           default:
             console.log(body);
@@ -207,6 +221,7 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({
 
     const createRoom = async () => {
       roomId = (await sessionStorage.getItem('roomId')) ?? '0000';
+      nickname = (await localStorage.getItem('nickname')) ?? '미사용자';
       client.activate();
     };
 

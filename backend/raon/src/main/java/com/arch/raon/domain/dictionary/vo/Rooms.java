@@ -1,5 +1,6 @@
 package com.arch.raon.domain.dictionary.vo;
 
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -108,6 +109,10 @@ public class Rooms {
 
 	public static SocketJoinResDTO getUsersOf(String roomId){
 		return new SocketJoinResDTO(roomOf(roomId).getRoomOwner(), roomOf(roomId).getUsers());
+	}
+
+	public static List<String> getUserNickNameOf(String roomId){
+		return roomOf(roomId).getUsers();
 	}
 
 	/**

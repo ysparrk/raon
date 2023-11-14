@@ -1,7 +1,7 @@
 package com.arch.raon.domain.dictionary.controller;
 
 import com.arch.raon.domain.dictionary.dto.request.DictionaryScoreReqDTO;
-import com.arch.raon.domain.dictionary.dto.response.DictionaryMyRankResDTO;
+import com.arch.raon.domain.dictionary.dto.response.DictionaryRankResDTO;
 import com.arch.raon.domain.dictionary.dto.response.DictionaryQuizResDTO;
 import com.arch.raon.domain.dictionary.service.DictionaryService;
 import com.arch.raon.global.auth.dto.UserAuthentication;
@@ -44,17 +44,45 @@ public class DictionaryController {
                         .build());
     }
 
-    @GetMapping("/ranking/DICTIONARY-COUNTRY-MY")
+    @GetMapping("/ranking/country-my")
     public ResponseEntity<ResponseDTO> getMyRanking(
             @AuthenticationPrincipal UserAuthentication userAuth
     ) {
 
-        DictionaryMyRankResDTO dictionaryMyRankResDTO = dictionaryService.getMyRank(userAuth.getId());
+        DictionaryRankResDTO dictionaryMyRankResDTO = dictionaryService.getMyRank(userAuth.getId());
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ResponseDTO.builder()
                         .data(dictionaryMyRankResDTO)
                         .message("내 랭킹 조회 성공")
+                        .build());
+    }
+
+    @GetMapping("/ranking/school-my")
+    public ResponseEntity<ResponseDTO> getSchoolMyRanking(
+            @AuthenticationPrincipal UserAuthentication userAuth
+    ) {
+
+        DictionaryRankResDTO dictionarySchoolMyRankResDTO = dictionaryService.getSchoolMyRanking(userAuth.getId());
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ResponseDTO.builder()
+                        .message("교내 랭킹 조회 성공")
+                        .data(dictionarySchoolMyRankResDTO)
+                        .build());
+    }
+
+    @GetMapping("/ranking/school")
+    public ResponseEntity<ResponseDTO> getSchoolRanking(
+            @AuthenticationPrincipal UserAuthentication userAuth
+    ) {
+
+        DictionaryRankResDTO dictionarySchoolRankResDTO =  dictionaryService.getSchoolRanking(userAuth.getId());
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ResponseDTO.builder()
+                        .message("학교 랭킹 조회 성공")
+                        .data(dictionarySchoolRankResDTO)
                         .build());
     }
 }

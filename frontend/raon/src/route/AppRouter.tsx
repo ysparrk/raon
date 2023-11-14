@@ -28,7 +28,7 @@ import DictionaryInit from '../components/GameDictionary/Pages/DictionaryInit.ts
 import DictionaryWaitingRoom from '../components/GameDictionary/Pages/DictionaryWaitingRoom.tsx';
 import DictionarySingleResult from '../components/GameDictionary/Pages/DictionarySingleResult.tsx';
 import DictionaryMultiGame from '../components/GameDictionary/Pages/DictionaryMultiGame.tsx';
-// import DictionaryResult from '../components/GameDictionary/Pages/DictionaryResult.tsx';
+import DictionaryMultiResult from '../components/GameDictionary/Pages/DictionaryMultiResult.tsx';
 
 // // Ranking
 import Ranking from '../components/Ranking/Pages/Ranking.tsx';
@@ -70,6 +70,10 @@ const AppRouter: React.FC = () => {
         <Route
           path="/game/dictionary-single-result"
           element={<DictionarySingleResult />}
+        />
+        <Route
+          path="/game/dictionary-multi-result"
+          element={<DictionaryMultiResult />}
         />
         <Route path="/ranking" element={<Ranking />} />
       </Routes>

@@ -54,6 +54,7 @@ export const roomManageState = atom({
     users: [],
     breakTime: false,
     userResult: [],
+    isFinish: false,
   },
 });
 export const gameStartState = atom({

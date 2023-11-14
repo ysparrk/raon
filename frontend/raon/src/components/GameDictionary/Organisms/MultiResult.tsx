@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useSetRecoilState, useRecoilValue } from 'recoil';
 import { roomManageState, multiDictState } from '../../../recoil/Atoms';
-import { useWebSocket } from '../../../websocket/WebSocketContext';
 import Timer from '../../Common/Atoms/Timer';
 
 const ResultDiv = styled.div`
@@ -15,7 +14,19 @@ const ResultDiv = styled.div`
   height: 60vh;
   gap: 2rem;
 `;
-
+const TimerDiv = styled.div`
+  position: fixed;
+  display: flex;
+  flex-direction: row;
+  top: 15%;
+  right: 5%;
+  font-size: 3.1375rem;
+  font-family: 'ONE-Mobile-POP';
+  color: black;
+  justify-content: space-between;
+  align-items: center;
+  width: 7.5rem;
+`;
 const LeftDiv = styled.div`
   display: flex;
   flex-direction: column;
@@ -51,6 +62,7 @@ const LeftMyAnswerP = styled.p`
   font-family: 'CookieRun';
   font-size: 4rem;
   color: white;
+  margin-bottom: 1rem;
 `;
 
 const CorrectAnswer = styled.span`
@@ -62,7 +74,7 @@ const LeftOthersDiv = styled.div`
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  margin-top: 3.125rem;
+  /* margin-top: 2.125rem; */
   font-family: 'ONE-Mobile-POP';
   font-size: 2.3rem;
 `;
@@ -71,6 +83,7 @@ const LeftOthersP = styled.p`
   font-family: 'ONE-Mobile-POP';
   font-size: 2.125rem;
   color: white;
+  margin: 0.5rem;
 `;
 
 const RightTopicP = styled.div`
@@ -86,12 +99,15 @@ const RightRankDiv = styled.div`
   font-family: 'CookieRun';
   font-size: 2.125rem;
   color: black;
-  gap: 0.625rem;
+  gap: 3.625rem;
+  margin: 1rem;
 `;
 
 function MultiResult() {
   const [myAnswer, setMyAnswer] = useState('');
   const [otherAnswer, setOtherAnswer] = useState<string[]>([]);
+  const [timerState, setTimerState] = useState(20);
+
   const Quiz = useRecoilValue(multiDictState);
   const Room = useRecoilValue(roomManageState);
   const myname = localStorage.getItem('nickname') ?? '미사용자';
@@ -113,7 +129,21 @@ function MultiResult() {
 
     checkMyRequest();
   }, [Room.userResult]);
+  useEffect(() => {
+    if (Room.breakTime) {
+      setTimerState(5);
+    }
+  }, [Room.breakTime]);
+  useEffect(() => {
+    const id = setInterval(() => {
+      setTimerState((count) => count - 1);
+    }, 1000);
 
+    if (timerState === 0) {
+      clearInterval(id);
+    }
+    return () => clearInterval(id);
+  }, [timerState]);
   return (
     <ResultDiv>
       <LeftDiv>
@@ -143,12 +173,17 @@ function MultiResult() {
         {Room.userResult.map(
           (user: { nickname?: string; current_point?: number }, index) => (
             <RightRankDiv key={user.nickname}>
+              <p>{index + 1}</p>
               <p>{user.nickname ?? '?'}</p>
               <p>{user.current_point ?? '0'}</p>
             </RightRankDiv>
           ),
         )}
       </RightDiv>
+      <TimerDiv>
+        <Timer />
+        {timerState}
+      </TimerDiv>
     </ResultDiv>
   );
 }
