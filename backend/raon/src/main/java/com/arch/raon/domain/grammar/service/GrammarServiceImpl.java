@@ -2,13 +2,11 @@ package com.arch.raon.domain.grammar.service;
 
 import com.arch.raon.domain.grammar.dto.query.GrammarMyRankQueryDTO;
 import com.arch.raon.domain.grammar.dto.redis.GrammarMyRankRedisDTO;
-import com.arch.raon.domain.grammar.dto.redis.GrammarSchoolRedisDTO;
 import com.arch.raon.domain.grammar.dto.request.GrammarResultDTO;
 import com.arch.raon.domain.grammar.dto.request.GrammarResultSaveReqDTO;
 import com.arch.raon.domain.grammar.dto.response.GrammarMyRankListResDTO;
 import com.arch.raon.domain.grammar.dto.response.GrammarMyRankingResDTO;
 import com.arch.raon.domain.grammar.dto.response.GrammarQuizResDTO;
-import com.arch.raon.domain.grammar.dto.response.GrammarSchoolRankListResDTO;
 import com.arch.raon.domain.grammar.entity.GrammarQuiz;
 import com.arch.raon.domain.grammar.repository.GrammarQuizRepository;
 import com.arch.raon.domain.grammar.repository.GrammarScoreRepository;
@@ -326,7 +324,7 @@ public class GrammarServiceImpl implements GrammarService {
 	}
 
 	@Override
-	public GrammarSchoolRankListResDTO getSchoolGrammarRankList(Long memberId) {
+	public GrammarMyRankListResDTO getSchoolGrammarRankList(Long memberId) {
 		Member member = memberRepository.findById(memberId).orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND) {
 			@Override
 			public ErrorCode getErrorCode() {
@@ -334,13 +332,13 @@ public class GrammarServiceImpl implements GrammarService {
 			}
 		});
 
-		List<GrammarSchoolRedisDTO> schoolGrammarRankList = redisService.getSchoolGrammarRankList();
+		List<GrammarMyRankRedisDTO> schoolGrammarRankList = redisService.getSchoolGrammarRankList();
 		Long mySchoolRank = redisService.getSchoolGrammarRank(member.getSchool());
 		double mySchoolScore = redisService.getSchoolGrammarPoint(member.getSchool());
 
-		GrammarSchoolRankListResDTO rankList = GrammarSchoolRankListResDTO.builder()
-				.mySchoolRank(mySchoolRank)
-				.mySchoolScore(mySchoolScore)
+		GrammarMyRankListResDTO rankList = GrammarMyRankListResDTO.builder()
+				.myRank(mySchoolRank)
+				.myScore(mySchoolScore)
 				.rankList(schoolGrammarRankList)
 				.build();
 

@@ -4,7 +4,6 @@ import com.arch.raon.domain.grammar.dto.request.GrammarResultSaveReqDTO;
 import com.arch.raon.domain.grammar.dto.response.GrammarMyRankListResDTO;
 import com.arch.raon.domain.grammar.dto.response.GrammarMyRankingResDTO;
 import com.arch.raon.domain.grammar.dto.response.GrammarQuizResDTO;
-import com.arch.raon.domain.grammar.dto.response.GrammarSchoolRankListResDTO;
 import com.arch.raon.domain.grammar.service.GrammarService;
 import com.arch.raon.global.auth.dto.UserAuthentication;
 import com.arch.raon.global.dto.ResponseDTO;
@@ -106,7 +105,7 @@ public class GrammarController {
 	public ResponseEntity<ResponseDTO> getSchoolRankList(
 			@AuthenticationPrincipal UserAuthentication userAuth
 	) {
-		GrammarSchoolRankListResDTO schoolGrammarRankList = grammarService.getSchoolGrammarRankList(userAuth.getId());
+		GrammarMyRankListResDTO schoolGrammarRankList = grammarService.getSchoolGrammarRankList(userAuth.getId());
 
 		return ResponseEntity.status(HttpStatus.OK)
 				.body(ResponseDTO.builder()
