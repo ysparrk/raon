@@ -33,7 +33,6 @@ public class DictionarySocketController {
 
 	private final SimpMessagingTemplate messagingTemplate;
 	private final DictionarySocketService dictionarySocketService;
-	private final DictionaryService dictionaryService;
 
 	/**
 	 * roomId가 유효한지 체크하는 HTTP 요청에 대한 응답이다.
