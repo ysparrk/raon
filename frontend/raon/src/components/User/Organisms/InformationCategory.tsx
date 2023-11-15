@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import Swal from 'sweetalert2';
 import InputBox from '../../Common/Atoms/InputBox.tsx';
 import ComboBox from '../../Common/Atoms/ComboBox.tsx';
@@ -120,8 +120,10 @@ const SchoolButtonDiv = styled.div`
   align-items: center;
   gap: 1.875rem;
 `;
-
-const SchoolListDiv = styled.div`
+interface SchoolListDivProps {
+  showPadding: boolean;
+}
+const SchoolListDiv = styled.div<SchoolListDivProps>`
   display: flex;
   flex-direction: column;
   /* justify-content: flex-start; */
@@ -136,6 +138,11 @@ const SchoolListDiv = styled.div`
   height: 60%;
   gap: 0.3125rem;
   overflow-y: auto;
+  ${(props) =>
+    props.showPadding &&
+    css`
+      padding-top: 60%;
+    `}
 `;
 
 const SchoolElemDiv = styled.div`
@@ -282,7 +289,7 @@ const InformationCategory = () => {
                   검색
                 </InputButtonDiv>
               </SchoolInputDiv>
-              <SchoolListDiv>
+              <SchoolListDiv showPadding={searchSchools.length >= 19}>
                 {searchSchools.length > 0 &&
                   searchSchools.map((schoolElem, index) => (
                     <SchoolElemDiv
