@@ -177,7 +177,7 @@ const RankingBody = () => {
 
   const renderRankItems = (rankData) => {
     return rankData.map((item, index) => (
-      <RankItem key={index}>
+      <RankItem key={item.ranker}>
         <RankNumber>{index + 1}등</RankNumber>
         <Nickname>{item.ranker}</Nickname>
         <Score>{item.score}점</Score>
