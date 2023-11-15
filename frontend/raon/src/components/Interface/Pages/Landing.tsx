@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import styled, { createGlobalStyle, keyframes } from 'styled-components';
 import { useNavigate } from 'react-router-dom';
+import { url } from 'inspector';
 import gildong from '../../../assets/Images/gildong.png';
+import kakaoImage from '../../../assets/Images/kakao_login_large_narrow.png';
 
 const rollAndRotateFromLeft = keyframes`
   0% {
@@ -60,8 +62,13 @@ const StyledBox = styled.div`
 const StyledStart = styled.div`
   font-family: 'CookieRun';
   color: #ffcb4c;
-  font-size: 60px;
-  margin-top: 20px;
+  background-image: url(${kakaoImage});
+  background-size: cover;
+  width: 24rem;
+  height: 5.625rem;
+  margin-top: 1.25rem;
+  margin-left: auto;
+  margin-right: auto;
   cursor: pointer;
 `;
 
@@ -130,9 +137,7 @@ function LandingPage() {
             onClick={() => {
               window.location.href = `${process.env.REACT_APP_OAUTH_URL}`;
             }}
-          >
-            시작하기
-          </StyledStart>
+          />
         </BoxContainer>
       </ImageContainer>
     </div>

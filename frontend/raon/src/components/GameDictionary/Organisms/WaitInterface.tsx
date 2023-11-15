@@ -29,44 +29,104 @@ const RoomCurrentDiv = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  padding-top: 100px;
+  padding-top: 6.25rem;
   align-items: center;
-  gap: 20px;
-  width: 600px;
-  margin: 50px;
+  gap: 1.25rem;
+  width: 37.5rem;
+  margin: 3.125rem;
 `;
 
 const RoomHeadText = styled.div`
-  font-size: 80px;
+  font-size: 5rem;
   font-family: 'CookieRun';
   color: white;
 `;
 
 const RoomCodeText = styled.div`
-  font-size: 40px;
+  font-size: 2.5rem;
   font-family: 'CookieRun';
   color: white;
 `;
 
 const RoomParticipantsText = styled.div`
-  font-size: 35px;
+  text-align: center;
+  font-size: 0.9875rem;
   font-family: 'ONE-Mobile-POP';
-  color: #ffcd4a;
+  color: ivory;
+  text-shadow:
+    -0.0938rem -0.0938rem 0 #000,
+    0.0938rem -0.0938rem 0 #000,
+    -0.0938rem 0.0938rem 0 #000,
+    0.0938rem 0.0938rem 0 #000;
 `;
 const RoomMyText = styled.div`
-  font-size: 35px;
+  text-align: center;
+  font-size: 0.9875rem;
   font-family: 'ONE-Mobile-POP';
-  color: #c4dc23;
+  color: ivory;
+  text-shadow:
+    -0.0938rem -0.0938rem 0 #000,
+    0.0938rem -0.0938rem 0 #000,
+    -0.0938rem 0.0938rem 0 #000,
+    0.0938rem 0.0938rem 0 #000;
+`;
+const KakaoButtonDiv = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 0.375rem;
+  width: 25rem;
+  height: 15.625rem;
+  margin: 3.125rem;
+  font-family: 'CookieRun';
+  font-size: 3.75rem;
+  border-radius: 1.25rem;
+  box-shadow: 0.0625rem 0.0625rem 0.3125rem rgba(100, 100, 100, 0.5);
+  background-color: #fae100;
+  color: #3c1e1e;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+`;
+const KakaoImageDiv = styled.div`
+  background-image: url('https://developers.kakao.com/assets/img/about/logos/kakaotalksharing/kakaotalk_sharing_btn_medium.png');
+  background-size: cover;
+  width: 3.75rem;
+  height: 3.75rem;
 `;
 
 const ButtonDiv = styled.div`
   position: absolute;
   display: flex;
-  gap: 30px;
+  gap: 1.875rem;
   justify-content: center;
   align-items: center;
   bottom: 6.5%;
   right: 10%;
+`;
+
+const UserContainerDiv = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 0.125rem;
+`;
+interface UserDivProps {
+  userImage: string;
+}
+
+const UserDiv = styled.div<UserDivProps>`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 0.125rem;
+  background-image: url(${(props) => props.userImage});
+  background-size: cover;
+  width: 100px;
+  height: 100px;
+  border-radius: 14px;
 `;
 
 declare global {
@@ -131,25 +191,45 @@ function WaitInterface() {
         <RoomCurrentDiv>
           <RoomHeadText>방 코드</RoomHeadText>
           <RoomCodeText>{roomId}</RoomCodeText>
-          {roomStatus.users &&
-            roomStatus.users.map((participant, index) => (
-              <div key={participant}>
-                {nickname === participant ? (
-                  <RoomMyText>{participant}</RoomMyText>
-                ) : (
-                  <RoomParticipantsText>{participant}</RoomParticipantsText>
-                )}
-              </div>
-              // <RoomParticipantsText key={participant}>
-              //   {participant}
-              // </RoomParticipantsText>
-            ))}
+          <UserContainerDiv>
+            {roomStatus.users &&
+              roomStatus.users.map(
+                (
+                  participant: {
+                    nickname: string;
+                    profileImgUrl: string;
+                    schoolName: string;
+                  },
+                  index,
+                ) => (
+                  <UserDiv
+                    key={participant.nickname}
+                    userImage={participant.profileImgUrl}
+                  >
+                    {nickname === participant.nickname ? (
+                      <RoomMyText>{participant.nickname}</RoomMyText>
+                    ) : (
+                      <RoomParticipantsText>
+                        {participant.nickname}
+                      </RoomParticipantsText>
+                    )}
+                  </UserDiv>
+                  // <RoomParticipantsText key={participant}>
+                  //   {participant}
+                  // </RoomParticipantsText>
+                ),
+              )}
+          </UserContainerDiv>
         </RoomCurrentDiv>
-        <JoinButton
+        {/* <JoinButton
           optionText="초대하기"
           buttoncolor="gold"
           onClick={handleshare}
-        />
+        /> */}
+        <KakaoButtonDiv onClick={handleshare}>
+          <KakaoImageDiv />
+          초대하기
+        </KakaoButtonDiv>
       </InterfaceDiv>
       <ButtonDiv>
         <StartButton
