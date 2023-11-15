@@ -49,14 +49,26 @@ const RoomCodeText = styled.div`
 `;
 
 const RoomParticipantsText = styled.div`
-  font-size: 2.1875rem;
+  text-align: center;
+  font-size: 0.9875rem;
   font-family: 'ONE-Mobile-POP';
-  color: #ffcd4a;
+  color: ivory;
+  text-shadow:
+    -0.0938rem -0.0938rem 0 #000,
+    0.0938rem -0.0938rem 0 #000,
+    -0.0938rem 0.0938rem 0 #000,
+    0.0938rem 0.0938rem 0 #000;
 `;
 const RoomMyText = styled.div`
-  font-size: 2.1875rem;
+  text-align: center;
+  font-size: 0.9875rem;
   font-family: 'ONE-Mobile-POP';
-  color: #c4dc23;
+  color: ivory;
+  text-shadow:
+    -0.0938rem -0.0938rem 0 #000,
+    0.0938rem -0.0938rem 0 #000,
+    -0.0938rem 0.0938rem 0 #000,
+    0.0938rem 0.0938rem 0 #000;
 `;
 const KakaoButtonDiv = styled.div`
   display: flex;
@@ -92,6 +104,29 @@ const ButtonDiv = styled.div`
   align-items: center;
   bottom: 6.5%;
   right: 10%;
+`;
+
+const UserContainerDiv = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 0.125rem;
+`;
+interface UserDivProps {
+  userImage: string;
+}
+
+const UserDiv = styled.div<UserDivProps>`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 0.125rem;
+  background-image: url(${(props) => props.userImage});
+  background-size: cover;
+  width: 100px;
+  height: 100px;
+  border-radius: 14px;
 `;
 
 declare global {
@@ -156,19 +191,35 @@ function WaitInterface() {
         <RoomCurrentDiv>
           <RoomHeadText>방 코드</RoomHeadText>
           <RoomCodeText>{roomId}</RoomCodeText>
-          {roomStatus.users &&
-            roomStatus.users.map((participant, index) => (
-              <div key={participant}>
-                {nickname === participant ? (
-                  <RoomMyText>{participant}</RoomMyText>
-                ) : (
-                  <RoomParticipantsText>{participant}</RoomParticipantsText>
-                )}
-              </div>
-              // <RoomParticipantsText key={participant}>
-              //   {participant}
-              // </RoomParticipantsText>
-            ))}
+          <UserContainerDiv>
+            {roomStatus.users &&
+              roomStatus.users.map(
+                (
+                  participant: {
+                    nickname: string;
+                    profileImgUrl: string;
+                    schoolName: string;
+                  },
+                  index,
+                ) => (
+                  <UserDiv
+                    key={participant.nickname}
+                    userImage={participant.profileImgUrl}
+                  >
+                    {nickname === participant.nickname ? (
+                      <RoomMyText>{participant.nickname}</RoomMyText>
+                    ) : (
+                      <RoomParticipantsText>
+                        {participant.nickname}
+                      </RoomParticipantsText>
+                    )}
+                  </UserDiv>
+                  // <RoomParticipantsText key={participant}>
+                  //   {participant}
+                  // </RoomParticipantsText>
+                ),
+              )}
+          </UserContainerDiv>
         </RoomCurrentDiv>
         {/* <JoinButton
           optionText="초대하기"
