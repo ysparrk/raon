@@ -247,6 +247,34 @@ const InformationCategory = () => {
     }
   };
 
+  const handleYearCheck = (year: string) => {
+    // 숫자만 입력받고, 그 숫자가 4자리인지 확인
+    const regExp = /^[0-9]{4}$/;
+  
+    if (!regExp.test(year)) {
+      Swal.fire({
+        title: '올바르지 않은 입력입니다.',
+        text: '출생년도는 숫자 4자리로 입력해주세요!',
+        icon: 'warning',
+      });
+      setBirthday("");  // 입력값 초기화
+    }
+  };
+
+  const handleNicknameCheck = (nickname: string) => {
+    const regExp = /^[가-힣]{2,12}$/;
+  
+    if (!regExp.test(nickname)) {
+      Swal.fire({
+        title: '올바르지 않은 입력입니다.',
+        text: '닉네임은 2글자 이상, 12글자 이하의 한글로 입력해주세요!',
+        icon: 'warning',
+      });
+      setBirthday("");  // 입력값 초기화
+    }
+  };
+
+
   const handleSchool = async () => {
     try {
       const response = await postSchoolsList(searchWord);
@@ -345,14 +373,17 @@ const InformationCategory = () => {
         <InputBox
           inputText={nickname}
           onChange={(e) => setNickname(e.target.value)}
+          placeHolder='2글자 이상, 12글자 이하의 한글을 입력해주세요!'
+          onBlur={() => handleNicknameCheck(nickname)}
         />
         <DuplicationCheckButton onClick={handleDuplicateCheck} />
       </Content>
       <Content>
         <Label>출생년도 :</Label>
         <InputBox
-          inputText={birthday}
-          onChange={(e) => setBirthday(e.target.value)}
+            inputText={birthday}
+            onChange={(e) => setBirthday(e.target.value)}
+            onBlur={() => handleYearCheck(birthday)}
         />
       </Content>
       <Content>
@@ -367,7 +398,7 @@ const InformationCategory = () => {
         <Label>학교 :</Label>
         <SchoolInput
           value={school}
-          placeholder="값을 입력해주세요"
+          placeholder="다니고 있는 학교를 입력해주세요!"
           onClick={() => {
             setIsSearch(true);
           }}

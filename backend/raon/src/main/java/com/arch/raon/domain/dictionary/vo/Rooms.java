@@ -56,7 +56,7 @@ public class Rooms {
 			return false;
 		}
 		else {
-			rooms.put(roomId, new Room(ownerNickname, ownerImgUrl, ownerNickname));
+			rooms.put(roomId, new Room(ownerNickname, ownerImgUrl, school));
 			return true;
 		}
 	}
