@@ -9,7 +9,6 @@ import helpDictionaryImage6 from '../../../assets/Images/helpDictionaryImage6.pn
 import { ReactComponent as Arrow } from '../../../assets/Images/arrow.svg';
 import BlurView from '../../GameSummarize/Atoms/BlurView';
 
-
 const TopBox: React.FC<{
   imageIndex: number;
   handleLeftArrowClick: () => void;
@@ -115,7 +114,6 @@ const HelpBox: React.FC = () => {
         }}
       >
         {comments[index]}
-        
       </div>
     </>
   );

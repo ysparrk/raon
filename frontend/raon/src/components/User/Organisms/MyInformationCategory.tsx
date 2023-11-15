@@ -14,7 +14,7 @@ import {
 import BlurBoxDiv from '../../Common/Atoms/BlurBackGround.tsx';
 import SmallButton from '../../Common/Atoms/SmallButton.tsx';
 import SchoolInputBox from '../Atoms/SchoolSearchInputBox.tsx';
-import ExitButton from '../../Common/Atoms/ExitButton.tsx';
+import ExitButton from '../../Common/Atoms/ExitButtonInRoom.tsx';
 
 const Container = styled.div`
   display: flex;
@@ -33,13 +33,13 @@ const Content = styled.div`
 `;
 
 const Button = styled.button`
-  margin: 20px;
-  padding: 20px 80px;
+  margin: 1.25rem;
+  padding: 1.25rem 5rem;
   border: none;
-  border-radius: 20px;
+  border-radius: 1.25rem;
   background-color: #383414;
-  margin-top: 80px;
-  font-size: 32px;
+  /* margin-top: 5rem; */
+  font-size: 2rem;
   font-family: 'CookieRun';
   color: white;
   cursor: pointer;
@@ -164,13 +164,27 @@ const Selection = styled.div`
   border-radius: 0.9375rem;
 `;
 
+const BottomDiv = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 1.25rem;
+  margin-top: 4rem;
+`;
+
+const ExitDiv = styled.div`
+  position: fixed;
+  right: 3%;
+`;
+
 interface MyImageDivProps {
   imageUrl: string;
 }
 const MyImageDiv = styled.div<MyImageDivProps>`
   display: flex;
-  width: 12rem;
-  height: 12rem;
+  width: 6rem;
+  height: 6rem;
   border-radius: 12px;
   background-image: url(${(props) => props.imageUrl});
   background-size: cover;
@@ -206,8 +220,16 @@ const MyInformationCategory = () => {
   const handleSubmit = async () => {
     if (!nicknameCheck) {
       Swal.fire({
-        title: '사용하고 있는 닉네임이에요!',
-        text: '다른 닉네임으로 중복 검사를 다시 진행해주세요!',
+        title: '닉네임 중복 검사를 진행해주세요',
+        text: '확인이 필요합니다!',
+        icon: 'warning',
+      });
+      return;
+    }
+    if (!nickname || !birthday || !school) {
+      Swal.fire({
+        title: '입력되지 않은 값이 있어요',
+        text: '모든 항목을 입력해주세요!',
         icon: 'warning',
       });
       return;
@@ -272,7 +294,6 @@ const MyInformationCategory = () => {
 
   return (
     <Container>
-      <MyImageDiv imageUrl={myImage} />
       <Content>
         {isSearch && (
           <>
@@ -387,8 +408,16 @@ const MyInformationCategory = () => {
           }}
         />
       </Content>
-      <Button onClick={handleSubmit}>수정하기</Button>
-      <ExitButton to="/main" />
+      <BottomDiv>
+        <MyImageDiv imageUrl={myImage} />
+
+        <Button onClick={handleSubmit}>수정하기</Button>
+        <ExitButton
+          onClick={() => {
+            navigate('/main');
+          }}
+        />
+      </BottomDiv>
     </Container>
   );
 };

@@ -1,13 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
 import SelectOption from '../../Common/Atoms/SelectOption';
 import main1 from '../../../assets/Images/main1.png';
 import main2 from '../../../assets/Images/main22.png';
 import main3 from '../../../assets/Images/main3.png';
 import main4 from '../../../assets/Images/main4.png';
 import ProfileButton from '../Atoms/ProfileButton';
-import Swal from 'sweetalert2';
 
 const MenuContainer = styled.div`
   display: flex;

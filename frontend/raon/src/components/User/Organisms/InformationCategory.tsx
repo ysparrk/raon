@@ -178,8 +178,16 @@ const InformationCategory = () => {
   const handleSubmit = async () => {
     if (!nicknameCheck) {
       Swal.fire({
-        title: '사용하고 있는 닉네임이에요!',
-        text: '다른 닉네임으로 중복 검사를 다시 진행해주세요!',
+        title: '닉네임 중복 검사를 진행해주세요',
+        text: '확인이 필요합니다!',
+        icon: 'warning',
+      });
+      return;
+    }
+    if (!nickname || !birthday || !school) {
+      Swal.fire({
+        title: '입력되지 않은 값이 있어요',
+        text: '모든 항목을 입력해주세요!',
         icon: 'warning',
       });
       return;
