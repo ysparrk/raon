@@ -7,7 +7,6 @@
 
 ***국어 능력이 부족한 어린이들이 놀이를 통해 자연스럽게 학습할 수 있도록 돕는 서비스입니다.***
 
----
 
 
 ## 서비스 기능 소개
@@ -24,7 +23,7 @@
 ![맞춤법 놀이](./exec/images/helpSpellingImage4.png)
 총 10문제를 풀고 나서 점수와 결과를 확인할 수 있습니다.
 
----
+
 ### 국어사전 놀이
 
 ![국어사전 놀이](./exec/images/helpDictionaryImage1.png)
@@ -45,15 +44,12 @@
 ![멀티플레이 화면 추가 필요](./exec/images/helpDictionaryImage7.png)
 
 
----
 ### 순위
 ![순위](./exec/image/ranking.png)
 
----
 ## 아키텍쳐
 ![아키텍쳐](./exec/image/architecture.png)
 
----
 
 
 ## 기술 스택🛠️
