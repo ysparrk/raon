@@ -3,6 +3,7 @@ package com.arch.raon.domain.dictionary.dto.response.socket;
 import java.io.Serializable;
 import java.util.List;
 
+import com.arch.raon.domain.dictionary.vo.User;
 import com.arch.raon.global.util.enums.SocketResponse;
 
 /**
@@ -15,18 +16,18 @@ public class SocketJoinResDTO implements Serializable {
 	private SocketResponse message;
 	private String newComer; // 방금 들어온 녀석, 새로운 사람 입장 시 알림 용도로 넣음
 	private String owner; // 현재 방장
-	private List<String> users; // 방에 있는 사람들(방금 들어온 녀석 포함)
+	private List<User> users; // 방에 있는 사람들(방금 들어온 녀석 포함)
 
 	public SocketJoinResDTO(){
 		super();
 	}
 
-	public SocketJoinResDTO(String owner, List<String> users) {
+	public SocketJoinResDTO(String owner, List<User> users) {
 		this.owner = owner;
 		this.users = users;
 	}
 
-	public SocketJoinResDTO(String newComer, String owner, List<String> users) {
+	public SocketJoinResDTO(String newComer, String owner, List<User> users) {
 		this.newComer = newComer;
 		this.owner = owner;
 		this.users = users;
@@ -36,7 +37,7 @@ public class SocketJoinResDTO implements Serializable {
 	@Override
 	public String toString() {
 		StringBuilder users = new StringBuilder();
-		for(String user: this.users){
+		for(User user: this.users){
 			users.append(user).append(" ");
 		}
 
@@ -63,11 +64,11 @@ public class SocketJoinResDTO implements Serializable {
 		this.owner = owner;
 	}
 
-	public List<String> getUsers() {
+	public List<User> getUsers() {
 		return users;
 	}
 
-	public void setUsers(List<String> users) {
+	public void setUsers(List<User> users) {
 		this.users = users;
 	}
 
