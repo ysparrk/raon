@@ -50,7 +50,7 @@ const RoomCodeText = styled.div`
 
 const RoomParticipantsText = styled.div`
   text-align: center;
-  font-size: 0.9875rem;
+  font-size: 1rem;
   font-family: 'ONE-Mobile-POP';
   color: ivory;
   text-shadow:
@@ -61,7 +61,7 @@ const RoomParticipantsText = styled.div`
 `;
 const RoomMyText = styled.div`
   text-align: center;
-  font-size: 0.9875rem;
+  font-size: 1rem;
   font-family: 'ONE-Mobile-POP';
   color: ivory;
   text-shadow:
@@ -121,12 +121,28 @@ const UserDiv = styled.div<UserDivProps>`
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
+  align-items: center;
   padding: 0.125rem;
   background-image: url(${(props) => props.userImage});
   background-size: cover;
-  width: 100px;
-  height: 100px;
+  width: 6.25rem;
+  height: 6.25rem;
   border-radius: 14px;
+`;
+
+const UserSchoolDiv = styled.div`
+  position: absolute;
+  display: flex;
+  margin-bottom: -1.25rem;
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+  flex-direction: column;
+  font-size: 0.85rem;
+  text-align: center;
+  font-family: 'CookieRun';
+  color: black;
+  width: 120%;
 `;
 
 declare global {
@@ -207,11 +223,17 @@ function WaitInterface() {
                     userImage={participant.profileImgUrl}
                   >
                     {nickname === participant.nickname ? (
-                      <RoomMyText>{participant.nickname}</RoomMyText>
+                      <>
+                        <RoomMyText>{participant.nickname}</RoomMyText>
+                        <UserSchoolDiv>{participant.schoolName}</UserSchoolDiv>
+                      </>
                     ) : (
-                      <RoomParticipantsText>
-                        {participant.nickname}
-                      </RoomParticipantsText>
+                      <>
+                        <RoomParticipantsText>
+                          {participant.nickname}
+                        </RoomParticipantsText>
+                        <UserSchoolDiv>{participant.schoolName}</UserSchoolDiv>
+                      </>
                     )}
                   </UserDiv>
                   // <RoomParticipantsText key={participant}>

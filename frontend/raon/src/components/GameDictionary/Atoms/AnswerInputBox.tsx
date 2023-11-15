@@ -1,4 +1,5 @@
-import React, { useState, ChangeEvent, KeyboardEvent } from 'react';
+import React, { useState, useEffect, ChangeEvent, KeyboardEvent } from 'react';
+import { toast } from 'react-toastify';
 
 interface AnswerInputBoxProps {
   inputText: string;
@@ -12,6 +13,18 @@ const AnswerInputBox = ({
   onEnter,
 }: AnswerInputBoxProps) => {
   const [isFocused, setIsFocused] = useState(false);
+  const [isError, setIsError] = useState(false);
+
+  useEffect(() => {
+    if (isError) {
+      toast.error('한글로 입력해주세요!', {
+        autoClose: 250,
+      });
+    }
+    setTimeout(() => {
+      setIsError(false);
+    }, 2000);
+  }, [isError]);
   const maxCharacterLimit = 3;
 
   const handleFocus = () => {
@@ -39,6 +52,8 @@ const AnswerInputBox = ({
       event.target.value.length <= maxCharacterLimit
     ) {
       onChange(event);
+    } else if (!koreanOnly.test(event.target.value)) {
+      setIsError(true);
     }
   };
 
