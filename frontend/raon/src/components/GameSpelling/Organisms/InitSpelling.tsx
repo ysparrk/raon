@@ -98,7 +98,7 @@ const ButtonDiv = styled.div`
   justify-content: center;
   align-items: center;
   bottom: 5.5%;
-  right: 2%;
+  /* right: 2%; */
   opacity: 0;
   animation: ${appearAnimation} 2.5s ease-in forwards;
 `;
@@ -127,12 +127,12 @@ function InitInterface() {
             navigate('/game/spelling-quiz');
           }}
         />
-        <ExitButton
-          onClick={() => {
-            navigate('/main');
-          }}
-        />
       </ButtonDiv>
+      <ExitButton
+        onClick={() => {
+          navigate('/main');
+        }}
+      />
     </>
   );
 }

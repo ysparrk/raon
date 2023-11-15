@@ -13,7 +13,7 @@ const RoomExitButton = ({ onClick }: JoinButtonProps) => {
     cursor: 'pointer',
     color: 'ivory',
     fontSize: '6rem',
-    WebkitTextStroke: '0.05rem navy',
+    WebkitTextStroke: '0.1rem navy',
     backgroundImage: `url(${eraser})`,
     backgroundSize: 'cover',
     width: '17.5rem',
@@ -22,11 +22,15 @@ const RoomExitButton = ({ onClick }: JoinButtonProps) => {
     alignItems: 'center',
     justifyContent: 'center',
   };
-
+  const ExitFixDiv = styled.div`
+    position: fixed;
+    bottom: 5%;
+    right: 5%;
+  `;
   return (
-    <div style={textStyle} onClick={onClick} role="button" tabIndex={0}>
+    <ExitFixDiv style={textStyle} onClick={onClick} role="button" tabIndex={0}>
       나가기
-    </div>
+    </ExitFixDiv>
   );
 };
 

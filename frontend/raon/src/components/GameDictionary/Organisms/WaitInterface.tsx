@@ -103,7 +103,7 @@ const ButtonDiv = styled.div`
   justify-content: center;
   align-items: center;
   bottom: 6.5%;
-  right: 10%;
+  /* right: 10%; */
 `;
 
 const UserContainerDiv = styled.div`
@@ -265,6 +265,7 @@ function WaitInterface() {
               alert('방장만이 게임을 시작할 수 있어요');
             }
           }}
+          fontColor="saddlebrown"
         />
         <RoomExitButton
           onClick={() => {
