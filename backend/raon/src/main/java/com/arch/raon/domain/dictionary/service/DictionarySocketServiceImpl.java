@@ -167,8 +167,13 @@ public class DictionarySocketServiceImpl implements DictionarySocketService{
 	}
 
 	@Override
-	public List<String> getUserNickNames(String roomId) {
-		return Rooms.getUserNickNameOf(roomId);
+	public List<User> getUsersOf(String roomId) {
+		return Rooms.getUsersOf(roomId);
+	}
+
+	@Override
+	public String getOwnerOf(String roomId) {
+		return Rooms.getOwnerOf(roomId);
 	}
 
 }

@@ -108,18 +108,7 @@ public class Rooms {
 
 	}
 
-	/**
-	 * test
-	 *
-	 * @param roomId
-	 * @return
-	 */
-	public static SocketJoinResDTO getUsersOf(String roomId){
-
-		return new SocketJoinResDTO(roomOf(roomId).getRoomOwner(), roomOf(roomId).getUsers());
-	}
-
-	public static List<String> getUserNickNameOf(String roomId){
+	public static List<User> getUsersOf(String roomId){
 		return roomOf(roomId).getUsers();
 	}
 
