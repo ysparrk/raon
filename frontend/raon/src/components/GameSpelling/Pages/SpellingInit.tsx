@@ -5,7 +5,6 @@ import LeftSpeakBalloon from '../../Common/Atoms/LeftSpeakBalloon';
 import RightSpeakBalloon from '../../Common/Atoms/RightSpeakBalloon';
 import HelpBox from '../Organisms/HelpBox';
 import HelpCharacter from '../../Common/Atoms/HelpCharacterDiv';
-import RoomExitButton from '../../Common/Atoms/ExitButtonInRoom';
 
 const ContentDiv = styled.div`
   display: flex;
@@ -54,14 +53,7 @@ const SpellingInit = () => {
         <InitSpelling />
       </ContentDiv>
       <HelpCharacter onClick={toggleHelpBox} />
-      {helpBoxVisible && (
-        <>
-          <HelpBox />
-          <ModalExitDiv>
-            <RoomExitButton onClick={toggleHelpBox} />
-          </ModalExitDiv>
-        </>
-      )}
+      {helpBoxVisible && <HelpBox />}
     </div>
   );
 };
