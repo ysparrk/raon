@@ -104,6 +104,7 @@ public class Rooms {
 			return true;
 		}
 		return false;
+
 	}
 
 	public static SocketJoinResDTO getUsersOf(String roomId){

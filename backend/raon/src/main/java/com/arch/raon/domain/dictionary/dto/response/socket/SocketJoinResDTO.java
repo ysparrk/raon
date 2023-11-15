@@ -42,6 +42,7 @@ public class SocketJoinResDTO implements Serializable {
 		}
 
 
+
 		return "SocketJoinResDTO{" +
 			", newComer='" + newComer + '\'' +
 			", users=" + users +
