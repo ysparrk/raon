@@ -49,6 +49,8 @@ public class DictionarySocketServiceImpl implements DictionarySocketService{
 
 			String imgUrl = member.getProfileUrl();
 			String school = member.getSchool();
+			System.out.println("========== [TEST] " + "img: "+ imgUrl + " school:" + school);
+
 
 			// 이미 존재하는 방이면 참가
 			if(Rooms.hasRoomThatIdIs(roomId)){
