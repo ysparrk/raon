@@ -3,9 +3,11 @@ import React, { useState, ChangeEvent } from 'react';
 interface InputBoxProps {
   inputText: string;
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  onBlur?: () => void;  // onBlur 핸들러를 선택적 프로퍼티로 추가
+  placeHolder?: string;
 }
 
-const InputBox = ({ inputText, onChange }: InputBoxProps) => {
+const InputBox = ({ inputText, onChange, onBlur, placeHolder }: InputBoxProps) => {
   const [isFocused, setIsFocused] = useState(false);
 
   const handleFocus = () => {
@@ -43,9 +45,9 @@ const InputBox = ({ inputText, onChange }: InputBoxProps) => {
       <input
         value={inputText}
         style={inputStyle}
-        placeholder="값을 입력해주세요"
+        placeholder={placeHolder ? placeHolder : "값을 입력해주세요"}
         onFocus={handleFocus}
-        onBlur={handleBlur}
+        onBlur={onBlur}
         onChange={onChange}
         autoComplete="off"
       />
