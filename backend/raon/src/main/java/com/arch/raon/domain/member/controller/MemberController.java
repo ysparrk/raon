@@ -10,6 +10,7 @@ import com.arch.raon.domain.member.service.MemberService;
 import com.arch.raon.global.auth.dto.UserAuthentication;
 import com.arch.raon.global.dto.ResponseDTO;
 import com.arch.raon.global.service.RedisService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +28,7 @@ public class MemberController {
     @PostMapping("/signup")
     public ResponseEntity<ResponseDTO> signup(
             @AuthenticationPrincipal UserAuthentication userAuth,
-            @RequestBody MemberSignupReqDTO memberSignupReqDTO) throws Exception {
+            @Valid @RequestBody MemberSignupReqDTO memberSignupReqDTO) {
         memberService.signup(userAuth.getId(), memberSignupReqDTO);
 
         return ResponseEntity.status(HttpStatus.OK)
@@ -64,7 +65,7 @@ public class MemberController {
     @PostMapping("/check/nickname")
     public ResponseEntity<ResponseDTO> checkNickname(
             @AuthenticationPrincipal UserAuthentication userAuth,
-            @RequestBody MemberCheckNicknameReqDTO memberCheckNicknameReqDTO) {
+            @Valid @RequestBody MemberCheckNicknameReqDTO memberCheckNicknameReqDTO) {
         boolean isAble = memberService.checkNickname(memberCheckNicknameReqDTO.getNickname());
         if(!isAble){
             return ResponseEntity.status(HttpStatus.OK)
@@ -81,7 +82,7 @@ public class MemberController {
     @PostMapping("/modify")
     public ResponseEntity<ResponseDTO> modifyMember(
             @AuthenticationPrincipal UserAuthentication userAuth,
-            @RequestBody MemberSignupReqDTO memberSignupReqDTO) {
+            @Valid @RequestBody MemberSignupReqDTO memberSignupReqDTO) {
 
         memberService.modifyMember(userAuth.getId(),memberSignupReqDTO);
 
@@ -107,7 +108,7 @@ public class MemberController {
 
     @PostMapping("/check-school")
     public ResponseEntity<ResponseDTO> checkSchool(
-            @RequestBody MemberCheckSchoolReqDTO memberCheckSchoolReqDTO
+            @Valid @RequestBody MemberCheckSchoolReqDTO memberCheckSchoolReqDTO
             ) {
 
         MemberCheckSchoolResDTO memberCheckSchoolResDTO = memberService.checkSchool(memberCheckSchoolReqDTO.getKeyword());
