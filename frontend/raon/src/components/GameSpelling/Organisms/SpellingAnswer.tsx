@@ -23,12 +23,13 @@ const ScoreHeader = styled.h1`
   width: 100%;
   margin-top: 1.5rem;
   margin-bottom: 2rem;
+  color: white;
 `;
 
 const Content = styled.div`
   font-family: 'CookieRun';
   font-size: 3.125rem;
-  color: #000000;
+  color: white;
 `;
 
 const Columns = styled.div`
