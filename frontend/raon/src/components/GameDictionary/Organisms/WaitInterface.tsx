@@ -29,40 +29,65 @@ const RoomCurrentDiv = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  padding-top: 100px;
+  padding-top: 6.25rem;
   align-items: center;
-  gap: 20px;
-  width: 600px;
-  margin: 50px;
+  gap: 1.25rem;
+  width: 37.5rem;
+  margin: 3.125rem;
 `;
 
 const RoomHeadText = styled.div`
-  font-size: 80px;
+  font-size: 5rem;
   font-family: 'CookieRun';
   color: white;
 `;
 
 const RoomCodeText = styled.div`
-  font-size: 40px;
+  font-size: 2.5rem;
   font-family: 'CookieRun';
   color: white;
 `;
 
 const RoomParticipantsText = styled.div`
-  font-size: 35px;
+  font-size: 2.1875rem;
   font-family: 'ONE-Mobile-POP';
   color: #ffcd4a;
 `;
 const RoomMyText = styled.div`
-  font-size: 35px;
+  font-size: 2.1875rem;
   font-family: 'ONE-Mobile-POP';
   color: #c4dc23;
+`;
+const KakaoButtonDiv = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 0.375rem;
+  width: 25rem;
+  height: 15.625rem;
+  margin: 3.125rem;
+  font-family: 'CookieRun';
+  font-size: 3.75rem;
+  border-radius: 1.25rem;
+  box-shadow: 0.0625rem 0.0625rem 0.3125rem rgba(100, 100, 100, 0.5);
+  background-color: #fae100;
+  color: #3c1e1e;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+`;
+const KakaoImageDiv = styled.div`
+  background-image: url('https://developers.kakao.com/assets/img/about/logos/kakaotalksharing/kakaotalk_sharing_btn_medium.png');
+  background-size: cover;
+  width: 3.75rem;
+  height: 3.75rem;
 `;
 
 const ButtonDiv = styled.div`
   position: absolute;
   display: flex;
-  gap: 30px;
+  gap: 1.875rem;
   justify-content: center;
   align-items: center;
   bottom: 6.5%;
@@ -145,11 +170,15 @@ function WaitInterface() {
               // </RoomParticipantsText>
             ))}
         </RoomCurrentDiv>
-        <JoinButton
+        {/* <JoinButton
           optionText="초대하기"
           buttoncolor="gold"
           onClick={handleshare}
-        />
+        /> */}
+        <KakaoButtonDiv onClick={handleshare}>
+          <KakaoImageDiv />
+          초대하기
+        </KakaoButtonDiv>
       </InterfaceDiv>
       <ButtonDiv>
         <StartButton
