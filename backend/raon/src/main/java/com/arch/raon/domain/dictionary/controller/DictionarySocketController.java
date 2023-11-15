@@ -109,7 +109,13 @@ public class DictionarySocketController {
 		switch(result) {
 			case LEAVE_SUCCESS:
 				String nextOwner = Rooms.getOwnerOf(reqDTO.getRoomId());
-				sendToRoom(reqDTO.getRoomId(), new SocketLeaveResDTO(reqDTO.getNickname(), nextOwner, SocketResponse.LEAVE));
+				sendToRoom(reqDTO.getRoomId()
+					, new SocketLeaveResDTO(reqDTO.getNickname()
+											, nextOwner
+											, dictionarySocketService.getUserNickNames(reqDTO.getRoomId())
+											, SocketResponse.LEAVE
+					)
+				);
 				break;
 			case LEAVE_FAIL_NONEXIST:
 				System.out.println("ERROR");
@@ -174,14 +180,19 @@ public class DictionarySocketController {
 				break;
 
 			case GAME_END: // 모든 유저가 마지막 스테이지의 정답을 보냈을 떄
+
+				// 일단 스테이지 10의 결과를 보내준다.
+				SocketStageResultResDTO final_stage_ranking = dictionarySocketService.getStageResultOf(reqDTO.getRoomId());
+				sendToRoom(reqDTO.getRoomId(), final_stage_ranking);
+
+				Thread.sleep(5000); // 이 시간동안 결과를 프론트에서 띄어줘야 하므로, 테스트를 위해 5초로 둔다.
+
+				// 최종 결과(사실 스테이지 결과랑 같은데 메세지명만 다름)를 보내준다.
 				SocketStageResultResDTO finalRanking = dictionarySocketService.getStageResultOf(reqDTO.getRoomId());
 				finalRanking.setMessage(SocketResponse.FINAL_RESULT);
-
-
-				// 최종 결과 전송
 				sendToRoom(reqDTO.getRoomId(), finalRanking);
 
-				// TODO : 결과를 db에 저장해야 한다.
+				// 알아서 보내고 redis에 저장한다.
 				// 태현이가 구현 한 레포지토리 객체를 사용한다.
 				dictionarySocketService.saveScore(reqDTO.getRoomId());
 		}

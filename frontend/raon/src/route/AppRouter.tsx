@@ -9,6 +9,7 @@ import Main from '../components/Interface/Pages/Main.tsx';
 // import Login from '../components/User/Pages/Login.tsx';
 import Information from '../components/User/Pages/Information.tsx';
 import SocialLogin from '../components/User/Pages/SocialLogin.tsx';
+import MyInformation from '../components/User/Pages/MyInformation.tsx';
 
 // // GameSpelling
 import SpellingQuiz from '../components/GameSpelling/Pages/SpellingQuiz.tsx';
@@ -28,7 +29,7 @@ import DictionaryInit from '../components/GameDictionary/Pages/DictionaryInit.ts
 import DictionaryWaitingRoom from '../components/GameDictionary/Pages/DictionaryWaitingRoom.tsx';
 import DictionarySingleResult from '../components/GameDictionary/Pages/DictionarySingleResult.tsx';
 import DictionaryMultiGame from '../components/GameDictionary/Pages/DictionaryMultiGame.tsx';
-// import DictionaryResult from '../components/GameDictionary/Pages/DictionaryResult.tsx';
+import DictionaryMultiResult from '../components/GameDictionary/Pages/DictionaryMultiResult.tsx';
 
 // // Ranking
 import Ranking from '../components/Ranking/Pages/Ranking.tsx';
@@ -41,6 +42,7 @@ const AppRouter: React.FC = () => {
         <Route path="/" element={<Landing />} />
         <Route path="/main" element={<Main />} />
         <Route path="/information/submit" element={<Information />} />
+        <Route path="/information/myinfo" element={<MyInformation />} />
         <Route path="/social" element={<SocialLogin />} />
         <Route
           path="/game/summarize-category"
@@ -70,6 +72,10 @@ const AppRouter: React.FC = () => {
         <Route
           path="/game/dictionary-single-result"
           element={<DictionarySingleResult />}
+        />
+        <Route
+          path="/game/dictionary-multi-result"
+          element={<DictionaryMultiResult />}
         />
         <Route path="/ranking" element={<Ranking />} />
       </Routes>

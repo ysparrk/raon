@@ -1,6 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import ExitButton from '../../Common/Atoms/ExitButton';
+import {
+  getPersonalSpelling,
+  getClassSpelling,
+  getSchoolSpelling,
+  getPersonalDictionary,
+  getClassDictionary,
+  getSchoolDictionary,
+} from '../../../api/RankingApi.tsx';
 
 interface GameLinkProps {
   active: boolean;
@@ -89,23 +97,93 @@ const Score = styled.div`
 const RankingBody = () => {
   const [activeGame, setActiveGame] = useState('맞춤법 놀이');
 
-  const [rankList] = useState([
-    { rank: 1, nickname: '레몬', score: 90 },
-    { rank: 2, nickname: '상재우', score: 88 },
-    { rank: 3, nickname: '인덕션', score: 85 },
-    { rank: 9, nickname: '내 위', score: 70 },
-    { rank: 10, nickname: '아치아빠재우', score: 66 },
-    { rank: 11, nickname: '내 아래', score: 65 },
-  ]);
+  const [personalList, setPersonalList] = useState([]);
+  const [classList, setClassList] = useState([]);
+  const [schoolList, setSchoolList] = useState([]);
 
-  const renderRankItems = () =>
-    rankList.map((item) => (
-      <RankItem key={item.rank}>
-        <RankNumber>{item.rank}등</RankNumber>
-        <Nickname>{item.nickname}</Nickname>
+  useEffect(() => {
+    const fetchSpellingData = async () => {
+      try {
+        const responsePersonal = await getPersonalSpelling();
+        if (
+          responsePersonal &&
+          responsePersonal.data &&
+          Array.isArray(responsePersonal.data.data.rankList)
+        ) {
+          setPersonalList(responsePersonal.data.data.rankList);
+        }
+
+        const responseClass = await getClassSpelling();
+        if (
+          responseClass &&
+          responseClass.data &&
+          Array.isArray(responseClass.data.data.rankList)
+        ) {
+          setClassList(responseClass.data.data.rankList);
+        }
+
+        const responseSchool = await getSchoolSpelling();
+        if (
+          responseSchool &&
+          responseSchool.data &&
+          Array.isArray(responseSchool.data.data.rankList)
+        ) {
+          setSchoolList(responseSchool.data.data.rankList);
+        }
+      } catch (error) {
+        console.error('맞춤법 놀이 API 요청 중 오류 발생:', error);
+      }
+    };
+
+    const fetchDictionaryData = async () => {
+      try {
+        const responsePersonal = await getPersonalDictionary();
+        if (
+          responsePersonal &&
+          responsePersonal.data &&
+          Array.isArray(responsePersonal.data.data.rankList)
+        ) {
+          setPersonalList(responsePersonal.data.data.rankList);
+        }
+
+        const responseClass = await getClassDictionary();
+        if (
+          responseClass &&
+          responseClass.data &&
+          Array.isArray(responseClass.data.data.rankList)
+        ) {
+          setClassList(responseClass.data.data.rankList);
+        }
+
+        const responseSchool = await getSchoolDictionary();
+        if (
+          responseSchool &&
+          responseSchool.data &&
+          Array.isArray(responseSchool.data.data.rankList)
+        ) {
+          setSchoolList(responseSchool.data.data.rankList);
+        }
+      } catch (error) {
+        console.error('국어사전 놀이 API 요청 중 오류 발생:', error);
+      }
+    };
+
+    if (activeGame === '맞춤법 놀이') {
+      fetchSpellingData();
+    } else if (activeGame === '국어사전 놀이') {
+      fetchDictionaryData();
+    }
+  }, [activeGame]);
+
+  const renderRankItems = (rankData) => {
+    return rankData.map((item, index) => (
+      <RankItem key={item.ranker}>
+        <RankNumber>{index + 1}등</RankNumber>
+        <Nickname>{item.ranker}</Nickname>
         <Score>{item.score}점</Score>
       </RankItem>
     ));
+  };
 
   return (
     <Container>
@@ -126,15 +204,15 @@ const RankingBody = () => {
       <RankingBox>
         <Rank>
           <RankTitle>전국 개인 순위</RankTitle>
-          {renderRankItems()}
+          {renderRankItems(personalList)}
         </Rank>
         <Rank>
           <RankTitle>교내 개인 순위</RankTitle>
-          {renderRankItems()}
+          {renderRankItems(classList)}
         </Rank>
         <Rank>
           <RankTitle>내 학교 순위</RankTitle>
-          {renderRankItems()}
+          {renderRankItems(schoolList)}
         </Rank>
       </RankingBox>
       <ExitButton to="/main/" />

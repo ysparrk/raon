@@ -23,6 +23,8 @@
   },
   "include": [
     "src",
-    "sound.d.ts"
+    "sound.d.ts",
+    "public/service-worker.js",
+    "src/serviceWorkerRegistration.ts" 
   ]
 }

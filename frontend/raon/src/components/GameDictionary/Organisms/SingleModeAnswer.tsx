@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, KeyboardEvent } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import smile from '../../../assets/Images/smile.png';
@@ -89,11 +89,19 @@ const SingleModeAnswer: React.FC<Props> = ({ onClose, answer, isCorrect }) => {
       }
     }
   });
+
+  const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      console.log('눌르긴함');
+      onClose();
+    }
+  };
+
   if (isCorrect) {
     return (
       <>
         <Firework />
-        <ModalOverlay>
+        <ModalOverlay onKeyDown={handleKeyDown} tabIndex={0}>
           <ModalContainer>
             <TopSection>
               <div>맞았어요!</div>
@@ -112,7 +120,7 @@ const SingleModeAnswer: React.FC<Props> = ({ onClose, answer, isCorrect }) => {
   return (
     <>
       <Tear />
-      <ModalOverlay>
+      <ModalOverlay onKeyDown={handleKeyDown} tabIndex={0}>
         <ModalContainer>
           <TopSection>
             <div>틀렸어요..</div>

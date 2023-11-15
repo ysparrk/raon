@@ -151,9 +151,13 @@ public class DictionarySocketServiceImpl implements DictionarySocketService{
 				}
 			});
 
-			Long id = member.getId();
-			redisService.setCountryDictionaryPoint(id, user.getCurrent_point());
+			redisService.setCountryDictionaryPoint(member.getNickname(), user.getCurrent_point());
 		}
+	}
+
+	@Override
+	public List<String> getUserNickNames(String roomId) {
+		return Rooms.getUserNickNameOf(roomId);
 	}
 
 }

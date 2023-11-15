@@ -12,6 +12,7 @@ const AnswerInputBox = ({
   onEnter,
 }: AnswerInputBoxProps) => {
   const [isFocused, setIsFocused] = useState(false);
+  const maxCharacterLimit = 3;
 
   const handleFocus = () => {
     setIsFocused(true);
@@ -33,7 +34,10 @@ const AnswerInputBox = ({
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     // 정규표현식을 사용하여 한글만 허용
     const koreanOnly = /^[ㄱ-ㅎ가-힣]*$/;
-    if (koreanOnly.test(event.target.value)) {
+    if (
+      koreanOnly.test(event.target.value) &&
+      event.target.value.length <= maxCharacterLimit
+    ) {
       onChange(event);
     }
   };

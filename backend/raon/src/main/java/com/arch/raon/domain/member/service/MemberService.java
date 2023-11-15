@@ -9,7 +9,7 @@ import com.arch.raon.global.auth.dto.OAuthUserInfo;
 
 public interface MemberService {
     public AuthUserInfo getOrRegisterUser(OAuthUserInfo oauthUserInfo);
-    public void signup(Long id, MemberSignupReqDTO memberSignupReqDTO);
+    void signup(Long id, MemberSignupReqDTO memberSignupReqDTO);
     public CheckActiveResDTO checkActive(Long id);
     boolean checkNickname(String nickname);
     void modifyMember(Long id, MemberSignupReqDTO memberSignupReqDTO);

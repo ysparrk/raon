@@ -40,7 +40,7 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({
   }, []);
 
   const initializeWebSocket = () => {
-    const nickname = localStorage.getItem('nickname') ?? '미사용자';
+    let nickname = localStorage.getItem('nickname') ?? '미사용자';
     let roomId = sessionStorage.getItem('roomId') ?? '0000';
     // const socket = new SockJS(`${process.env.REACT_APP_API_URL}api/ws`, null, {
     //   transports: ['websocket', 'xhr-streaming', 'xhr-polling'],
@@ -104,6 +104,10 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({
           case 'DIRECTION_QUIZ':
             console.log('동서남북 퀴즈');
             console.log(body);
+            setRoomStatus((prev) => ({
+              ...prev,
+              breakTime: false,
+            }));
             setMultiState((prev) => ({
               ...prev,
               type: 'D',
@@ -113,13 +117,17 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({
               northWord: body.dictionaryDirectionQuiz.northWord,
               eastWord: body.dictionaryDirectionQuiz.eastWord,
               southWord: body.dictionaryDirectionQuiz.southWord,
-              answer: body.dictionaryDirectionQuiz.answer,
+              answer: body.answer,
             }));
             break;
 
           case 'INITIAL_QUIZ':
             console.log('초성퀴즈');
             console.log(body);
+            setRoomStatus((prev) => ({
+              ...prev,
+              breakTime: false,
+            }));
             setMultiState((prev) => ({
               ...prev,
               type: 'I',
@@ -128,9 +136,40 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({
               initial: body.dictionaryInitialQuiz.initial,
               meaning: body.dictionaryInitialQuiz.meaning,
               word: body.dictionaryInitialQuiz.word,
+              answer: body.answer,
             }));
             break;
-
+          case 'STAGE_RESULT':
+            console.log(body);
+            setRoomStatus((prev) => ({
+              ...prev,
+              userResult: body.users,
+              breakTime: true,
+            }));
+            break;
+          case 'LEAVE':
+            console.log(body);
+            setRoomStatus((prev) => ({
+              ...prev,
+              users: body.lefts,
+            }));
+            if (body.nextOwner === nickname) {
+              setRoomStatus((prev) => ({
+                ...prev,
+                manager: true,
+              }));
+              alert('방장이 되었습니다');
+            }
+            break;
+          case 'FINAL_RESULT':
+            console.log(body);
+            setRoomStatus((prev) => ({
+              ...prev,
+              userResult: body.users,
+              isFinish: true,
+            }));
+            setGameStart(false);
+            break;
           default:
             console.log(body);
             break;
@@ -182,6 +221,7 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({
 
     const createRoom = async () => {
       roomId = (await sessionStorage.getItem('roomId')) ?? '0000';
+      nickname = (await localStorage.getItem('nickname')) ?? '미사용자';
       client.activate();
     };
 

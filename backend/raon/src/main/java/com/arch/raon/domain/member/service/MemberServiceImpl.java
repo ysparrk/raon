@@ -12,6 +12,7 @@ import com.arch.raon.global.auth.dto.AuthUserInfo;
 import com.arch.raon.global.auth.dto.OAuthUserInfo;
 import com.arch.raon.global.exception.CustomException;
 import com.arch.raon.global.exception.ErrorCode;
+import com.arch.raon.global.service.RedisService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,6 +28,7 @@ public class MemberServiceImpl implements MemberService{
 
     private final MemberRepository memberRepository;
     private final SchoolRepository schoolRepository;
+    private final RedisService redisService;
 
     @Override
     @Transactional
@@ -71,6 +73,12 @@ public class MemberServiceImpl implements MemberService{
     }
     @Override
     public boolean checkNickname(String nickname){
+        for(int i=1; i<=10; i++){
+            String str = "테스트" + i;
+            if(nickname.equals(str)){
+                return false;
+            }
+        }
         Optional<Member> byNickname = memberRepository.findByNickname(nickname);
         if(byNickname.isPresent()){
             return false;
@@ -87,8 +95,20 @@ public class MemberServiceImpl implements MemberService{
                 return super.getErrorCode();
             }
         });
+        String oldNickname = member.getNickname();
+        String oldSchool = member.getSchool();
+        System.out.println("oldNickname = " + oldNickname);
 
         member.signup(memberSignupReqDTO);
+
+        String newNickname = member.getNickname();
+        String newSchool = member.getSchool();
+        System.out.println("newNickname = " + newNickname);
+
+        redisService.changeMemberInfo(oldNickname, oldSchool, newNickname, newSchool);
+
+
+
     }
 
     @Override

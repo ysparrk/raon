@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Client } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
@@ -6,15 +6,28 @@ import { useNavigate } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import ExitButton from '../../Common/Atoms/ExitButtonInRoom';
 import TitleBox from '../../Common/Atoms/TitleBox';
-import { multiDictState } from '../../../recoil/Atoms';
+import { multiDictState, roomManageState } from '../../../recoil/Atoms';
 import QuizCrossWord from '../Organisms/MultiQuizCrossWord';
 import QuizLetter from '../Organisms/MultiQuizLetter';
+import MultiResult from '../Organisms/MultiResult';
 
 const ContentDiv = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+`;
+
+const ReadyDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-family: 'CookieRun';
+  font-weight: 900;
+  color: white;
+  height: 70vh;
+  font-size: 5.125rem;
 `;
 const CountDiv = styled.div`
   position: fixed;
@@ -28,6 +41,25 @@ const CountDiv = styled.div`
 
 const DictionaryWaitingRoom = () => {
   const Quiz = useRecoilValue(multiDictState);
+  const Room = useRecoilValue(roomManageState);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (Room.isFinish) {
+      navigate('/game/dictionary-multi-result');
+    }
+  }, [Room.isFinish]);
+  if (Room.breakTime) {
+    return (
+      <div>
+        <TitleBox>국어사전 놀이</TitleBox>
+        <CountDiv>{Quiz.stage} / 10</CountDiv>
+        <ContentDiv>
+          <MultiResult />
+        </ContentDiv>
+      </div>
+    );
+  }
 
   if (Quiz.type === 'I') {
     return (
@@ -71,7 +103,9 @@ const DictionaryWaitingRoom = () => {
   return (
     <div>
       <TitleBox>국어사전 놀이</TitleBox>
-      <ContentDiv>게임시작중</ContentDiv>
+      <ContentDiv>
+        <ReadyDiv>곧 게임이 시작됩니다!</ReadyDiv>
+      </ContentDiv>
     </div>
   );
 };

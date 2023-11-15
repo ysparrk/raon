@@ -1,9 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
 import SelectOption from '../../Common/Atoms/SelectOption';
 import main1 from '../../../assets/Images/main1.png';
-import main2 from '../../../assets/Images/main2.png';
+import main2 from '../../../assets/Images/main22.png';
 import main3 from '../../../assets/Images/main3.png';
 import main4 from '../../../assets/Images/main4.png';
 import ProfileButton from '../Atoms/ProfileButton';
@@ -15,7 +16,7 @@ const MenuContainer = styled.div`
   align-items: center;
   max-width: 90%;
   margin: 0 auto;
-  height: 90vh; // 뷰포트의 높이에 따라 컨테이너의 높이를 설정
+  height: 90vh;
 `;
 
 const MainMenu = () => {
@@ -32,7 +33,13 @@ const MainMenu = () => {
         <SelectOption
           imgSrc={main2}
           optionText="글 요약 놀이"
-          onClick={() => navigate('/game/summarize-category')}
+          isAble={false}
+          onClick={() => {
+            Swal.fire({
+              title: '비활성화된 요소에요',
+              text: '나중에 만나요!',
+            });
+          }}
         />
         <SelectOption
           imgSrc={main3}

@@ -1,29 +1,29 @@
 package com.arch.raon.domain.grammar.service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.IntStream;
-
+import com.arch.raon.domain.grammar.dto.query.GrammarMyRankQueryDTO;
+import com.arch.raon.domain.grammar.dto.redis.GrammarMyRankRedisDTO;
 import com.arch.raon.domain.grammar.dto.request.GrammarResultDTO;
 import com.arch.raon.domain.grammar.dto.request.GrammarResultSaveReqDTO;
-import com.arch.raon.domain.grammar.dto.query.GrammarMyRankQueryDTO;
+import com.arch.raon.domain.grammar.dto.response.GrammarMyRankListResDTO;
 import com.arch.raon.domain.grammar.dto.response.GrammarMyRankingResDTO;
 import com.arch.raon.domain.grammar.dto.response.GrammarQuizResDTO;
+import com.arch.raon.domain.grammar.entity.GrammarQuiz;
+import com.arch.raon.domain.grammar.repository.GrammarQuizRepository;
+import com.arch.raon.domain.grammar.repository.GrammarScoreRepository;
 import com.arch.raon.domain.member.entity.Member;
 import com.arch.raon.domain.member.repository.MemberRepository;
 import com.arch.raon.global.exception.CustomException;
 import com.arch.raon.global.exception.ErrorCode;
+import com.arch.raon.global.service.RedisService;
 import com.arch.raon.global.util.enums.GrammarRanking;
 import com.arch.raon.global.util.enums.RankState;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.arch.raon.domain.grammar.entity.GrammarQuiz;
-import com.arch.raon.domain.grammar.entity.GrammarScore;
-import com.arch.raon.domain.grammar.repository.GrammarQuizRepository;
-import com.arch.raon.domain.grammar.repository.GrammarScoreRepository;
-
-import lombok.RequiredArgsConstructor;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.IntStream;
 
 @Service
 @Transactional(readOnly = true)
@@ -33,6 +33,7 @@ public class GrammarServiceImpl implements GrammarService {
 	private final GrammarQuizRepository grammarQuizRepository;
 	private final GrammarScoreRepository grammarScoreRepository;
 	private final MemberRepository memberRepository;
+	private final RedisService redisService;
 
 	@Override
 	public List<GrammarQuizResDTO> getQuizzes() {
@@ -65,9 +66,17 @@ public class GrammarServiceImpl implements GrammarService {
 
 	@Transactional
 	@Override
-	public Long saveScoreResult(GrammarResultSaveReqDTO grammarResultSaveReqDTO, Long id) {
+	public void saveScoreResult(GrammarResultSaveReqDTO grammarResultSaveReqDTO, Long id) {
 		int score = 0;
-		Member member = memberRepository.findById(id).get();
+
+		Member member = memberRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND) {
+			@Override
+			public ErrorCode getErrorCode() {
+				return super.getErrorCode();
+			}
+		});
+
+
 		List<GrammarResultDTO> grammarResultList = grammarResultSaveReqDTO.getGrammarResultList();
 		for (GrammarResultDTO grammarResultDTO : grammarResultList) {
 			if(grammarResultDTO.getHit() == 1) {
@@ -75,14 +84,9 @@ public class GrammarServiceImpl implements GrammarService {
 			}
 		}
 
-		GrammarScore grammarScoreEntity = GrammarScore
-				.builder()
-				.score(score)
-				.member(member)
-				.build();
-
-		grammarScoreRepository.save(grammarScoreEntity);
-		return grammarScoreEntity.getId();
+		redisService.setCountryMyGrammarPoint(member.getNickname(), score * 10);
+		redisService.setSchoolMyGrammarPoint(member.getNickname(), member.getSchool(), score * 10);
+		redisService.setSchoolGrammarPoint(member.getSchool(), score * 10);
 	}
 
 	@Transactional
@@ -273,5 +277,73 @@ public class GrammarServiceImpl implements GrammarService {
 		}
 
 	}
+
+	@Override
+	public GrammarMyRankListResDTO getCountryMyGrammarRankList(Long memberId) {
+		Member member = memberRepository.findById(memberId).orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND) {
+			@Override
+			public ErrorCode getErrorCode() {
+				return super.getErrorCode();
+			}
+		});
+
+		List<GrammarMyRankRedisDTO> rankRedisList = redisService.getCountryMyGrammarRankList();
+		Long myRank = redisService.getCountryMyGrammarRank(member.getNickname());
+		double myScore = redisService.getCountryMyGrammarPoint(member.getNickname());
+
+		GrammarMyRankListResDTO rankList = GrammarMyRankListResDTO.builder()
+				.myRank(myRank+1)
+				.myScore((int) myScore)
+				.rankList(rankRedisList)
+				.build();
+
+		return rankList;
+	}
+
+	@Override
+	public GrammarMyRankListResDTO getSchoolMyGrammarRankList(Long memberId) {
+		Member member = memberRepository.findById(memberId).orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND) {
+			@Override
+			public ErrorCode getErrorCode() {
+				return super.getErrorCode();
+			}
+		});
+
+		List<GrammarMyRankRedisDTO> rankRedisList = redisService.getSchoolMyGrammarRankList(member.getSchool());
+		Long myRank = redisService.getSchoolMyGrammarRank(member.getNickname(), member.getSchool());
+		double myScore = redisService.getSchoolMyGrammarPoint(member.getNickname(), member.getSchool());
+
+		GrammarMyRankListResDTO rankList = GrammarMyRankListResDTO.builder()
+				.myRank(myRank+1)
+				.myScore((int) myScore)
+				.rankList(rankRedisList)
+				.build();
+
+
+		return rankList;
+	}
+
+	@Override
+	public GrammarMyRankListResDTO getSchoolGrammarRankList(Long memberId) {
+		Member member = memberRepository.findById(memberId).orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND) {
+			@Override
+			public ErrorCode getErrorCode() {
+				return super.getErrorCode();
+			}
+		});
+
+		List<GrammarMyRankRedisDTO> schoolGrammarRankList = redisService.getSchoolGrammarRankList();
+		Long mySchoolRank = redisService.getSchoolGrammarRank(member.getSchool());
+		double mySchoolScore = redisService.getSchoolGrammarPoint(member.getSchool());
+
+		GrammarMyRankListResDTO rankList = GrammarMyRankListResDTO.builder()
+				.myRank(mySchoolRank+1)
+				.myScore((int) mySchoolScore)
+				.rankList(schoolGrammarRankList)
+				.build();
+
+		return rankList;
+	}
+
 
 }
