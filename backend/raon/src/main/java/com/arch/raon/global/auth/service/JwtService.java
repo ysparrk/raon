@@ -10,12 +10,11 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import net.minidev.json.JSONObject;
-import org.json.simple.parser.JSONParser;
+import net.minidev.json.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.spec.SecretKeySpec;
-import java.text.ParseException;
 import java.util.Base64;
 import java.util.Date;
 import java.util.Objects;
@@ -82,13 +81,7 @@ public class JwtService {
             throw new TokenException(ErrorCode.TOKEN_INVALID);
         }
 
-        // newAccessToken 생성
-        String newAccessToken = createAccessToken(id);
-
-        // redis 업데이트
-        redisService.updateRefreshTokenKey(String.valueOf(id), newAccessToken);
-
-        return newAccessToken;
+        return createAccessToken(id);
     }
 
     public String getSubject(String token){
@@ -127,6 +120,7 @@ public class JwtService {
         try{
             jsonObject = (JSONObject) jsonParser.parse(new String(userId));
         }catch (Exception e){
+            e.printStackTrace();
             throw new TokenException(ErrorCode.TOKEN_INVALID);
         }
         return (String) jsonObject.get("sub");

@@ -43,9 +43,6 @@ public class RedisService {
         return Boolean.TRUE.equals(securityRedis.delete(id));
     }
 
-    public void updateRefreshTokenKey(String id, String newAccessToken){
-        securityRedis.rename(id, newAccessToken);
-    }
 
     public void setCountryGrammarPoint(String nickName, int point){
         rankingRedis.opsForZSet().incrementScore("countryGrammar",nickName, point);
