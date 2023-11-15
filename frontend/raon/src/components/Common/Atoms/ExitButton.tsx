@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import eraser from '../../../assets/Images/eraser.png';
 
 const ExitButton = ({ to }: { to: string }) => {
   const navigate = useNavigate();
@@ -17,8 +18,16 @@ const ExitButton = ({ to }: { to: string }) => {
   const textStyle: React.CSSProperties = {
     fontFamily: "'CookieRun'",
     cursor: 'pointer',
-    color: '#FFCD4A',
-    fontSize: '6.25rem',
+    color: 'ivory',
+    fontSize: '6rem',
+    WebkitTextStroke: '0.05rem navy',
+    backgroundImage: `url(${eraser})`,
+    backgroundSize: 'cover',
+    width: '17.5rem',
+    height: '8.25rem',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
   };
 
   return (
