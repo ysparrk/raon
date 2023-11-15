@@ -6,6 +6,7 @@ import com.arch.raon.domain.dictionary.dto.request.SocketQuizReqDTO;
 import com.arch.raon.domain.dictionary.dto.response.DictionaryQuizResDTO;
 import com.arch.raon.domain.dictionary.dto.response.socket.SocketQuizDTO;
 import com.arch.raon.domain.dictionary.dto.response.socket.SocketStageResultResDTO;
+import com.arch.raon.domain.dictionary.vo.User;
 import com.arch.raon.global.util.enums.RoomResult;
 
 public interface DictionarySocketService {
@@ -27,5 +28,7 @@ public interface DictionarySocketService {
 
     void saveScore(String roomId);
 
-	List<String> getUserNickNames(String roomId);
+	List<User> getUsersOf(String roomId);
+
+	String getOwnerOf(String roomId);
 }

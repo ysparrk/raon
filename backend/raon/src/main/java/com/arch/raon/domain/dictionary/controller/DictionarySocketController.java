@@ -1,7 +1,5 @@
 package com.arch.raon.domain.dictionary.controller;
 
-import com.arch.raon.domain.dictionary.service.DictionaryService;
-import com.arch.raon.domain.dictionary.vo.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -79,7 +77,10 @@ public class DictionarySocketController {
 		switch (result){
 			case JOIN_SUCCESS:
 			case CREATE_SUCCESS:
-				SocketJoinResDTO socketJoinResDTO = Rooms.getUsersOf(reqDTO.getRoomId());
+				SocketJoinResDTO socketJoinResDTO = new SocketJoinResDTO(
+					 dictionarySocketService.getOwnerOf(reqDTO.getRoomId())
+					,dictionarySocketService.getUsersOf(reqDTO.getRoomId())
+					);
 				socketJoinResDTO.setMessage(SocketResponse.ENTER);
 				socketJoinResDTO.setNewComer(reqDTO.getNickname());
 
@@ -111,7 +112,7 @@ public class DictionarySocketController {
 				sendToRoom(reqDTO.getRoomId()
 					, new SocketLeaveResDTO(reqDTO.getNickname()
 											, nextOwner
-											, dictionarySocketService.getUserNickNames(reqDTO.getRoomId())
+											, dictionarySocketService.getUsersOf(reqDTO.getRoomId())
 											, SocketResponse.LEAVE
 					)
 				);
