@@ -51,12 +51,12 @@ public class Rooms {
 	 * @return true  : 방 생성 성공
 	 *         false : 방 생성 실패
 	 */
-	public static boolean makeRoom(String roomId, String ownerNickname){
+	public static boolean makeRoom(String roomId, String ownerNickname, String ownerImgUrl, String school){
 		if(hasRoomThatIdIs(roomId)){
 			return false;
 		}
 		else {
-			rooms.put(roomId, new Room(ownerNickname));
+			rooms.put(roomId, new Room(ownerNickname, ownerImgUrl, ownerNickname));
 			return true;
 		}
 	}
@@ -105,13 +105,10 @@ public class Rooms {
 			return true;
 		}
 		return false;
+
 	}
 
-	public static SocketJoinResDTO getUsersOf(String roomId){
-		return new SocketJoinResDTO(roomOf(roomId).getRoomOwner(), roomOf(roomId).getUsers());
-	}
-
-	public static List<String> getUserNickNameOf(String roomId){
+	public static List<User> getUsersOf(String roomId){
 		return roomOf(roomId).getUsers();
 	}
 
@@ -141,8 +138,8 @@ public class Rooms {
 	 * @param nickname
 	 * @param roomId
 	 */
-	public static void userEnterToRoom(String nickname, String roomId) {
-		roomOf(roomId).enter(nickname);
+	public static void userEnterToRoom(String nickname, String roomId, String imgUrl, String school) {
+		roomOf(roomId).enter(nickname, imgUrl, school);
 	}
 
 	public static boolean isUserInRoom(String nickname, String roomId){

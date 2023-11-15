@@ -37,6 +37,11 @@ public class Room {
 		this.owner = nickname;
 	}
 
+	public Room(String nickname, String imgUrl, String school){
+		userInfo.put(nickname, new User(nickname, imgUrl, school));
+		this.owner = nickname;
+	}
+
 	//========== WAITING일 때의 메소드들 =========================
 	public boolean hasUserNamed(String nickname){
 		return userInfo.containsKey(nickname);
@@ -46,16 +51,16 @@ public class Room {
 	}
 	public int getRoomSize(){return userInfo.size();}
 
-	public List<String> getUsers(){
-		List<String> users = new ArrayList<>();
+	public List<User> getUsers(){
+		List<User> users = new ArrayList<>();
 		for(Map.Entry<String, User> entry : userInfo.entrySet()){
-			users.add(entry.getKey());
+			users.add(entry.getValue());
 		}
 		return users;
 	}
 
-	public void enter(String enteredUser){
-		userInfo.put(enteredUser,new User(enteredUser, 0));
+	public void enter(String enteredUser, String imgUrl, String school){
+		userInfo.put(enteredUser,new User(enteredUser, imgUrl, school));
 	}
 
 	// 방에 있는 유저가 방에 나간다.
@@ -173,8 +178,6 @@ public class Room {
 		Collections.sort(rank);
 		return rank;
 	}
-
-
 
 
 	//============ 방장에 대한 메소드들 =========================

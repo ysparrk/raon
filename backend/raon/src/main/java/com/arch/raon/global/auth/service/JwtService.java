@@ -1,33 +1,44 @@
 package com.arch.raon.global.auth.service;
 
+import com.arch.raon.global.auth.dto.ReissueTokenReqDTO;
 import com.arch.raon.global.auth.exception.TokenException;
 import com.arch.raon.global.exception.ErrorCode;
+import com.arch.raon.global.service.RedisService;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import net.minidev.json.JSONObject;
+import net.minidev.json.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.spec.SecretKeySpec;
+import java.util.Base64;
 import java.util.Date;
+import java.util.Objects;
+
 
 @Service
 public class JwtService {
+    private final RedisService redisService;
     private static final long MILLI_SECOND = 1000L;
     private final String secretKey;
 
     private final long expirationHours = 60 * 30;
     private final String issuer;
 
+
     //30일
     private final long refreshTokenExpire = 60 * 60 * 24 * 30;
 
     public JwtService(
+            RedisService redisService,
             @Value("${custom.jwt.issuer}") String issuer,
             @Value("${custom.jwt.secretKey}") String secretKey
     ) {
+        this.redisService = redisService;
         this.issuer=issuer;
         this.secretKey=secretKey;
     }
@@ -57,6 +68,22 @@ public class JwtService {
                 .compact();
     }
 
+    public String reissueAccessToken(String refreshToken, ReissueTokenReqDTO reissueTokenReqDTO){
+        // refreshToken 확인
+        validateToken(refreshToken);
+        String accessToken = reissueTokenReqDTO.getAccessToken();
+        Long id = Long.valueOf(extractSubFromToken(accessToken));
+        System.out.println(id);
+        String redisRefreshToken = redisService.getRefreshToken(String.valueOf(id));
+
+        // 기존 refreshToken 일치 확인
+        if (!Objects.equals(redisRefreshToken, refreshToken)){
+            throw new TokenException(ErrorCode.TOKEN_INVALID);
+        }
+
+        return createAccessToken(id);
+    }
+
     public String getSubject(String token){
         return Jwts.parserBuilder()
                 .setSigningKey(secretKey.getBytes())
@@ -65,6 +92,7 @@ public class JwtService {
                 .getBody()
                 .getSubject();
     }
+
     public void validateToken(String token){
         try{
             Jwts.parserBuilder()
@@ -82,4 +110,19 @@ public class JwtService {
         return (int) refreshTokenExpire;
     }
 
+    public String extractSubFromToken(String expiredAccessToken) {
+        JSONParser jsonParser = new JSONParser();
+        String[] split = expiredAccessToken.split("\\.");
+        byte[] payLoad = split[1].getBytes();
+        Base64.Decoder decoder = Base64.getDecoder();
+        byte[] userId = decoder.decode(payLoad);
+        JSONObject jsonObject = null;
+        try{
+            jsonObject = (JSONObject) jsonParser.parse(new String(userId));
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new TokenException(ErrorCode.TOKEN_INVALID);
+        }
+        return (String) jsonObject.get("sub");
+    }
 }

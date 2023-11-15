@@ -39,16 +39,27 @@ public class DictionarySocketServiceImpl implements DictionarySocketService{
 	@Override
 	public RoomResult connectRoom(String nickname, String roomId) {
 		if(isValidUser(nickname)) {
+			// TODO: 여기서 nickname으로 url과 school을 받아와야 한다.
+			Member member = memberRepository.findByNickname(nickname).orElseThrow(() -> new CustomException(ErrorCode.NO_SUCH_MEMBER){
+				@Override
+				public ErrorCode getErrorCode() {
+					return super.getErrorCode();
+				}
+			});
+
+			String imgUrl = member.getProfileUrl();
+			String school = member.getSchool();
+
 			// 이미 존재하는 방이면 참가
 			if(Rooms.hasRoomThatIdIs(roomId)){
 				if(Rooms.isThatRoomFull(roomId)){
 					return RoomResult.JOIN_FAIL_FULL;
 				}
-				Rooms.userEnterToRoom(nickname, roomId);
+				Rooms.userEnterToRoom(nickname, roomId, imgUrl, school);
 				return RoomResult.JOIN_SUCCESS;
 			}
 			// 존재하지 않는 방이면 방 생성
-			Rooms.makeRoom(roomId, nickname);
+			Rooms.makeRoom(roomId, nickname, imgUrl, school);
 			return RoomResult.CREATE_SUCCESS;
 		}
 		return RoomResult.FAIL_INVALID_USER;
@@ -156,8 +167,13 @@ public class DictionarySocketServiceImpl implements DictionarySocketService{
 	}
 
 	@Override
-	public List<String> getUserNickNames(String roomId) {
-		return Rooms.getUserNickNameOf(roomId);
+	public List<User> getUsersOf(String roomId) {
+		return Rooms.getUsersOf(roomId);
+	}
+
+	@Override
+	public String getOwnerOf(String roomId) {
+		return Rooms.getOwnerOf(roomId);
 	}
 
 }

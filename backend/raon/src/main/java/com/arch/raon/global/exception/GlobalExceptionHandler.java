@@ -4,9 +4,12 @@ import com.arch.raon.global.auth.exception.TokenException;
 import com.arch.raon.global.dto.ErrorResponseDTO;
 import com.arch.raon.global.dto.ResponseDTO;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.ConstraintViolationException;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.InvalidDataAccessResourceUsageException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -37,11 +40,34 @@ public class GlobalExceptionHandler {
     // CustomException을 상속받지 않은 에러를 처리하는 Handler들 작성
     // @Valid 예외 처리
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ErrorResponseDTO> handleMethodArgumentNotValidException(BindException e) {
+    public ResponseEntity<ErrorResponseDTO> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         log.error("[EXCEPTION] {}", e.getClass().getSimpleName());
         e.printStackTrace();
         return ResponseEntity.status(BAD_REQUEST)
-                .body(new ErrorResponseDTO(INVALID_INPUT_VALUE.getCode(), e.getFieldError().getDefaultMessage()));
+                .body(new ErrorResponseDTO(INVALID_INPUT_VALUE.getCode(), INVALID_INPUT_VALUE.getMessage()));
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<ErrorResponseDTO> handleMethodArgumentNotValidException(ConstraintViolationException e) {
+        log.error("[EXCEPTION] {}", e.getClass().getSimpleName());
+        e.printStackTrace();
+        return ResponseEntity.status(BAD_REQUEST)
+                .body(new ErrorResponseDTO(INVALID_INPUT_VALUE.getCode(), INVALID_INPUT_VALUE.getMessage()));
+    }
+
+    @ExceptionHandler(InvalidDataAccessResourceUsageException.class)
+    public ResponseEntity<ErrorResponseDTO> handleMethodArgumentNotValidException(InvalidDataAccessResourceUsageException e) {
+        log.error("[EXCEPTION] {}", e.getClass().getSimpleName());
+        e.printStackTrace();
+        return ResponseEntity.status(BAD_REQUEST)
+                .body(new ErrorResponseDTO(INVALID_INPUT_VALUE.getCode(), INVALID_INPUT_VALUE.getMessage()));
+    }
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<ErrorResponseDTO> handleMethodArgumentNotValidException(HttpMessageNotReadableException e) {
+        log.error("[EXCEPTION] {}", e.getClass().getSimpleName());
+        e.printStackTrace();
+        return ResponseEntity.status(BAD_REQUEST)
+                .body(new ErrorResponseDTO(INVALID_INPUT_VALUE.getCode(), INVALID_INPUT_VALUE.getMessage()));
     }
 
     // 요청 데이터 인자 부족

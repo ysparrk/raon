@@ -3,13 +3,14 @@ package com.arch.raon.domain.dictionary.dto.response.socket;
 import java.io.Serializable;
 import java.util.List;
 
+import com.arch.raon.domain.dictionary.vo.User;
 import com.arch.raon.global.util.enums.SocketResponse;
 
 public class SocketLeaveResDTO implements Serializable {
 	private String leaved;
 	private String nextOwner = "none";
 
-	private List<String> lefts;
+	private List<User> lefts;
 
 	private SocketResponse message;
 
@@ -17,7 +18,7 @@ public class SocketLeaveResDTO implements Serializable {
 		super();
 	}
 
-	public SocketLeaveResDTO(String leaved, String nextOwner, List<String> lefts, SocketResponse message) {
+	public SocketLeaveResDTO(String leaved, String nextOwner, List<User> lefts, SocketResponse message) {
 		this.leaved = leaved;
 		this.nextOwner = nextOwner;
 		this.lefts = lefts; // 방에 남은 사람들
@@ -58,11 +59,11 @@ public class SocketLeaveResDTO implements Serializable {
 		this.message = message;
 	}
 
-	public List<String> getLefts() {
+	public List<User> getLefts() {
 		return lefts;
 	}
 
-	public void setLefts(List<String> lefts) {
+	public void setLefts(List<User> lefts) {
 		this.lefts = lefts;
 	}
 }
