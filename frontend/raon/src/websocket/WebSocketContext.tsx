@@ -33,7 +33,7 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({
   const setMultiState = useSetRecoilState(multiDictState);
   const setGameStart = useSetRecoilState(gameStartState);
   const setRoomStatus = useSetRecoilState(roomManageState);
-  const [isFinish, setIsFinish] = useState(false);
+  let finish = false;
   const initializeWebSocket = () => {
     let nickname = localStorage.getItem('nickname') ?? '미사용자';
     let roomId = sessionStorage.getItem('roomId') ?? '0000';
@@ -83,6 +83,7 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({
           case 'ENTER':
             console.log('방 사람 리스트');
             console.log(body);
+            finish = false;
             setRoomStatus((prev) => ({
               ...prev,
               users: body.users,
@@ -90,7 +91,7 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({
             toast(`${body.newComer} 님이 참여했습니다!`, {
               toastId: body.newComer,
               pauseOnHover: false,
-              autoClose: 4000,
+              autoClose: 3000,
             });
 
             break;
@@ -99,7 +100,6 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({
             console.log('방장이 게임 시작');
             console.log(body);
             setGameStart(true);
-            setIsFinish(false);
             break;
 
           case 'DIRECTION_QUIZ':
@@ -154,7 +154,7 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({
               ...prev,
               users: body.lefts,
             }));
-            if (body.nextOwner === nickname && !isFinish) {
+            if (body.nextOwner === nickname && !finish) {
               setRoomStatus((prev) => ({
                 ...prev,
                 manager: true,
@@ -174,7 +174,7 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({
               isFinish: true,
             }));
             setGameStart(false);
-            setIsFinish(true);
+            finish = true;
             break;
           default:
             console.log(body);
