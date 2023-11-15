@@ -5,23 +5,12 @@ import LeftSpeakBalloon from '../../Common/Atoms/LeftSpeakBalloon';
 import RightSpeakBalloon from '../../Common/Atoms/RightSpeakBalloon';
 import HelpBox from '../Organisms/HelpBox';
 import HelpCharacter from '../../Common/Atoms/HelpCharacterDiv';
-import RoomExitButton from '../../Common/Atoms/ExitButtonInRoom';
 
 const ContentDiv = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-`;
-
-const ModalExitDiv = styled.div`
-  position: absolute;
-  bottom: -15%;
-  right: 6%;
-  display: flex;
-  width: 300px;
-  height: 300px;
-  z-index: 8;
 `;
 
 const SpeakEventLeftDiv = styled.div`
@@ -56,14 +45,7 @@ const DictionaryInit = () => {
         <InitInterface />
       </ContentDiv>
       <HelpCharacter onClick={toggleHelpBox} />
-      {helpBoxVisible && (
-        <>
-          <HelpBox />
-          <ModalExitDiv>
-            <RoomExitButton onClick={toggleHelpBox} />
-          </ModalExitDiv>
-        </>
-      )}
+      {helpBoxVisible && <HelpBox />}
     </div>
   );
 };

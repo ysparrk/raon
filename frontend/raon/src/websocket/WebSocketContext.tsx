@@ -1,13 +1,15 @@
 // WebSocketContext.tsx
-import React, { createContext, useContext, useEffect } from 'react';
+import React, { createContext, useContext, useState } from 'react';
 import { Client, IMessage } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
-import { useSetRecoilState } from 'recoil';
+import { useSetRecoilState, useRecoilState } from 'recoil';
+import { toast, ToastContainer } from 'react-toastify';
 import {
   multiDictState,
   gameStartState,
   roomManageState,
 } from '../recoil/Atoms';
+import 'react-toastify/dist/ReactToastify.css';
 
 interface WebSocketContextProps {
   leaveRoom: () => void;
@@ -31,14 +33,7 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({
   const setMultiState = useSetRecoilState(multiDictState);
   const setGameStart = useSetRecoilState(gameStartState);
   const setRoomStatus = useSetRecoilState(roomManageState);
-
-  useEffect(() => {
-    // Initialize WebSocket connection here if needed
-    return () => {
-      // Clean up WebSocket connection when the component unmounts
-    };
-  }, []);
-
+  const [isFinish, setIsFinish] = useState(false);
   const initializeWebSocket = () => {
     let nickname = localStorage.getItem('nickname') ?? '미사용자';
     let roomId = sessionStorage.getItem('roomId') ?? '0000';
@@ -92,6 +87,11 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({
               ...prev,
               users: body.users,
             }));
+            toast(`${body.newComer} 님이 참여했습니다!`, {
+              toastId: body.newComer,
+              pauseOnHover: false,
+              autoClose: 4000,
+            });
 
             break;
 
@@ -99,6 +99,7 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({
             console.log('방장이 게임 시작');
             console.log(body);
             setGameStart(true);
+            setIsFinish(false);
             break;
 
           case 'DIRECTION_QUIZ':
@@ -153,12 +154,16 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({
               ...prev,
               users: body.lefts,
             }));
-            if (body.nextOwner === nickname) {
+            if (body.nextOwner === nickname && !isFinish) {
               setRoomStatus((prev) => ({
                 ...prev,
                 manager: true,
               }));
-              alert('방장이 되었습니다');
+              toast.success(`방장이 됐습니다!`, {
+                toastId: body.nextOwner,
+                pauseOnHover: true,
+                autoClose: 4000,
+              });
             }
             break;
           case 'FINAL_RESULT':
@@ -169,6 +174,7 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({
               isFinish: true,
             }));
             setGameStart(false);
+            setIsFinish(true);
             break;
           default:
             console.log(body);

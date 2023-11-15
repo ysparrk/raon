@@ -49,49 +49,91 @@ const Rank = styled.div`
   flex-direction: column;
   align-items: flex-start;
   justify-content: start;
-  padding: 10px;
+  padding: 0.625rem;
   border-right: 1px solid #ccc;
+  height: 25rem;
 
   &:last-child {
     border-right: none;
   }
 `;
 
+const RankScrollDiv = styled.div`
+  height: 23rem;
+  overflow-y: auto;
+  overflow-x: hidden;
+  width: 100%;
+  margin: 0;
+  padding: 0.5875rem;
+`;
+
 const RankTitle = styled.div`
-  font-size: 44px;
+  font-size: 2.5rem;
   font-family: 'CookieRun';
   text-align: center;
   width: 100%;
-  padding-bottom: 10px;
+  padding-bottom: 0.625rem;
 `;
 
-const RankItem = styled.div`
+const RankItem = styled.div<{ rank: number }>`
   display: flex;
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  padding: 5px 0;
+  padding: 0.3125rem 0;
+  transition: background-color 0.3s;
+  &.first,
+  &.second,
+  &.third {
+    color: white;
+  }
 `;
 
-const RankNumber = styled.div`
-  flex: 0 0 20%;
+const RankNumber = styled.div<{ rank: number }>`
+  flex: 0 0 10%;
   text-align: left;
   font-family: 'CookieRun';
-  font-size: 24px;
+  font-size: 1.5rem;
+  &.first {
+    color: gold; /* 1등 색상 */
+    text-shadow:
+      -0.0938rem -0.0938rem 0 #000,
+      0.0938rem -0.0938rem 0 #000,
+      -0.0938rem 0.0938rem 0 #000,
+      0.0938rem 0.0938rem 0 #000;
+  }
+
+  &.second {
+    color: silver; /* 2등 색상 */
+    text-shadow:
+      -0.0938rem -0.0938rem 0 #000,
+      0.0938rem -0.0938rem 0 #000,
+      -0.0938rem 0.0938rem 0 #000,
+      0.0938rem 0.0938rem 0 #000;
+  }
+
+  &.third {
+    color: #cd7f32; /* 3등 색상 (브론즈) */
+    text-shadow:
+      -0.0938rem -0.0938rem 0 #000,
+      0.0938rem -0.0938rem 0 #000,
+      -0.0938rem 0.0938rem 0 #000,
+      0.0938rem 0.0938rem 0 #000;
+  }
 `;
 
 const Nickname = styled.div`
   flex: 0 0 60%;
   text-align: left;
   font-family: 'CookieRun';
-  font-size: 24px;
+  font-size: 1.375rem;
 `;
 
 const Score = styled.div`
-  flex: 0 0 20%;
+  flex: 0 0 30%;
   text-align: right;
   font-family: 'CookieRun';
-  font-size: 24px;
+  font-size: 1.25rem;
 `;
 
 const RankingBody = () => {
@@ -174,11 +216,28 @@ const RankingBody = () => {
       fetchDictionaryData();
     }
   }, [activeGame]);
-
-  const renderRankItems = (rankData) => {
+  const getRankClass = (index: number) => {
+    if (index === 0) {
+      return 'first';
+    }
+    if (index === 1) {
+      return 'second';
+    }
+    if (index === 2) {
+      return 'third';
+    }
+    return '';
+  };
+  const renderRankItems = (rankData: any[]) => {
     return rankData.map((item, index) => (
-      <RankItem key={item.ranker}>
-        <RankNumber>{index + 1}등</RankNumber>
+      <RankItem
+        rank={index + 1}
+        className={getRankClass(index)}
+        key={item.ranker}
+      >
+        <RankNumber rank={index + 1} className={getRankClass(index)}>
+          {index + 1}등
+        </RankNumber>
         <Nickname>{item.ranker}</Nickname>
         <Score>{item.score}점</Score>
       </RankItem>
@@ -204,15 +263,15 @@ const RankingBody = () => {
       <RankingBox>
         <Rank>
           <RankTitle>전국 개인 순위</RankTitle>
-          {renderRankItems(personalList)}
+          <RankScrollDiv>{renderRankItems(personalList)}</RankScrollDiv>
         </Rank>
         <Rank>
           <RankTitle>교내 개인 순위</RankTitle>
-          {renderRankItems(classList)}
+          <RankScrollDiv>{renderRankItems(classList)}</RankScrollDiv>
         </Rank>
         <Rank>
           <RankTitle>내 학교 순위</RankTitle>
-          {renderRankItems(schoolList)}
+          <RankScrollDiv>{renderRankItems(schoolList)}</RankScrollDiv>
         </Rank>
       </RankingBox>
       <ExitButton to="/main/" />
