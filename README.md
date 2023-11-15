@@ -14,44 +14,44 @@
 
 ### 맞춤법 놀이
 
-![맞춤법 놀이](./exec/images/helpSpellingImage1.PNG)
+![맞춤법 놀이](./exec/images/helpSpellingImage1.png)
 빈칸에 들어갈 알맞은 말을 고르는 놀이입니다.
 
-![맞춤법 놀이](./exec/images/helpSpellingImage3.PNG)
+![맞춤법 놀이](./exec/images/helpSpellingImage3.png)
 한 문제를 풀 때마다 정답 여부와 해당 문제의 난이도를 보여줍니다.
 난이도는 정답율에 기반하여 산정됩니다.
 
-![맞춤법 놀이](./exec/images/helpSpellingImage4.PNG)
+![맞춤법 놀이](./exec/images/helpSpellingImage4.png)
 총 10문제를 풀고 나서 점수와 결과를 확인할 수 있습니다.
 
 ---
 ### 국어사전 놀이
 
-![국어사전 놀이](./exec/images/helpDictionaryImage1.PNG)
+![국어사전 놀이](./exec/images/helpDictionaryImage1.png)
 국어사전 놀이는 혼자서 플레이 하거나 웹소켓 기반으로 친구들과 함께 플레이할 수 있습니다.
 카카오톡 공유 기능을 통해 방 코드를 공유하여 초대합니다.
 
 
-![국어사전 놀이](./exec/images/helpDictionaryImage2.PNG)
+![국어사전 놀이](./exec/images/helpDictionaryImage2.png)
 국어사전 놀이에는 두 가지 유형의 문제가 등장합니다.
 첫 번째 유형의 문제는 초성 퀴즈입니다.
 
-![국어사전 놀이](./exec/images/helpDictionaryImage4.PNG)
+![국어사전 놀이](./exec/images/helpDictionaryImage4.png)
 두 번째 유형의 문제는 동서남북 퀴즈입니다.
 가운데에 한 글자를 넣어 각 단어를 완성하면 됩니다.
 
-![국어사전 놀이](./exec/images/helpDictionaryImage5.PNG)
+![국어사전 놀이](./exec/images/helpDictionaryImage5.png)
 
-![멀티플레이 화면 추가 필요](./exec/images/helpDictionaryImage7.PNG)
+![멀티플레이 화면 추가 필요](./exec/images/helpDictionaryImage7.png)
 
 
 ---
 ### 순위
-![순위](./exec/image/ranking.PNG)
+![순위](./exec/image/ranking.png)
 
 ---
 ## 아키텍쳐
-![아키텍쳐](./exec/image/architecture.PNG)
+![아키텍쳐](./exec/image/architecture.png)
 
 ---
 
