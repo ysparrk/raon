@@ -7,8 +7,8 @@ import {
   answerState,
   spellingIdState,
 } from '../../../recoil/Atoms.tsx';
-import ExitButton from '../../Common/Atoms/ExitButton.tsx';
-
+import ExitButton from '../../Common/Atoms/ExitButtonInRoom.tsx';
+import { useNavigate } from 'react-router';
 const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -56,6 +56,7 @@ const SpellingAnswer = () => {
   const userAnswers = useRecoilValue(submitState);
   const correctAnswers = useRecoilValue(answerState);
   const spellingId = useRecoilValue(spellingIdState);
+  const navigate = useNavigate();
 
   const leftAnswers = userAnswers.slice(0, 5);
   const rightAnswers = userAnswers.slice(5, 10);
@@ -126,7 +127,11 @@ const SpellingAnswer = () => {
           </Column>
         </Columns>
       </Content>
-      <ExitButton to="/main/" />
+      <ExitButton
+        onClick={() => {
+          navigate('/main');
+        }}
+      />
     </Container>
   );
 };

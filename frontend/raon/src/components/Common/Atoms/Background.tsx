@@ -18,10 +18,22 @@ const BackgroundImage: React.FC = () => {
   const handleVolumeButtonClick = async () => {
     console.log('눌렀어요!');
     await toggleMute();
+    const currentURL = window.location.href;
     if (isMuted) {
       console.log('재생하기');
       setTimeout(() => {
-        startBGM('main');
+        if (currentURL.includes('main')) {
+          startBGM('main');
+        } else if (currentURL.includes('single')) {
+          startBGM('singleGame');
+        } else if (currentURL.includes('multi-game')) {
+          startBGM('multiGame');
+        } else if (currentURL.includes('multi-i')) {
+          startBGM('multiWait');
+        } else {
+          // Default case, you may want to handle this differently based on your needs
+          startBGM('main');
+        }
       }, 300);
     } else {
       console.log('멈추기');

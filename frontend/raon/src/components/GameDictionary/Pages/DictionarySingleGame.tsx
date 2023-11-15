@@ -7,7 +7,7 @@ import QuizCrossWord from '../Organisms/QuizCrossWord';
 import TitleBox from '../../Common/Atoms/TitleBox';
 import { getQuiz } from '../../../api/GameDictionaryApi';
 import { dictScoreState } from '../../../recoil/Atoms';
-
+import { useBGM } from '../../../sound/SoundContext';
 const ContentDiv = styled.div`
   display: flex;
   flex-direction: column;
@@ -52,7 +52,12 @@ const DictionaryGame = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const navigate = useNavigate();
   const setDictScore = useSetRecoilState(dictScoreState);
-
+  const { startBGM, isMuted } = useBGM();
+  useEffect(() => {
+    if (!isMuted) {
+      startBGM('singleGame');
+    }
+  }, []);
   useEffect(() => {
     const fetchQuizList = async () => {
       try {

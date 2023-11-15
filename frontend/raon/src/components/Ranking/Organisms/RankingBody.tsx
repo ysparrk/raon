@@ -65,6 +65,21 @@ const RankScrollDiv = styled.div`
   width: 100%;
   margin: 0;
   padding: 0.5875rem;
+  &::-webkit-scrollbar {
+    width: 0.995rem;
+  }
+  &::-webkit-scrollbar-track {
+    background-color: ivory;
+    border-radius: 0.625rem;
+    box-shadow: inset 0rem 0rem 0.3125rem white;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: gray;
+    border-radius: 0.625rem;
+  }
+  &::-webkit-scrollbar-thumb:hover {
+    background-color: #2f3542;
+  }
 `;
 
 const RankTitle = styled.div`
@@ -134,6 +149,12 @@ const Score = styled.div`
   text-align: right;
   font-family: 'CookieRun';
   font-size: 1.25rem;
+`;
+
+const ExitFixDiv = styled.div`
+  position: fixed;
+  bottom: 5%;
+  right: 5%;
 `;
 
 const RankingBody = () => {
@@ -274,7 +295,9 @@ const RankingBody = () => {
           <RankScrollDiv>{renderRankItems(schoolList)}</RankScrollDiv>
         </Rank>
       </RankingBox>
-      <ExitButton to="/main/" />
+      <ExitFixDiv>
+        <ExitButton to="/main/" />
+      </ExitFixDiv>
     </Container>
   );
 };

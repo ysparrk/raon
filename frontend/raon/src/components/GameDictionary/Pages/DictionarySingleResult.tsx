@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import SingleModeResult from '../Organisms/SingleModeResult';
 import TitleBox from '../../Common/Atoms/TitleBox';
-import ExitButton from '../../Common/Atoms/ExitButton';
+import ExitButton from '../../Common/Atoms/ExitButtonInRoom';
 import gildong from '../../../assets/Images/gildong.png';
+import { useNavigate } from 'react-router';
 
 const GildongImage = styled.img<{ shouldMove: boolean }>`
   width: 300px;
@@ -13,7 +14,7 @@ const GildongImage = styled.img<{ shouldMove: boolean }>`
   position: absolute;
   bottom: 0px;
   right: -400px;
-
+  z-index: 2;
   transform: ${({ shouldMove }) =>
     shouldMove ? 'translateX(-380px)' : 'translateX(0px)'};
 `;
@@ -37,6 +38,8 @@ const ContentDiv = styled.div`
 function SummarizeResultPage() {
   const [shouldMoveRight, setShouldMoveRight] = useState(false);
   const [shouldMoveLeft, setShouldMoveLeft] = useState(false);
+  const navigate = useNavigate();
+
   useEffect(() => {
     // 오른쪽 이미지를 움직이게 하는 타이머
     const timerRight = setTimeout(() => setShouldMoveRight(true), 1500);
@@ -81,8 +84,12 @@ function SummarizeResultPage() {
       <TitleBox>국어사전 놀이</TitleBox>
       <ContentDiv>
         <SingleModeResult />
-        <ExitButton to="/main/" />
       </ContentDiv>
+      <ExitButton
+        onClick={() => {
+          navigate('/main');
+        }}
+      />
     </div>
   );
 }
