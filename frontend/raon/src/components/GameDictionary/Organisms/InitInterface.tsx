@@ -130,7 +130,7 @@ function InitInterface() {
           fontColor="dodgerblue"
           content="함께하기"
           onClick={() => {
-            navigate('/game/dictionary-join');
+            navigate('/game/dictionary-multi-init');
           }}
         />
         <StartButton

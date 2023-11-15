@@ -54,8 +54,14 @@ const AppRouter: React.FC = () => {
         <Route path="/game/spelling-quiz" element={<SpellingQuiz />} />
         <Route path="/game/spelling-result" element={<SpellingResult />} />
         <Route path="/game/dictionary-init" element={<DictionaryInit />} />
-        <Route path="/game/dictionary-join" element={<DictionaryJoin />} />
-        <Route path="/game/dictionary-quiz" element={<DictionaryQuiz />} />
+        <Route
+          path="/game/dictionary-multi-init"
+          element={<DictionaryJoin />}
+        />
+        <Route
+          path="/game/dictionary-multi-interface"
+          element={<DictionaryQuiz />}
+        />
 
         <Route
           path="/game/dictionary-single-game"

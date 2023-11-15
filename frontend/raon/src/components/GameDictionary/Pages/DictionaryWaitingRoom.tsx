@@ -47,7 +47,7 @@ const DictionaryWaitingRoom = () => {
             leaveRoom(client, nickname, roomId);
             disconnectWebSocket(client);
           }
-          navigate('/game/dictionary-join');
+          navigate('/game/dictionary-multi-init');
         }}
       />
     </div>

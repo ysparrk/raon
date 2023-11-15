@@ -10,7 +10,7 @@ import { multiDictState, roomManageState } from '../../../recoil/Atoms';
 import QuizCrossWord from '../Organisms/MultiQuizCrossWord';
 import QuizLetter from '../Organisms/MultiQuizLetter';
 import MultiResult from '../Organisms/MultiResult';
-
+import { useBGM } from '../../../sound/SoundContext';
 const ContentDiv = styled.div`
   display: flex;
   flex-direction: column;
@@ -43,6 +43,12 @@ const DictionaryWaitingRoom = () => {
   const Quiz = useRecoilValue(multiDictState);
   const Room = useRecoilValue(roomManageState);
   const navigate = useNavigate();
+  const { startBGM, isMuted } = useBGM();
+  useEffect(() => {
+    if (!isMuted) {
+      startBGM('multiGame');
+    }
+  }, []);
 
   useEffect(() => {
     if (Room.isFinish) {
