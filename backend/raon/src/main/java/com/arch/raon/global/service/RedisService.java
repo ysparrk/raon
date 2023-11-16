@@ -197,23 +197,12 @@ public class RedisService {
         return collect;
     }
 
-    public void changeMemberInfo(String oldNickName,String oldSchool, String newNickName, String newSchool){
-        if(oldNickName.equals(newNickName) && !oldSchool.equals(newSchool)) { //학교만 변경 되었을 때
-            rankingRedis.opsForZSet().incrementScore("countryDictionary:" + newSchool, newNickName, getSchoolMyDictionaryPoint(oldNickName, oldSchool));
-            rankingRedis.opsForZSet().remove("countryDictionary:" + oldSchool, oldNickName);
-            rankingRedis.opsForZSet().incrementScore("schoolMyGrammar:" + newSchool, newNickName, getSchoolMyGrammarPoint(oldNickName, oldSchool));
-            rankingRedis.opsForZSet().remove("schoolMyGrammar:" + oldSchool, oldNickName);
-            return;
-        }
-        rankingRedis.opsForZSet().incrementScore("countryDictionary", newNickName, getCountryDictionaryPoint(oldNickName));
+    public void removeData(String oldNickName,String oldSchool){
         rankingRedis.opsForZSet().remove("countryDictionary",oldNickName);
-        rankingRedis.opsForZSet().incrementScore("countryMyGrammar", newNickName, getCountryMyGrammarPoint(oldNickName));
         rankingRedis.opsForZSet().remove("countryMyGrammar", oldNickName);
-
         rankingRedis.opsForZSet().remove("countryDictionary:" + oldSchool, oldNickName);
-        rankingRedis.opsForZSet().incrementScore("countryDictionary:" + newSchool, newNickName, getSchoolMyDictionaryPoint(oldNickName, oldSchool));
         rankingRedis.opsForZSet().remove("schoolMyGrammar:" + oldSchool, oldNickName);
-        rankingRedis.opsForZSet().incrementScore("schoolMyGrammar:" + newSchool, newNickName, getSchoolMyGrammarPoint(oldNickName, oldSchool));
     }
+
 
 }

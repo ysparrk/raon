@@ -105,9 +105,17 @@ public class MemberServiceImpl implements MemberService{
         String newSchool = member.getSchool();
         System.out.println("newNickname = " + newNickname);
 
-        if(!oldNickname.equals(newNickname) || !oldSchool.equals(newSchool)){
-            redisService.changeMemberInfo(oldNickname, oldSchool, newNickname, newSchool);
-        }
+        int oldCountryDictionaryPoint = (int) redisService.getCountryDictionaryPoint(oldNickname);
+        int oldCountryGrammarPoint = (int) redisService.getCountryMyGrammarPoint(oldNickname);
+        int oldSchoolDictionaryPoint = (int) redisService.getSchoolMyDictionaryPoint(oldNickname,oldSchool);
+        int oldSchoolGrammarPoint = (int) redisService.getSchoolMyGrammarPoint(oldNickname,oldSchool);
+
+        redisService.removeData(oldNickname, oldSchool);
+
+        redisService.setCountryDictionaryPoint(newNickname, oldCountryDictionaryPoint);
+        redisService.setCountryMyGrammarPoint(newNickname, oldCountryGrammarPoint);
+        redisService.setSchoolDictionaryPoint(newNickname, newSchool, oldSchoolDictionaryPoint);
+        redisService.setSchoolMyGrammarPoint(newNickname, newSchool, oldSchoolGrammarPoint);
     }
 
     @Override
