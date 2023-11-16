@@ -105,10 +105,9 @@ public class MemberServiceImpl implements MemberService{
         String newSchool = member.getSchool();
         System.out.println("newNickname = " + newNickname);
 
-        redisService.changeMemberInfo(oldNickname, oldSchool, newNickname, newSchool);
-
-
-
+        if(!oldNickname.equals(newNickname) || !oldSchool.equals(newSchool)){
+            redisService.changeMemberInfo(oldNickname, oldSchool, newNickname, newSchool);
+        }
     }
 
     @Override
