@@ -76,7 +76,7 @@ function JoinInterface() {
   const navigate = useNavigate();
   const setManagerState = useSetRecoilState(roomManageState);
   const Stomp = useWebSocket();
-  const roomId = uuidv4();
+  const roomId = uuidv4().slice(0,8);
 
   const handleCreateClick = async (
     nicknameInput: string,
