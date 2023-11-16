@@ -107,7 +107,7 @@ function InitInterface() {
   return (
     <>
       <InterfaceDiv>
-        <GameHeaderDiv>맞춤법 퀴즈</GameHeaderDiv>
+        <GameHeaderDiv>맞춤법 놀이</GameHeaderDiv>
         <GameExampleQuestionDiv>
           <p>다음 중 맞는 것을 고르세요</p>
         </GameExampleQuestionDiv>
