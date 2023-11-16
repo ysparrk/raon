@@ -54,6 +54,14 @@ const Label = styled.span`
   margin-right: 20px;
 `;
 
+const RowContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  justify-content: center;
+`;
+
 const SchoolInput = styled.input`
   height: 3.125rem;
   width: 31.25rem;
@@ -191,8 +199,9 @@ interface MyImageDivProps {
 }
 const MyImageDiv = styled.div<MyImageDivProps>`
   display: flex;
-  width: 6rem;
-  height: 6rem;
+  width: 18rem;
+  height: 18rem;
+  margin-right: 6rem;
   border-radius: 12px;
   background-image: url(${(props) => props.imageUrl});
   background-size: cover;
@@ -305,123 +314,126 @@ const MyInformationCategory = () => {
 
   return (
     <Container>
-      <Content>
-        {isSearch && (
-          <>
-            <BlurBoxDiv />
-            <SchoolDiv>
-              <SchoolTitleDiv>학교 검색</SchoolTitleDiv>
-              <SchoolInputDiv>
-                <SchoolInputBox
-                  inputText={searchWord}
-                  onChange={(e) => setSearchWord(e.target.value)}
-                  onEnter={() => {
-                    if (searchWord && searchWord.length >= 2) {
-                      handleSchool();
-                    } else {
-                      alert('이름을 2글자 이상 입력해주세요');
-                    }
-                  }}
-                />
-                <InputButtonDiv
-                  onClick={() => {
-                    if (searchWord && searchWord.length >= 2) {
-                      handleSchool();
-                    } else {
-                      alert('이름을 2글자 이상 입력해주세요');
-                    }
-                  }}
-                >
-                  검색
-                </InputButtonDiv>
-              </SchoolInputDiv>
-              <SchoolListDiv showPadding={searchSchools.length >= 19}>
-                {searchSchools.length > 0 &&
-                  searchSchools.map((schoolElem, index) => (
-                    <SchoolElemDiv
-                      key={schoolElem.id}
+      <RowContainer>
+        <MyImageDiv imageUrl={myImage} />
+        <div>
+          <Content>
+            {isSearch && (
+              <>
+                <BlurBoxDiv />
+                <SchoolDiv>
+                  <SchoolTitleDiv>학교 검색</SchoolTitleDiv>
+                  <SchoolInputDiv>
+                    <SchoolInputBox
+                      inputText={searchWord}
+                      onChange={(e) => setSearchWord(e.target.value)}
+                      onEnter={() => {
+                        if (searchWord && searchWord.length >= 2) {
+                          handleSchool();
+                        } else {
+                          alert('이름을 2글자 이상 입력해주세요');
+                        }
+                      }}
+                    />
+                    <InputButtonDiv
                       onClick={() => {
-                        setSchool(schoolElem.schoolName);
+                        if (searchWord && searchWord.length >= 2) {
+                          handleSchool();
+                        } else {
+                          alert('이름을 2글자 이상 입력해주세요');
+                        }
                       }}
                     >
-                      {school === schoolElem.schoolName ? (
-                        <Selection>
-                          {schoolElem.schoolName}
-                          <SchoolRegionSpan>
-                            {schoolElem.location}
-                          </SchoolRegionSpan>
-                        </Selection>
-                      ) : (
-                        <>
-                          {schoolElem.schoolName}
-                          <SchoolRegionSpan>
-                            {schoolElem.location}
-                          </SchoolRegionSpan>
-                        </>
-                      )}
-                    </SchoolElemDiv>
-                  ))}
-              </SchoolListDiv>
+                      검색
+                    </InputButtonDiv>
+                  </SchoolInputDiv>
+                  <SchoolListDiv showPadding={searchSchools.length >= 19}>
+                    {searchSchools.length > 0 &&
+                      searchSchools.map((schoolElem, index) => (
+                        <SchoolElemDiv
+                          key={schoolElem.id}
+                          onClick={() => {
+                            setSchool(schoolElem.schoolName);
+                          }}
+                        >
+                          {school === schoolElem.schoolName ? (
+                            <Selection>
+                              {schoolElem.schoolName}
+                              <SchoolRegionSpan>
+                                {schoolElem.location}
+                              </SchoolRegionSpan>
+                            </Selection>
+                          ) : (
+                            <>
+                              {schoolElem.schoolName}
+                              <SchoolRegionSpan>
+                                {schoolElem.location}
+                              </SchoolRegionSpan>
+                            </>
+                          )}
+                        </SchoolElemDiv>
+                      ))}
+                  </SchoolListDiv>
 
-              <SchoolButtonDiv>
-                <SmallButton
-                  content="확인하기"
-                  fontColor="skyblue"
-                  onClick={() => {
-                    setIsSearch(false);
-                    setSearchSchools([]);
-                    setSearchWord('');
-                  }}
-                />
-                <SmallButton
-                  content="취소하기"
-                  fontColor="lightsalmon"
-                  onClick={() => {
-                    setIsSearch(false);
-                    setSearchSchools([]);
-                    setSchool('');
-                    setSearchWord('');
-                  }}
-                />
-              </SchoolButtonDiv>
-            </SchoolDiv>
-          </>
-        )}
-        <Label>닉네임 :</Label>
-        <InputBox
-          inputText={nickname}
-          onChange={(e) => setNickname(e.target.value)}
-        />
-        <DuplicationCheckButton onClick={handleDuplicateCheck} />
-      </Content>
-      <Content>
-        <Label>출생년도 :</Label>
-        <InputBox
-          inputText={birthday}
-          onChange={(e) => setBirthday(e.target.value)}
-        />
-      </Content>
-      <Content>
-        <Label>성별 :</Label>
-        <ComboBox
-          selectedOption={gender}
-          onChange={(e) => setGender(e.target.value)}
-          options={genderOptions}
-        />
-      </Content>
-      <Content>
-        <Label>학교 :</Label>
-        <SchoolInput
-          value={school}
-          placeholder="값을 입력해주세요"
-          onClick={() => {
-            setIsSearch(true);
-          }}
-        />
-      </Content>
+                  <SchoolButtonDiv>
+                    <SmallButton
+                      content="확인하기"
+                      fontColor="skyblue"
+                      onClick={() => {
+                        setIsSearch(false);
+                        setSearchSchools([]);
+                        setSearchWord('');
+                      }}
+                    />
+                    <SmallButton
+                      content="취소하기"
+                      fontColor="lightsalmon"
+                      onClick={() => {
+                        setIsSearch(false);
+                        setSearchSchools([]);
+                        setSchool('');
+                        setSearchWord('');
+                      }}
+                    />
+                  </SchoolButtonDiv>
+                </SchoolDiv>
+              </>
+            )}
+            <Label>닉네임 :</Label>
+            <InputBox
+              inputText={nickname}
+              onChange={(e) => setNickname(e.target.value)}
+            />
+            <DuplicationCheckButton onClick={handleDuplicateCheck} />
+          </Content>
+          <Content>
+            <Label>출생년도 :</Label>
+            <InputBox
+              inputText={birthday}
+              onChange={(e) => setBirthday(e.target.value)}
+            />
+          </Content>
+          <Content>
+            <Label>성별 :</Label>
+            <ComboBox
+              selectedOption={gender}
+              onChange={(e) => setGender(e.target.value)}
+              options={genderOptions}
+            />
+          </Content>
+          <Content>
+            <Label>학교 :</Label>
+            <SchoolInput
+              value={school}
+              placeholder="값을 입력해주세요"
+              onClick={() => {
+                setIsSearch(true);
+              }}
+            />
+          </Content>
+        </div>
+      </RowContainer>
       <BottomDiv>
-        {/* <MyImageDiv imageUrl={myImage} /> */}
-
         <Button onClick={handleSubmit}>수정하기</Button>
         <ExitButton
           onClick={() => {
