@@ -96,51 +96,121 @@
 
 ## 🎬 시나리오
 
+1. 최초에는 초기 화면으로 이동하게 됩니다.
+
+   로그인은 `카카오` 로 진행할 수 있습니다.
+
 <table>
     <tr align="center">
         <td><B>스플래시</B></td>
+        <td><B>메인 페이지</B></td>
     </tr>
     <tr align="center">
         <td>
-            ![스플래시](./exec/images/helpSpellingImage1.png)
+            ![스플래시](./exec/images/splash.png)
+        </td>
+        <td>
+            ![메인페이지](./exec/images/main.png)
         </td>
     </tr>
 </table>
 
-### 맞춤법 놀이
+2.  맞춤법 놀이는 빈칸에 들어갈 알맞은 말을 고르는 놀이입니다.
 
-![맞춤법 놀이](./exec/images/helpSpellingImage1.png)
-빈칸에 들어갈 알맞은 말을 고르는 놀이입니다.
+    한 문제를 풀 때마다 정답 여부와 해당 문제의 난이도를 보여줍니다.
 
-![맞춤법 놀이](./exec/images/helpSpellingImage3.png)
-한 문제를 풀 때마다 정답 여부와 해당 문제의 난이도를 보여줍니다.
-난이도는 정답율에 기반하여 산정됩니다.
+    난이도는 정답율에 기반하여 산정됩니다.
 
-![맞춤법 놀이](./exec/images/helpSpellingImage4.png)
-총 10문제를 풀고 나서 점수와 결과를 확인할 수 있습니다.
+    총 10문제를 풀고 나서 점수와 결과를 확인할 수 있습니다.
 
-### 국어사전 놀이
+<table>
+    <tr align="center">
+        <td><B>문제 풀기</B></td>
+        <td><B>정답 여부 확인</B></td>
+        <td><B>최종 점수 확인</B></td>
+    </tr>
+    <tr align="center">
+        <td>
+            ![문제풀기](./exec/images/spelling1.png)
+        </td>
+        <td>
+            ![정답여부확인](./exec/images/spelling2.png)
+        </td>
+        <td>
+            ![최종점수확인](./exec/images/spelling3.png)
+        </td>
+    </tr>
+</table>
 
-![국어사전 놀이](./exec/images/helpDictionaryImage1.png)
-국어사전 놀이는 혼자서 플레이 하거나 웹소켓 기반으로 친구들과 함께 플레이할 수 있습니다.
-카카오톡 공유 기능을 통해 방 코드를 공유하여 초대합니다.
+3.  국어사전 놀이는 두가지 놀이를 제공합니다.
 
-![국어사전 놀이](./exec/images/helpDictionaryImage2.png)
-국어사전 놀이에는 두 가지 유형의 문제가 등장합니다.
-첫 번째 유형의 문제는 초성 퀴즈입니다.
+    단어의 의미와 초성을 보고 정답을 입력하거나,
 
-![국어사전 놀이](./exec/images/helpDictionaryImage4.png)
-두 번째 유형의 문제는 동서남북 퀴즈입니다.
-가운데에 한 글자를 넣어 각 단어를 완성하면 됩니다.
+    위, 아래, 왼쪽, 오른쪽 모두 단어가 될 수 있도록 하는 글자를 입력할 수 있습니다.
 
-![국어사전 놀이](./exec/images/helpDictionaryImage5.png)
+<table>
+    <tr align="center">
+        <td><B>모드 선택</B></td>
+        <td><B>사전 퀴즈</B></td>
+        <td><B>동서남북 퀴즈</B></td>
+    </tr>
+    <tr align="center">
+        <td>
+            ![모드선택](./exec/images/dictionary1.png)
+        </td>
+        <td>
+            ![사전퀴즈](./exec/images/dictionary2.png)
+        </td>
+        <td>
+            ![동서남북퀴즈](./exec/images/dictionary3.png)
+        </td>
+    </tr>
+</table>
 
-![멀티플레이 화면 추가 필요](./exec/images/helpDictionaryImage7.png)
+4.  멀티 플레이는 친구와 경쟁을 하며 놀이를 즐길 수 있습니다.
 
-### 순위
+    방 코드는 카카오톡으로 공유할 수 있으며,
 
-![순위](./exec/image/ranking.png)
+    정답을 가장 빨리 맞춘 플레이어에게 제일 높은 점수가 부여됩니다.
 
-## 아키텍쳐
+<table>
+    <tr align="center">
+        <td><B>방 생성</B></td>
+        <td><B>대기 방</B></td>
+        <td><B>중간 결과</B></td>
+        <td><B>최종 결과</B></td>
+    </tr>
+    <tr align="center">
+        <td>
+            ![방 생성](./exec/images/multi1.png)
+        </td>
+        <td>
+            ![대기 방](./exec/images/multi2.png)
+        </td>
+        <td>
+            ![중간 결과](./exec/images/multi3.png)
+        </td>
+        <td>
+            ![최종 결과](./exec/images/multi4.png)
+        </td>
+    </tr>
+</table>
 
-![아키텍쳐](./exec/image/architecture.png)
+5.  순위를 확인하며 친구와 재미있게 경쟁할 수 있으며,
+
+    내 정보를 변경할 수 있습니다.
+
+<table>
+    <tr align="center">
+        <td><B>순위</B></td>
+        <td><B>내 정보</B></td>
+    </tr>
+    <tr align="center">
+        <td>
+            ![순위](./exec/images/rank.png)
+        </td>
+        <td>
+            ![내 정보](./exec/images/mypage.png)
+        </td>
+    </tr>
+</table>
