@@ -4,7 +4,7 @@ import MainMenu from '../Organisms/MainMenu';
 import { useBGM } from '../../../sound/SoundContext';
 
 const Main = () => {
-  const { startBGM, isMuted } = useBGM();
+  const { startBGM, isMuted, stopBGM } = useBGM();
   useEffect(() => {
     if (!isMuted) {
       startBGM('main');

@@ -106,7 +106,7 @@ const RankItem = styled.div<{ rank: number }>`
 `;
 
 const RankNumber = styled.div<{ rank: number }>`
-  flex: 0 0 10%;
+  flex: 0 0 13%;
   text-align: left;
   font-family: 'CookieRun';
   font-size: 1.5rem;
@@ -139,7 +139,7 @@ const RankNumber = styled.div<{ rank: number }>`
 `;
 
 const Nickname = styled.div`
-  flex: 0 0 60%;
+  flex: 0 0 57%;
   text-align: left;
   font-family: 'CookieRun';
   font-size: 1.375rem;

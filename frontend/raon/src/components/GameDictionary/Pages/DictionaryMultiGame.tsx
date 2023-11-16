@@ -47,6 +47,7 @@ const DictionaryWaitingRoom = () => {
   const { startBGM, isMuted } = useBGM();
   useEffect(() => {
     if (!isMuted) {
+      startBGM('newPhase');
       startBGM('multiGame');
     }
   }, []);

@@ -6,6 +6,7 @@ import AnswerInputBox from '../Atoms/AnswerInputBox';
 import SingleModeAnswer from './SingleModeAnswer';
 import { useWebSocket } from '../../../websocket/WebSocketContext';
 import Timer from '../../Common/Atoms/Timer';
+import { useBGM } from '../../../sound/SoundContext';
 
 interface QuizCrossWordProps {
   word: string;
@@ -143,11 +144,16 @@ function MultiQuizCrossWord({
   const [timerState, setTimerState] = useState(20);
   const QuizStage = useRecoilValue(multiDictState);
   const Stomp = useWebSocket();
+  const { startBGM, isMuted } = useBGM();
+
   useEffect(() => {
     setTimerState(20);
     setIsSolved(false);
     setStartTime(Date.now());
     setInputValue('');
+    if (!isMuted) {
+      startBGM('nextStage');
+    }
   }, [QuizStage.stage]);
   useEffect(() => {
     // 설정된 시간 간격마다 setInterval 콜백이 실행된다.
@@ -170,7 +176,9 @@ function MultiQuizCrossWord({
   const handleClick = (value: string) => {
     const timeSpend = Date.now() - startTime;
 
-    console.log(value, timeSpend, QuizStage.stage);
+    if (!isMuted) {
+      startBGM('sendData');
+    }
     Stomp.sendQuizResult(value, timeSpend, QuizStage.stage);
     // if (value === word) {
     //   // setIsCorrect(true);
