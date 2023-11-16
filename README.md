@@ -96,6 +96,17 @@
 
 ## 🎬 시나리오
 
+<table>
+    <tr align="center">
+        <td><B>스플래시</B></td>
+    </tr>
+    <tr align="center">
+        <td>
+            ![스플래시](./exec/images/helpSpellingImage1.png)
+        </td>
+    </tr>
+</table>
+
 ### 맞춤법 놀이
 
 ![맞춤법 놀이](./exec/images/helpSpellingImage1.png)
