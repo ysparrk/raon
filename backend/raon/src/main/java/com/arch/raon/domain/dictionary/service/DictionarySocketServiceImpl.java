@@ -163,6 +163,8 @@ public class DictionarySocketServiceImpl implements DictionarySocketService{
 			});
 
 			redisService.setCountryDictionaryPoint(member.getNickname(), user.getCurrent_point());
+			redisService.setSchoolDictionaryPoint(member.getNickname(),member.getSchool(),user.getCurrent_point());
+			redisService.setMySchoolDictionaryPoint(member.getSchool(),user.getCurrent_point());
 		}
 	}
 
