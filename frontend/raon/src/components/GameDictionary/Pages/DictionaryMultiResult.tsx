@@ -19,8 +19,11 @@ function DictionaryMultiResult() {
   const QuizReset = useResetRecoilState(multiDictState);
   const RoomReset = useResetRecoilState(roomManageState);
   const Stomp = useWebSocket();
-  const handleExit = () => {
+
+  useEffect(() => {
     Stomp.leaveRoom();
+  }, []);
+  const handleExit = () => {
     QuizReset();
     RoomReset();
     navigate('/main');

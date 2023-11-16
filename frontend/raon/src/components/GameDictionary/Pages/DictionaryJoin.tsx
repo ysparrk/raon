@@ -1,10 +1,11 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
+import { useNavigate } from 'react-router';
 import TitleBox from '../../Common/Atoms/TitleBox';
 import ExitButton from '../../Common/Atoms/ExitButtonInRoom';
 import JoinInterface from '../Organisms/JoinInterface';
 import { useBGM } from '../../../sound/SoundContext';
-import { useNavigate } from 'react-router';
+
 const ContentDiv = styled.div`
   display: flex;
   flex-direction: column;

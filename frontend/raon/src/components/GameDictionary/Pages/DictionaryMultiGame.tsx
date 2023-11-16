@@ -11,6 +11,7 @@ import QuizCrossWord from '../Organisms/MultiQuizCrossWord';
 import QuizLetter from '../Organisms/MultiQuizLetter';
 import MultiResult from '../Organisms/MultiResult';
 import { useBGM } from '../../../sound/SoundContext';
+
 const ContentDiv = styled.div`
   display: flex;
   flex-direction: column;
