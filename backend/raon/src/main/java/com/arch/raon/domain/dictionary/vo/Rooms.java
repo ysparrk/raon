@@ -18,7 +18,7 @@ import com.arch.raon.global.util.enums.SocketResponse;
  * - 방의 삭제 추가를 관리한다.
  */
 public class Rooms {
-	private static final int MAX_PLAYERS = 3;
+	private static final int MAX_PLAYERS = 6;
 	private static final ConcurrentMap<String, Room> rooms = new ConcurrentHashMap<>();
 
 	/**
