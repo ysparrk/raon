@@ -128,6 +128,8 @@ const UserDiv = styled.div<UserDivProps>`
   width: 6.25rem;
   height: 6.25rem;
   border-radius: 14px;
+  background-color: lightgray;
+  border: 0.125rem solid darkgray;
 `;
 
 const UserSchoolDiv = styled.div`
