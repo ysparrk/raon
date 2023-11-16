@@ -216,6 +216,9 @@ const MyInformationCategory = () => {
       const response = await postMemberInfoGet();
       console.log(response);
       setNickname(response.data.nickname);
+      if (response.data.nickname === localStorage.getItem('nickname')) {
+        setNicknameCheck(true);
+      }
       setBirthday(response.data.yearOfBirth);
       setSchool(response.data.school);
       if (response.data.gender === 'FEMALE') {
