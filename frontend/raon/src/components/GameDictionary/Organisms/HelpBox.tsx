@@ -7,6 +7,7 @@ import helpDictionaryImage4 from '../../../assets/Images/helpDictionaryImage4.pn
 import helpDictionaryImage5 from '../../../assets/Images/helpDictionaryImage5.png';
 import helpDictionaryImage6 from '../../../assets/Images/helpDictionaryImage6.png';
 import { ReactComponent as Arrow } from '../../../assets/Images/arrow.svg';
+import { ReactComponent as Arrow2 } from '../../../assets/Images/arrow2.svg';
 import BlurView from '../../GameSummarize/Atoms/BlurView';
 
 const TopBox: React.FC<{
@@ -42,7 +43,11 @@ const TopBox: React.FC<{
           fontSize: '24px',
         }}
       >
-        <Arrow onClick={handleLeftArrowClick} />
+        {imageIndex === 0 ? (
+          <Arrow2 onClick={handleLeftArrowClick} />
+        ) : (
+          <Arrow onClick={handleLeftArrowClick} />
+        )}
         <img
           src={images[imageIndex]}
           alt="Spelling Help"
@@ -52,10 +57,17 @@ const TopBox: React.FC<{
             objectFit: 'contain',
           }}
         />
-        <Arrow
-          onClick={handleRightArrowClick}
-          style={{ transform: 'rotate(180deg)' }}
-        />
+        {imageIndex === 5 ? (
+          <Arrow2
+            onClick={handleRightArrowClick}
+            style={{ transform: 'rotate(180deg)' }}
+          />
+        ) : (
+          <Arrow
+            onClick={handleRightArrowClick}
+            style={{ transform: 'rotate(180deg)' }}
+          />
+        )}
       </div>
     </>
   );
