@@ -4,6 +4,7 @@ import helpSpellingImage2 from '../../../assets/Images/helpSpellingImage2.png';
 import helpSpellingImage3 from '../../../assets/Images/helpSpellingImage3.png';
 import helpSpellingImage4 from '../../../assets/Images/helpSpellingImage4.png';
 import { ReactComponent as Arrow } from '../../../assets/Images/arrow.svg';
+import { ReactComponent as Arrow2 } from '../../../assets/Images/arrow2.svg';
 
 const TopBox: React.FC<{
   imageIndex: number;
@@ -34,7 +35,11 @@ const TopBox: React.FC<{
         fontSize: '24px',
       }}
     >
-      <Arrow onClick={handleLeftArrowClick} />
+      {imageIndex === 0 ? (
+        <Arrow2 onClick={handleLeftArrowClick} />
+      ) : (
+        <Arrow onClick={handleLeftArrowClick} />
+      )}
       <img
         src={images[imageIndex]}
         alt="Spelling Help"
@@ -44,10 +49,17 @@ const TopBox: React.FC<{
           objectFit: 'contain',
         }}
       />
-      <Arrow
-        onClick={handleRightArrowClick}
-        style={{ transform: 'rotate(180deg)' }}
-      />
+      {imageIndex === 3 ? (
+        <Arrow2
+          onClick={handleRightArrowClick}
+          style={{ transform: 'rotate(180deg)' }}
+        />
+      ) : (
+        <Arrow
+          onClick={handleRightArrowClick}
+          style={{ transform: 'rotate(180deg)' }}
+        />
+      )}
     </div>
   );
 };
