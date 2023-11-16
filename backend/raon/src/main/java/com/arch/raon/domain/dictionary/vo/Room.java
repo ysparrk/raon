@@ -157,7 +157,7 @@ public class Room {
 		}
 
 		if(quizList.get(currentQuizIdx).getAnswer().equals(userAnswer)){
-			int point = (100_000 - timeSpend); // TODO: 늦게 풀 수록 점수를 낮게 주고 싶은데 방법이 없나?
+			int point = PointCalculator.getPoint(timeSpend);
 			System.out.println(" 			nickname:"+nickname+" answer:" + userAnswer+" point:" + point);
 			userInfo.get(nickname).addPoint(point);
 		}
