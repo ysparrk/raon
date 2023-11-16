@@ -50,9 +50,9 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({
         console.log('에러임');
         console.log(error);
       },
-      debug: (str) => {
-        console.log(str);
-      },
+      // debug: (str) => {
+      //   console.log(str);
+      // },
       onConnect: () => {
         if (roomId === '0000') {
           alert('구독한 방 아이디가 없습니다.');
@@ -81,8 +81,6 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({
 
         switch (msg) {
           case 'ENTER':
-            console.log('방 사람 리스트');
-            console.log(body);
             finish = false;
             setRoomStatus((prev) => ({
               ...prev,
@@ -97,14 +95,10 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({
             break;
 
           case 'STAGE_START':
-            console.log('방장이 게임 시작');
-            console.log(body);
             setGameStart(true);
             break;
 
           case 'DIRECTION_QUIZ':
-            console.log('동서남북 퀴즈');
-            console.log(body);
             setRoomStatus((prev) => ({
               ...prev,
               breakTime: false,
@@ -123,8 +117,6 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({
             break;
 
           case 'INITIAL_QUIZ':
-            console.log('초성퀴즈');
-            console.log(body);
             setRoomStatus((prev) => ({
               ...prev,
               breakTime: false,
@@ -141,7 +133,6 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({
             }));
             break;
           case 'STAGE_RESULT':
-            console.log(body);
             setRoomStatus((prev) => ({
               ...prev,
               userResult: body.users,
@@ -149,7 +140,6 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({
             }));
             break;
           case 'LEAVE':
-            console.log(body);
             setRoomStatus((prev) => ({
               ...prev,
               users: body.lefts,
@@ -167,7 +157,6 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({
             }
             break;
           case 'FINAL_RESULT':
-            console.log(body);
             setRoomStatus((prev) => ({
               ...prev,
               userResult: body.users,
@@ -184,7 +173,6 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({
     };
 
     const leaveRoom = (): void => {
-      console.log('방나가기 요청 보내기');
       client.publish({
         destination: `/dictionary-quiz/leave`,
         body: JSON.stringify({ nickname, roomId }),
@@ -194,13 +182,11 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({
 
     const disconnectWebSocket = (): void => {
       if (client && client.connected) {
-        console.log('소켓종료');
         client.deactivate();
       }
     };
 
     const gameStart = (): void => {
-      console.log('게임 시작 요청');
       client.publish({
         destination: `/dictionary-quiz/game-start`,
         body: JSON.stringify({ nickname, roomId }),
@@ -212,7 +198,6 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({
       timeSpend: number,
       stage: number,
     ): void => {
-      console.log('퀴즈 정답 보내기');
       client.publish({
         destination: `/dictionary-quiz/on-stage`,
         body: JSON.stringify({

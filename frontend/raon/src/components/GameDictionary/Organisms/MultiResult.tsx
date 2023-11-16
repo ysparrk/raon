@@ -168,36 +168,42 @@ function MultiResult() {
           ))}
         </LeftOthersDiv>
       </LeftDiv>
-      <RightDiv>
-        <RightTopicP>현재 점수</RightTopicP>
-        {Room.userResult.map(
-          (
-            user: {
-              nickname?: string;
-              current_point?: number;
-              lastAnswer?: string;
-            },
-            index,
-          ) => {
-            if (user.lastAnswer === Quiz.answer) {
+      {Quiz.stage !== 10 ? (
+        <RightDiv>
+          <RightTopicP>현재 점수</RightTopicP>
+          {Room.userResult.map(
+            (
+              user: {
+                nickname?: string;
+                current_point?: number;
+                lastAnswer?: string;
+              },
+              index,
+            ) => {
+              if (user.lastAnswer === Quiz.answer) {
+                return (
+                  <RightRankDiv key={user.nickname}>
+                    <CorrectAnswer>{index + 1}등</CorrectAnswer>
+                    <CorrectAnswer>{user.nickname ?? '?'}</CorrectAnswer>
+                    <CorrectAnswer>{user.current_point ?? '0'}점</CorrectAnswer>
+                  </RightRankDiv>
+                );
+              }
               return (
                 <RightRankDiv key={user.nickname}>
-                  <CorrectAnswer>{index + 1}</CorrectAnswer>
-                  <CorrectAnswer>{user.nickname ?? '?'}</CorrectAnswer>
-                  <CorrectAnswer>{user.current_point ?? '0'}</CorrectAnswer>
+                  <p>{index + 1}등</p>
+                  <p>{user.nickname ?? '?'}</p>
+                  <p>{user.current_point ?? '0'}점</p>
                 </RightRankDiv>
               );
-            }
-            return (
-              <RightRankDiv key={user.nickname}>
-                <p>{index + 1}</p>
-                <p>{user.nickname ?? '?'}</p>
-                <p>{user.current_point ?? '0'}</p>
-              </RightRankDiv>
-            );
-          },
-        )}
-      </RightDiv>
+            },
+          )}
+        </RightDiv>
+      ) : (
+        <RightDiv>
+          <RightTopicP>끝났습니다! 최종 결과를 기다려주세요!</RightTopicP>
+        </RightDiv>
+      )}
 
       <TimerDiv>
         <Timer />
