@@ -7,6 +7,7 @@ import MultiModeResult from '../Organisms/MultiFinalResult';
 import TitleBox from '../../Common/Atoms/TitleBox';
 import ExitButton from '../../Common/Atoms/ExitButtonInRoom';
 import { useWebSocket } from '../../../websocket/WebSocketContext';
+import { useBGM } from '../../../sound/SoundContext';
 
 const ContentDiv = styled.div`
   display: flex;
@@ -19,7 +20,13 @@ function DictionaryMultiResult() {
   const QuizReset = useResetRecoilState(multiDictState);
   const RoomReset = useResetRecoilState(roomManageState);
   const Stomp = useWebSocket();
-
+  const { startBGM, isMuted } = useBGM();
+  useEffect(() => {
+    if (!isMuted) {
+      startBGM('newPhase');
+      startBGM('applause');
+    }
+  }, []);
   useEffect(() => {
     Stomp.leaveRoom();
   }, []);

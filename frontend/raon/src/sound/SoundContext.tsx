@@ -7,6 +7,11 @@ import multigameBGM from './SoundAssets/Backgrounds/상남자가 아닌 너가 �
 
 import correctSound from './SoundAssets/Effects/zapsplat_cartoon_bright_chime_idea_positive_001_79203.mp3';
 import incorrectSound from './SoundAssets/Effects/zapsplat_multimedia_game_sound_percussive_negative_lose_fail_003_63679.mp3';
+import newphaseSound from './SoundAssets/Effects/zapsplat_multimedia_game_sound_mallets_musical_short_riff_ending_finished_63792.mp3';
+import resultSound from './SoundAssets/Effects/zapsplat_multimedia_game_sound_digital_bright_short_collect_tally_002_55274.mp3';
+import nextstageSound from './SoundAssets/Effects/zapsplat_fantasy_magic_spell_wand_ping_classic_mallet_correct_right_answer_002_88659.mp3';
+import senddataSound from './SoundAssets/Effects/zapsplat_multimedia_game_sound_positive_warm_bright_bell_mallet_tone_short_003_66220.mp3';
+import applauseSound from './SoundAssets/Effects/ftus_american_football_fans_applause_scream_cheer_usa_high_school_238.mp3';
 
 const BGMContext = createContext<
   | {
@@ -17,7 +22,12 @@ const BGMContext = createContext<
           | 'multiWait'
           | 'multiGame'
           | 'correct'
-          | 'incorrect',
+          | 'incorrect'
+          | 'newPhase'
+          | 'result'
+          | 'nextStage'
+          | 'sendData'
+          | 'applause',
       ) => void;
       stopBGM: () => void;
       toggleMute: () => void; // 무음 모드를 토글하기 위한 함수
@@ -53,11 +63,24 @@ export const BGMProvider: React.FC<{ children: React.ReactNode }> = ({
   //     volume: 0.4,
   //     loop: true,
   //   });
+  const [playApplause] = useSound(applauseSound, {
+    volume: 0.4,
+  });
   const [playCorrect] = useSound(correctSound, {
     volume: 0.45,
   });
   const [playIncorrect] = useSound(incorrectSound, {
     volume: 0.4,
+  });
+  const [playNewPhase] = useSound(newphaseSound, { volume: 0.4 });
+  const [playResult] = useSound(resultSound, {
+    volume: 0.2,
+  });
+  const [playNextStage] = useSound(nextstageSound, {
+    volume: 0.4,
+  });
+  const [playSendData] = useSound(senddataSound, {
+    volume: 0.45,
   });
   const [mainPlaying, setMainPlaying] = useState(false);
   const [singleGamePlaying, setSingleGamePlaying] = useState(false);
@@ -82,7 +105,12 @@ export const BGMProvider: React.FC<{ children: React.ReactNode }> = ({
           | 'multiWait'
           | 'multiGame'
           | 'correct'
-          | 'incorrect',
+          | 'incorrect'
+          | 'newPhase'
+          | 'result'
+          | 'nextStage'
+          | 'sendData'
+          | 'applause',
       ) => {
         switch (bgmType) {
           case 'main':
@@ -177,6 +205,21 @@ export const BGMProvider: React.FC<{ children: React.ReactNode }> = ({
           case 'incorrect':
             playIncorrect();
             break;
+          case 'newPhase':
+            playNewPhase();
+            break;
+          case 'result':
+            playResult();
+            break;
+          case 'nextStage':
+            playNextStage();
+            break;
+          case 'sendData':
+            playSendData();
+            break;
+          case 'applause':
+            playApplause();
+            break;
           default:
             break;
         }
@@ -221,6 +264,11 @@ export const BGMProvider: React.FC<{ children: React.ReactNode }> = ({
       //   stopStage,
       playCorrect,
       playIncorrect,
+      playNewPhase,
+      playResult,
+      playNextStage,
+      playSendData,
+      playApplause,
       isMuted,
     ],
   );

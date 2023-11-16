@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { useSetRecoilState, useRecoilValue } from 'recoil';
 import { roomManageState, multiDictState } from '../../../recoil/Atoms';
 import Timer from '../../Common/Atoms/Timer';
+import { useBGM } from '../../../sound/SoundContext';
 
 const ResultDiv = styled.div`
   display: flex;
@@ -111,6 +112,7 @@ function MultiResult() {
   const Quiz = useRecoilValue(multiDictState);
   const Room = useRecoilValue(roomManageState);
   const myname = localStorage.getItem('nickname') ?? '미사용자';
+  const { startBGM, isMuted } = useBGM();
 
   useEffect(() => {
     setOtherAnswer([]);
@@ -132,6 +134,9 @@ function MultiResult() {
   useEffect(() => {
     if (Room.breakTime) {
       setTimerState(5);
+      if (!isMuted) {
+        startBGM('result');
+      }
     }
   }, [Room.breakTime]);
   useEffect(() => {
