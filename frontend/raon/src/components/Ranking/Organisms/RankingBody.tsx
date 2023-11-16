@@ -9,6 +9,7 @@ import {
   getClassDictionary,
   getSchoolDictionary,
 } from '../../../api/RankingApi.tsx';
+import { postMemberInfoGet } from '../../../api/MemberApi.tsx';
 
 interface GameLinkProps {
   active: boolean;
@@ -164,8 +165,21 @@ const RankingBody = () => {
   const [personalList, setPersonalList] = useState([]);
   const [classList, setClassList] = useState([]);
   const [schoolList, setSchoolList] = useState([]);
+  const [schoolName, setSchoolName] = useState('');
 
   useEffect(() => {
+    const fetchMemberInfo = async () => {
+      try {
+        const response = await postMemberInfoGet();
+        if (response && response.data) {
+          setSchoolName(response.data.school);
+        }
+      } catch (error) {
+        console.error('회원 정보 요청 중 오류 발생:', error);
+      }
+    };
+
+    fetchMemberInfo();
     const fetchSpellingData = async () => {
       try {
         const responsePersonal = await getPersonalSpelling();
@@ -288,7 +302,7 @@ const RankingBody = () => {
           <RankScrollDiv>{renderRankItems(personalList)}</RankScrollDiv>
         </Rank>
         <Rank>
-          <RankTitle>교내 개인 순위</RankTitle>
+          <RankTitle>{schoolName} 순위</RankTitle>
           <RankScrollDiv>{renderRankItems(classList)}</RankScrollDiv>
         </Rank>
         <Rank>
