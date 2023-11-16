@@ -9,7 +9,7 @@ interface JoinButtonProps {
 
 const RoomExitButton = ({ onClick }: JoinButtonProps) => {
   const textStyle: React.CSSProperties = {
-    fontFamily: "'CookieRun'",
+    fontFamily: "'ONE-Mobile-POP'",
     cursor: 'pointer',
     color: 'ivory',
     fontSize: '6rem',
@@ -24,8 +24,8 @@ const RoomExitButton = ({ onClick }: JoinButtonProps) => {
   };
   const ExitFixDiv = styled.div`
     position: fixed;
-    bottom: 5%;
-    right: 5%;
+    bottom: 3%;
+    right: 3%;
   `;
   return (
     <ExitFixDiv style={textStyle} onClick={onClick} role="button" tabIndex={0}>

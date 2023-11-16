@@ -16,7 +16,7 @@ const ExitButton = ({ to }: { to: string }) => {
   `;
 
   const textStyle: React.CSSProperties = {
-    fontFamily: "'CookieRun'",
+    fontFamily: "'ONE-Mobile-POP'",
     cursor: 'pointer',
     color: 'ivory',
     fontSize: '6rem',

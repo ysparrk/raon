@@ -8,6 +8,7 @@ import TitleBox from '../../Common/Atoms/TitleBox';
 import { getQuiz } from '../../../api/GameDictionaryApi';
 import { dictScoreState } from '../../../recoil/Atoms';
 import { useBGM } from '../../../sound/SoundContext';
+
 const ContentDiv = styled.div`
   display: flex;
   flex-direction: column;

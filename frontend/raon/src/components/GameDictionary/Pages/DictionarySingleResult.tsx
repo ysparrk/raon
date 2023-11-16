@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import { useNavigate } from 'react-router';
 import SingleModeResult from '../Organisms/SingleModeResult';
 import TitleBox from '../../Common/Atoms/TitleBox';
 import ExitButton from '../../Common/Atoms/ExitButtonInRoom';
 import gildong from '../../../assets/Images/gildong.png';
-import { useNavigate } from 'react-router';
 
 const GildongImage = styled.img<{ shouldMove: boolean }>`
   width: 300px;

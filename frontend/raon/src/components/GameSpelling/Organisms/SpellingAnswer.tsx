@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { useRecoilValue } from 'recoil';
+import { useNavigate } from 'react-router';
 import { postSpellingResult } from '../../../api/GameSpellingApi.tsx';
 import {
   submitState,
@@ -8,7 +9,7 @@ import {
   spellingIdState,
 } from '../../../recoil/Atoms.tsx';
 import ExitButton from '../../Common/Atoms/ExitButtonInRoom.tsx';
-import { useNavigate } from 'react-router';
+
 const Container = styled.div`
   display: flex;
   flex-direction: column;

@@ -52,6 +52,7 @@ const Rank = styled.div`
   padding: 0.625rem;
   border-right: 1px solid #ccc;
   height: 25rem;
+  z-index: 1;
 
   &:last-child {
     border-right: none;
@@ -153,8 +154,8 @@ const Score = styled.div`
 
 const ExitFixDiv = styled.div`
   position: fixed;
-  bottom: 5%;
-  right: 5%;
+  bottom: 3%;
+  right: 3%;
 `;
 
 const RankingBody = () => {
