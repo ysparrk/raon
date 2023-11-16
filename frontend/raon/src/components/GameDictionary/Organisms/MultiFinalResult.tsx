@@ -32,7 +32,7 @@ const ResultPersonalDiv = styled.div`
   font-weight: 800;
   font-size: 2rem;
   color: white;
-  gap: 4.825rem;
+  gap: 2.825rem;
   margin: 1rem;
 `;
 const ResultInfoDiv = styled.div`
@@ -47,15 +47,16 @@ const LeftDiv = styled.div`
   display: flex;
   justify-content: center;
   align-items: flex-end;
-  width: 40%;
+  width: 37%;
   margin: 0;
   height: 100%;
 `;
 const RightDiv = styled.div`
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 60%;
+  width: 63%;
   margin: 0;
   height: 100%;
 `;
