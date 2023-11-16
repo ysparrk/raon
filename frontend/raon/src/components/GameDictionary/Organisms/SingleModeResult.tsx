@@ -37,19 +37,19 @@ const ScoreText = styled.div`
 
 function SingleModeResult() {
   const userScore = useRecoilValue(dictScoreState);
-  useEffect(() => {
-    const postScore = async (score: number) => {
-      try {
-        const response = await postSingleResult(score);
-        console.log(response);
-      } catch (error) {
-        console.log(error);
-      }
-    };
+  // useEffect(() => {
+  //   const postScore = async (score: number) => {
+  //     try {
+  //       const response = await postSingleResult(score);
+  //       console.log(response);
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   };
 
-    // postScore 함수 호출
-    postScore(userScore);
-  }, [userScore]); // 두 번째 매개변수로 userScore를 의존성으로 설정
+  //   // postScore 함수 호출
+  //   postScore(userScore);
+  // }, [userScore]); // 두 번째 매개변수로 userScore를 의존성으로 설정
 
   let content = '';
   if (userScore >= 80) {
