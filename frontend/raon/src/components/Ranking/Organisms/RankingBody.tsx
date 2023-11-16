@@ -92,13 +92,19 @@ const RankTitle = styled.div`
   padding-bottom: 0.625rem;
 `;
 
-const RankItem = styled.div<{ rank: number }>`
+const RankItem = styled.div<{
+  rank: number;
+  isCurrentUser: boolean;
+  isCurrentSchool: boolean;
+}>`
   display: flex;
   justify-content: space-between;
   align-items: center;
   width: 100%;
   padding: 0.3125rem 0;
   transition: background-color 0.3s;
+  background-color: ${(props) =>
+    props.isCurrentUser || props.isCurrentSchool ? '#FFCD4A' : 'transparent'};
   &.first,
   &.second,
   &.third {
@@ -264,12 +270,16 @@ const RankingBody = () => {
     }
     return '';
   };
-  const renderRankItems = (rankData: any[]) => {
+  const renderRankItems = (rankData: any[], isSchoolRank: boolean = false) => {
+    const currentUserNickname = window.localStorage.getItem('nickname');
+
     return rankData.map((item, index) => (
       <RankItem
         rank={index + 1}
         className={getRankClass(index)}
         key={item.ranker}
+        isCurrentUser={item.ranker === currentUserNickname}
+        isCurrentSchool={isSchoolRank && item.school === schoolName}
       >
         <RankNumber rank={index + 1} className={getRankClass(index)}>
           {index + 1}등
@@ -307,7 +317,7 @@ const RankingBody = () => {
         </Rank>
         <Rank>
           <RankTitle>내 학교 순위</RankTitle>
-          <RankScrollDiv>{renderRankItems(schoolList)}</RankScrollDiv>
+          <RankScrollDiv>{renderRankItems(schoolList, true)}</RankScrollDiv>
         </Rank>
       </RankingBox>
       <ExitFixDiv>
