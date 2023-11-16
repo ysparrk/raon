@@ -50,7 +50,7 @@ const TopBox: React.FC<{
         }}
       />
       {imageIndex === 3 ? (
-        <Arrow2
+        <Arrow
           onClick={handleRightArrowClick}
           style={{ transform: 'rotate(180deg)' }}
         />

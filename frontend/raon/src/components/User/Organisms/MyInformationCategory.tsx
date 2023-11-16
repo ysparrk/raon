@@ -420,7 +420,7 @@ const MyInformationCategory = () => {
         />
       </Content>
       <BottomDiv>
-        <MyImageDiv imageUrl={myImage} />
+        {/* <MyImageDiv imageUrl={myImage} /> */}
 
         <Button onClick={handleSubmit}>수정하기</Button>
         <ExitButton

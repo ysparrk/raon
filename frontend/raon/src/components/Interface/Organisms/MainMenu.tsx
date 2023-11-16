@@ -36,7 +36,7 @@ const MainMenu = () => {
           isAble={false}
           onClick={() => {
             Swal.fire({
-              title: '비활성화된 요소에요',
+              title: '개발중인 게임이에요',
               text: '나중에 만나요!',
             });
           }}
