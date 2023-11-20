@@ -26,11 +26,11 @@ public class JwtService {
     private static final long MILLI_SECOND = 1000L;
     private final String secretKey;
 
-    private final long expirationHours = 60 * 30;
+    private final long expirationHours = 60 * 60 * 24 * 7;
     private final String issuer;
 
 
-    //30일
+    // 30일
     private final long refreshTokenExpire = 60 * 60 * 24 * 30;
 
     public JwtService(
