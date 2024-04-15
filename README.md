@@ -54,6 +54,7 @@
 ![Untitled](./exec/images/infraStructure.png)
 
 ### ER-Diagram
+![Untitled](./exec/images/자율erd.png)
 
 
 </br>
