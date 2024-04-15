@@ -1,98 +1,134 @@
-![header](https://capsule-render.vercel.app/api?type=waving&color=auto&height=300&section=header&text=Raon&fontSize=180)
+## 🧑‍🏫 라온 🇰🇷
 
-# 라온
+아이들을 위한 놀이를 통한 국어 학습 게임 웹 앱 서비스
 
-### "즐거운"이라는 뜻의 우리말
+
+### Overview
+
+> 💡 SNS의 발달과 코로나 이후 아이들의 국어 능력이 저하되고 있습니다. <ins>**_라온_** 은 "즐거운"이라는 우리말</ins>로 친구들과 함께하는 놀이를 통해 국어를 자연스럽게 학습할 수 있도록 돕는 서비스입니다.
+
+
+### Project Info
+
+🗓️ 2023. 07. 04 ~ 2023. 08. 18. (총 7주)
+
+🏆 베스트 멤버 선정
 
 <br/>
 
-# 👨‍👩‍👦‍👦 팀원 역할 및 소개
+### 👨‍👩‍👦‍👦 팀원 역할 및 소개
 
-| Frontend | 역할 | 담당             |
-| -------- | ---- | ---------------- |
-| 정준혁   | 팀장 | 페이지 구성, API 연결 |
+| Frontend | 역할      | 담당                  |
+| -------- | --------- | --------------------- |
+| 정준혁   | 팀장      | 페이지 구성, API 연결 |
 | 서인덕   | FE-Leader | 전역 데이터 흐름 제어 |
 
-| Backend | 역할 | 담당             |
-| ------- | ---- | ---------------- |
-| 고재원  | BE-Leader | Web Socket 멀티 플레이 |
-| 박영서  | Full Stack | Web Socket 멀티 플레이, 퀴즈 랭킹 조회 |
-| 하재우  | Backend | Spring Security + JWT |
+| Backend | 역할          | 담당                                          |
+| ------- | ------------- | --------------------------------------------- |
+| 고재원  | BE-Leader     | Web Socket 멀티 플레이                        |
+| 박영서  | Full Stack    | Web Socket 멀티 플레이, 퀴즈 랭킹 조회        |
+| 하재우  | Backend       | Spring Security + JWT                         |
 | 김태현  | Backend/Infra | 퀴즈 랭킹 조회, 사용자 정보 입력 및 학교 검색 |
 
-## 🇰🇷 서비스 개요
 
-> 어린이를 위한 국어 능력 증진 프로그램
-
-**_국어 능력이 부족한 어린이들이 놀이를 통해 자연스럽게 학습할 수 있도록 돕는 서비스입니다._**
 
 ## ✨ 핵심 기능
 
-> ### 🌈 맞춤법 놀이 <br/>
->
-> **`평소에 몰랐거나 햇갈리던 맞춤법을 퀴즈로 재미있게!`** <br/>
+### 🌈 맞춤법 놀이 <br/>
+**`평소에 몰랐거나 햇갈리던 맞춤법을 퀴즈로 재미있게!`** <br/>
 
-> ### ❄ 국어사전 놀이 <br/>
->
-> **`단어의 의미를 퀴즈를 통해 재미있게 배울 수 있어요!`** <br/> > **`동서남북 퀴즈를 하며 사고력을 길러요!`**
+### ❄ 국어사전 놀이 <br/>
 
-> ### ⭐ 순위 <br/>
->
-> **`전국에서 혹은 교내에서 내가 몇등인지 확인해요!`** <br/> > **`친구들과 함께하며 즐겨요!`**
+**`단어의 의미를 퀴즈를 통해 재미있게 배울 수 있어요!`** <br/> > **`동서남북 퀴즈를 하며 사고력을 길러요!`**
 
-> ### 🏗 인프라 구조 <br/>
->
-> ![Untitled](./exec/images/infraStructure.png)
+### ⭐ 순위 <br/>
+**`전국에서 혹은 교내에서 내가 몇등인지 확인해요!`** <br/> > **`친구들과 함께하며 즐겨요!`**
 
-## 🛠️ 기술 스택
+
+</br>
+
+## ⚙️ 시스템 설계
+
+### System Architecture
+
+![Untitled](./exec/images/infraStructure.png)
+
+### ER-Diagram
+
+
+</br>
+
+## 🛠️ Skills
+
+### Server
+
+<p>
+    <img src="https://img.shields.io/badge/Java-007396?style=flat&logo=Conda-Forge&logoColor=white" /> 
+    <img src="https://img.shields.io/badge/springboot-6DB33F?style=flat&logo=springboot&logoColor=white"/>
+    <img src="https://img.shields.io/badge/springsecurity-6DB33F?style=flat&logo=springsecurity&logoColor=white"/>
+    <img src="https://img.shields.io/badge/JWT-000000?style=flat&logo=jsonwebtokens&logoColor=white"/>
+    <img src="https://img.shields.io/badge/spring_Web_Socket-6DB33F?style=flat&logo=socket.io&logoColor=white"/>
+    <img src="https://img.shields.io/badge/gradle-02303A?style=flat&logo=gradle&logoColor=white">
+</p>
+
+### Database
+
+<p>
+    <img src="https://img.shields.io/badge/redis-DC382D?style=flat&logo=redis&logoColor=white"/>
+    <img src="https://img.shields.io/badge/MariaDB-4479A1?style=flat&logo=mariadb&logoColor=white"/>
+</p>
 
 ### Front-end
 
 <p>
-    <img src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white"/>
-    <img src="https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=react&logoColor=white"/>
-    <img src="https://img.shields.io/badge/Recoil-3578E5?style=for-the-badge&logo=recoil&logoColor=white"/>
-    <img src="https://img.shields.io/badge/pwa-5A0FC8?style=for-the-badge&logo=pwa&logoColor=white"/>
-    <img src="https://img.shields.io/badge/Styled_Components-DB7093?style=for-the-badge&logo=styledcomponents&logoColor=white"/>
-</p>
-
-### Back-end
-
-<p>
-    <img src="https://img.shields.io/badge/Java-008FC7?style=for-the-badge&logo=openjdk&logoColor=black"/>
-    <img src="https://img.shields.io/badge/springboot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white"/>
-    <img src="https://img.shields.io/badge/springsecurity-6DB33F?style=for-the-badge&logo=springsecurity&logoColor=white"/>
-    <img src="https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=jsonwebtokens&logoColor=white"/>
-    <img src="https://img.shields.io/badge/spring_Web_Socket-6DB33F?style=for-the-badge&logo=socket.io&logoColor=white"/>
+    <img src="https://img.shields.io/badge/TypeScript-3178C6?style=flat&logo=typescript&logoColor=white"/>
+    <img src="https://img.shields.io/badge/React-61DAFB?style=flat&logo=react&logoColor=white"/>
+    <img src="https://img.shields.io/badge/Recoil-3578E5?style=flat&logo=recoil&logoColor=white"/>
+    <img src="https://img.shields.io/badge/pwa-5A0FC8?style=flat&logo=pwa&logoColor=white"/>
+    <img src="https://img.shields.io/badge/Styled_Components-DB7093?style=flat&logo=styledcomponents&logoColor=white"/>
 </p>
 
 ### Infra
 
 <p>
-    <img src="https://img.shields.io/badge/amazonec2-FF9900?style=for-the-badge&logo=amazonec2&logoColor=white"/>
-    <img src="https://img.shields.io/badge/ubuntu-E95420?style=for-the-badge&logo=ubuntu&logoColor=white"/>
-    <img src="https://img.shields.io/badge/docker-2496ED?style=for-the-badge&logo=docker&logoColor=white"/>
-    <img src="https://img.shields.io/badge/nginx-009639?style=for-the-badge&logo=nginx&logoColor=white"/>
-    <img src="https://img.shields.io/badge/Jenkins-D24939?style=for-the-badge&logo=jenkins&logoColor=white"/>
-</p>
-
-### DB
-
-<p>
-    <img src="https://img.shields.io/badge/redis-DC382D?style=for-the-badge&logo=redis&logoColor=white"/>
-    <img src="https://img.shields.io/badge/MariaDB-4479A1?style=for-the-badge&logo=mariadb&logoColor=white"/>
+    <img src="https://img.shields.io/badge/amazonec2-FF9900?style=flat&logo=amazonec2&logoColor=white"/>
+    <img src="https://img.shields.io/badge/ubuntu-E95420?style=flat&logo=ubuntu&logoColor=white"/>
+    <img src="https://img.shields.io/badge/docker-2496ED?style=flat&logo=docker&logoColor=white"/>
+    <img src="https://img.shields.io/badge/nginx-009639?style=flat&logo=nginx&logoColor=white"/>
+    <img src="https://img.shields.io/badge/Jenkins-D24939?style=flat&logo=jenkins&logoColor=white"/>
 </p>
 
 ### Project Management
 
 <p>
-    <img src="https://img.shields.io/badge/jira-0052CC?style=for-the-badge&logo=jira&logoColor=white"/>
-    <img src="https://img.shields.io/badge/gitlab-FC6D26?style=for-the-badge&logo=gitlab&logoColor=white"/>
-    <img src="https://img.shields.io/badge/swagger-85EA2D?style=for-the-badge&logo=Swagger&logoColor=white"/>
-    <img src="https://img.shields.io/badge/notion-000000?style=for-the-badge&logo=notion&logoColor=white"/>
-    <img src="https://img.shields.io/badge/mattermost-0058CC?style=for-the-badge&logo=mattermost&logoColor=white"/>
+    <img src="https://img.shields.io/badge/jira-0052CC?style=flat&logo=jira&logoColor=white"/>
+    <img src="https://img.shields.io/badge/gitlab-FC6D26?style=flat&logo=gitlab&logoColor=white"/>
+    <img src="https://img.shields.io/badge/swagger-85EA2D?style=flat&logo=Swagger&logoColor=white"/>
+    <img src="https://img.shields.io/badge/notion-000000?style=flat&logo=notion&logoColor=white"/>
+    <img src="https://img.shields.io/badge/mattermost-0058CC?style=flat&logo=mattermost&logoColor=white"/>
 </p>
 <br/>
+
+## ⭐ Issue
+### Back-end
+📌 **조회 속도 향상(실시간 랭킹 조회)**
+
+- 문제: 랭킹 시스템의 경우 실시간으로 기록을 업데이트 되어야 하고, 업데이트 되는 기간이 존재 → RDBMS 활용에 대한 의문점이 생김
+- 해결: In-Memory DB인 Redis의 sorted-set을 통해 구현
+- 비고: 10만개의 더미 데이터를 활용해 조회 속도를 비교해 본 결과 4배 빠른 성능이 보임을 확인
+
+</br>
+
+### Front-end
+📌 **StompJS를 활용한 소켓 통신 구현**
+
+- 문제: iframe을 통해 접근할 수 없는 문제 발생
+- 원인: X-Frame-Options to DENY 설정 때문
+- 해결:
+    
+    1) header, Socket Option 설정을 ‘sameOrigin’으로 변경하여 해결
+
+</br>
 
 ## 🎬 시나리오
 
