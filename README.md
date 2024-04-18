@@ -1,15 +1,12 @@
-<img src="exec/images/logo.png" width="33.3%" height="33.3%" alt="앱 로고">
-
+<img src="exec/images/logo.png" width="30%" height="30%" alt="앱 로고">
 
 ### 🧑‍🏫 라온 🇰🇷
 
 아이들을 위한 놀이를 통한 국어 학습 게임 웹 앱 서비스
 
-
 #### Overview
 
 > 💡 SNS의 발달과 코로나 이후 아이들의 국어 능력이 저하되고 있습니다. <ins>**_라온_** 은 "즐거운"이라는 우리말</ins>로 친구들과 함께하는 놀이를 통해 국어를 자연스럽게 학습할 수 있도록 돕는 서비스입니다.
-
 
 ## Project Info
 
@@ -31,7 +28,6 @@
 | 정준혁   | 팀장      | 페이지 구성, API 연결 |
 | 서인덕   | FE-Leader | 전역 데이터 흐름 제어 |
 
-
 ---
 
 </br>
@@ -46,14 +42,13 @@
 
 ### 📄 [B. 기능 명세서](https://wooha.notion.site/cb79ee0674c4484887e0084d4b22e47c?pvs=4)
 
-
 ### C. System Architecture
 
 ![Untitled](./exec/images/infraStructure.png)
 
 ### D. ER-Diagram
-![Untitled](./exec/images/자율erd.png)
 
+![Untitled](./exec/images/자율erd.png)
 
 </br>
 
@@ -88,6 +83,7 @@
 </p>
 
 #### Infra
+
 <p>
     <img src="https://img.shields.io/badge/amazonec2-FF9900?style=flat&logo=amazonec2&logoColor=white"/>
     <img src="https://img.shields.io/badge/ubuntu-E95420?style=flat&logo=ubuntu&logoColor=white"/>
@@ -97,6 +93,7 @@
 </p>
 
 #### Project Management
+
 <p>
     <img src="https://img.shields.io/badge/jira-0052CC?style=flat&logo=jira&logoColor=white"/>
     <img src="https://img.shields.io/badge/gitlab-FC6D26?style=flat&logo=gitlab&logoColor=white"/>
@@ -107,7 +104,9 @@
 <br/>
 
 ## ⭐ Issue
+
 ### Back-end
+
 📌 **조회 속도 향상(실시간 랭킹 조회)**
 
 - 문제: 랭킹 시스템의 경우 실시간으로 기록을 업데이트 되어야 하고, 업데이트 되는 기간이 존재 → RDBMS 활용에 대한 의문점이 생김
@@ -117,13 +116,13 @@
 </br>
 
 ### Front-end
+
 📌 **StompJS를 활용한 소켓 통신 구현**
 
 - 문제: iframe을 통해 접근할 수 없는 문제 발생
 - 원인: X-Frame-Options to DENY 설정 때문
 - 해결:
-    
-    1) header, Socket Option 설정을 ‘sameOrigin’으로 변경하여 해결
+  1. header, Socket Option 설정을 ‘sameOrigin’으로 변경하여 해결
 
 </br>
 
@@ -133,7 +132,6 @@
   <img src="exec/images/번다운차트_5.png"  width="70%" height="70%"/>
 </p>
 
-
 </br>
 
 ## 🎬 담당 기능
@@ -142,19 +140,19 @@
 
 2. 멀티플레이 게임
 
-
 </br>
 
 ## 💭 회고
 
 #### 새로운 기술
+
 > 프로젝트 과정에서 처음으로 FE를 담당했습니다. React와 Typescript 모두 처음 접해보았지만, 멀티 플레이 기능 구현이라는 목표를 가지고 노력하였습니다. 어려움이 있을 때 도와준 FE 팀원들에게 감사합니다.
 
 #### 주변 친구들과 즐기는 서비스 개발
+
 > 게임 서비스를 개발하면서 가장 좋았던 점은 주변 사람들과 함께 즐길 수 있었다는 점 입니다. 국어 관련 퀴즈를 풀며 몰랐던 국어 맞춤법과 단어를 알게 되어 좋았다는 소감을 들었을 때 뿌듯함을 느꼈습니다. 이 경험을 통해 사용자들에게 실질적인 도움을 줄 수 있는 서비스를 만드는 것이 얼마나 중요한지를 깨달았습니다.
 
 📌 [최종 발표 자료](https://www.miricanvas.com/v/12lvj8y)
-
 
 ---
 
