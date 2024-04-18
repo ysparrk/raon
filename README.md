@@ -1,4 +1,4 @@
-<img src="exec/images/logo.png" alt="앱 로고">
+<img src="exec/images/logo.png" width="60%" height="60%" alt="앱 로고">
 
 
 ### 🧑‍🏫 라온 🇰🇷
