@@ -1,4 +1,4 @@
-<img src="exec/images/logo.png" width="20%" height="20%" alt="앱 로고">
+<img src="exec/images/logo.png" width="17%" height="17%" alt="앱 로고">
 
 ### 🧑‍🏫 라온 🇰🇷
 
@@ -127,10 +127,54 @@
 </br>
 
 ## 📉 Burndown chart
+> 6주 동안 Jira를 활용하여 Stroy Point를 월요일에 배분하고, 금요일에 회고하는 시간을 가졌습니다.
 
-<p style="display: flex; align=center">
-  <img src="exec/images/번다운차트_5.png"  width="70%" height="70%"/>
-</p>
+
+<table>
+  <tr>
+     <th algin="center">1주차</th>
+     <th algin="center">2주차</th>
+  </tr>
+
+  <tr>
+     <td algin="center">
+        <img src="exec/images/번다운차트_1.png"  width="80%" height="70%"/>
+    </td>
+     <td algin="center">
+        <img src="exec/images/번다운차트_2.png"  width="100%" height="70%"/>
+    </td>
+  </tr>
+
+  <tr>
+     <th algin="center">3주차</th>
+     <th algin="center">4주차</th>
+  </tr>
+
+  <tr>
+     <td algin="center">
+        <img src="exec/images/번다운차트_3.png"  width="80%" height="80%"/>
+    </td>
+     <td algin="center">
+        <img src="exec/images/번다운차트_4.png"  width="100%" height="100%"/>
+    </td>
+  </tr>
+
+  <tr>
+     <th algin="center">5주차</th>
+     <th algin="center">6주차</th>
+  </tr>
+
+  <tr>
+     <td algin="center">
+        <img src="exec/images/번다운차트_5.png"  width="70%" height="70%"/>
+    </td>
+     <td algin="center">
+        <img src="exec/images/번다운차트_6.png"  width="100%" height="100%"/>
+    </td>
+  </tr>
+
+</table>
+
 
 </br>
 
@@ -139,6 +183,9 @@
 1. 랭킹 구현
 
 2. 멀티플레이 게임
+-> 게임 장면 gif로 만들어서 넣기
+
+
 
 </br>
 
